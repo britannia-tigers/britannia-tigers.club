@@ -1,0 +1,26 @@
+{
+  "name": "britannia-tigers.club",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest",
+    "dev:fe": "npm run --prefix frontend watch",
+    "dev:be": "npm run --prefix backend watch",
+    "dev": "concurrently 'npm:dev:*'",
+    "build:fe": "npm run --prefix frontend build",
+    "build:be": "npm run --prefix backend build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/h3nr7/britannia-tigers.club.git"
+  },
+  "author": "h3nr7",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/h3nr7/britannia-tigers.club/issues"
+  },
+  "homepage": "https://github.com/h3nr7/britannia-tigers.club#readme",
+  "devDependencies": {
+    "concurrently": "^8.2.1"
+  }}
