@@ -1,4 +1,8 @@
 
+install:
+	npm install
+	cd frontend && npm install
+	cd backend && npm install
 
 build-fe:
 	npm run build:fe
@@ -11,4 +15,7 @@ copy-be:
 	cp backend/package.json dist/build/package.json
 
 build: build-fe build-be copy-be
+
+dev:
+	npm run dev
 
