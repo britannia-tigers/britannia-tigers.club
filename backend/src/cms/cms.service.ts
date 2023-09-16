@@ -1,28 +1,10 @@
 import { Get, Injectable } from '@nestjs/common';
 import { 
   createClient, PlainClientAPI, 
-  CollectionProp, EntryProps,
   QueryOptions 
 } from 'contentful-management';
 import config from './contentful.config';
-
-interface Members {
-    
-}
-
-interface Pages {
-
-}
-
-interface Sessions {
-
-}
-
-export type Response<T> = CollectionProp<EntryProps<T>>;
-
-export type MembersResponse = Response<Members>;
-export type PagesResponse = Response<Pages>;
-export type SessionsResponse = Response<Sessions>;
+import { ExtendedQueryOptions, FilterParam, PageFullResponse, PageListResponse, SessionFullResponse, SessionListResponse } from './cms.interface';
 
 
 @Injectable()
@@ -55,22 +37,18 @@ export class CmsService {
 
 
   /**
-   * GET members
-   * @param q 
-   * @returns 
-   */
-  async getMembers(q: QueryOptions = {}): Promise<MembersResponse> {
-    return this.getListByContentType(config.contentTypeId.members, q);
-  }
-
-
-  /**
    * GET pages
    * @param q 
    * @returns 
    */
-  async getPages(q: QueryOptions): Promise<PagesResponse> {
+  async getPages(q: QueryOptions = {}): Promise<PageListResponse> {
     return this.getListByContentType(config.contentTypeId.pages, q);
+  }
+
+  async getPageById(id: string): Promise<PageFullResponse> {
+    return this.client.entry.get({
+      entryId: id,
+    });
   }
 
 
@@ -79,10 +57,59 @@ export class CmsService {
    * @param q 
    * @returns 
    */
-  async getSessions(q: QueryOptions): Promise<SessionsResponse> {
+  async getRawSessions(q: QueryOptions = {}): Promise<SessionListResponse> {
     return this.getListByContentType(config.contentTypeId.sessions, q);
   }
 
+  /**
+   * GET session by id
+   * @param id 
+   * @returns 
+   */
+  async getSessionById(id: string): Promise<SessionFullResponse> {
+    return this.client.entry.get({
+      entryId: id,
+    });
+  }
+
+  async getNextSession(): Promise<SessionFullResponse> {
+    const curDate = new Date();
+    const res = await this.client.entry.getPublished({
+      query:{
+        content_type: config.contentTypeId.sessions,
+        [filterBy('date', 'gte')]: curDate.toISOString()
+      }
+    });
+
+    return res.items[0];
+  }
+
+  /**
+   * Find a session by query
+   * @param q 
+   * @returns 
+   */
+  async findSessions(q: ExtendedQueryOptions = {}): Promise<SessionListResponse> {
+
+    const { name, location, radius, ...rest } = q;
+
+    let restQuery = {};
+    if(name) {
+      restQuery = { ...restQuery, [filterBy('name', 'match')]: name }
+    }
+    if(location) {
+      const r = radius || 1; //default 1km
+      restQuery = { ...restQuery, [filterBy('location', 'within')]: `${location},${r}` }
+    }
+
+    return this.client.entry.getPublished({
+      query:{
+        content_type: config.contentTypeId.sessions,
+        ...restQuery,
+        ...rest
+      }
+    });
+  }
 
   /**
    * Base get list by Content type
@@ -99,3 +126,8 @@ export class CmsService {
     })
   }
 }
+
+function filterBy(name:string, param: FilterParam) {
+  return `fields.${name}[${param}]`
+}
+

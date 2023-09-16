@@ -11,6 +11,8 @@ export function Profile() {
     ...user
   }), [user])
 
+  console.log('Profile: ', user)
+
   return (
     <>
       <div>

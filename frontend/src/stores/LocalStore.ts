@@ -3,15 +3,16 @@ type LocalDataTypes = string
 
 interface LocalData {
   accessToken?:string
+  pathname?: string
 }
 
 
-function getLocalStore(name:keyof LocalData) {
+export function getLocalStore(name:keyof LocalData) {
   const store = getStoreData()
   return store[name]
 }
 
-function setLocalStore(name: keyof LocalData, data:LocalDataTypes) {
+export function setLocalStore(name: keyof LocalData, data:LocalDataTypes) {
   const store = getStoreData()
   store[name] = data
   setStoreData(store as LocalData)

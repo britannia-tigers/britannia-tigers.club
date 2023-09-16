@@ -1,16 +1,18 @@
 import { useMemo, useEffect, PropsWithChildren } from 'react'
 
 import { Auth0Provider, AppState, useAuth0 } from '@auth0/auth0-react'
-import { useNavigate, redirect, Navigate, Route } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
+import { setLocalStore } from '../stores/LocalStore'
 
 export function Auth({ children }: PropsWithChildren) {
 
   const navigate = useNavigate()
 
   const {
-    domain, clientId, redirectionUri
+    audience, domain, clientId, redirectionUri
   } = useMemo(() => {
     return {
+      audience: import.meta.env.VITE_AUTH0_AUDIENCE as string,
       domain: import.meta.env.VITE_AUTH0_DOMAIN as string,
       clientId: import.meta.env.VITE_AUTH0_CLIENT_ID as string,
       redirectionUri: import.meta.env.VITE_AUTH0_CALLBACK_URL as string
@@ -26,7 +28,14 @@ export function Auth({ children }: PropsWithChildren) {
       domain={domain}
       clientId={clientId}
       authorizationParams={{
-        redirect_uri: redirectionUri
+        audience: audience,
+        redirect_uri: redirectionUri,
+        scope: [
+          'openid',
+          'profile',
+          'email',  
+          'list:sessions'
+        ].join(' ')
       }}
       onRedirectCallback={redirectHandler}>
         { children }
@@ -37,6 +46,9 @@ export function Auth({ children }: PropsWithChildren) {
 export function Restricted({ children }: PropsWithChildren) {
 
   const { isLoading, isAuthenticated, error, loginWithRedirect } = useAuth0()
+
+  const location = useLocation()
+  setLocalStore('pathname', location.pathname)
 
   useEffect(() => {
     console.log(isLoading, isAuthenticated)
