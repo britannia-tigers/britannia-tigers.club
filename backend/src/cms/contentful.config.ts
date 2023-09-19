@@ -1,4 +1,7 @@
 export default {
+  locale: {
+    gb: 'en-GB'
+  },
   contentTypeId: {
     members: 'members',
     pages: 'pages',

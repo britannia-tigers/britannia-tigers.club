@@ -1,5 +1,5 @@
 import { useAuth0 } from '@auth0/auth0-react'
-import { Header, Nav , Anchor, Avatar, Box } from 'grommet'
+import { Header, Nav , Avatar, Box } from 'grommet'
 import { Link, useNavigate } from 'react-router-dom'
 
 export function Navi() {

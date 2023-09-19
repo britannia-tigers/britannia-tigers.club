@@ -12,11 +12,13 @@ export interface PageFull extends Page {
 }
 
 export interface Session {
-
+  name: string
+  location: string
+  date: string
 }
 
 export interface SessionFull extends Session {
-
+  radius: string
 }
 
 export interface ExtendedQueryOptions extends QueryOptions {

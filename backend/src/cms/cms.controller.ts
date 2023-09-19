@@ -1,27 +1,51 @@
-import { Controller, Get, Param, Query, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Query, UseGuards } from '@nestjs/common';
 import { CmsService } from './cms.service';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { PermissionGuard } from 'src/auth/permission.guard';
 import { SessionPermissions } from './cms.permissions';
-import { PageListResponse, SessionFullResponse, SessionListResponse } from './cms.interface';
+import { PageFullResponse, PageListResponse, SessionFullResponse, SessionListResponse } from './cms.interface';
+import { SessionDto, SessionRequestDto } from './cms.dto';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
 @Controller('api')
 export class CmsController {
   constructor(private readonly cmsService: CmsService) {}
 
   
+  @ApiBearerAuth('bearer')
+  @UseGuards(AuthGuard)
+  @UseGuards(PermissionGuard([SessionPermissions.CREATE]))
+  @Post('sessions')
+  createSession(@Body() { name, location, date }:SessionDto) {
+    return this.cmsService.createSession({ name, location, date });
+  }
+
+  @ApiBearerAuth('bearer')
+  @UseGuards(AuthGuard)
+  @UseGuards(PermissionGuard([SessionPermissions.WRITE]))
+  @Post('sessions/:id/publish')
+  publishSession(@Param('id') id:string) {
+    return this.cmsService.publishSession(id);
+  }
+
+  @ApiBearerAuth('bearer')
+  @UseGuards(AuthGuard)
+  @UseGuards(PermissionGuard([SessionPermissions.READ]))
+  @Get('session/:id')
+  getSession(@Param('id') id:string) {
+    return this.cmsService.getSessionById(id);
+  }
+  
   /**
    * get all sessions
    * @returns 
    */
-  @UseGuards(PermissionGuard([SessionPermissions.LIST]))
+  @ApiBearerAuth('bearer')
   @UseGuards(AuthGuard)
+  @UseGuards(PermissionGuard([SessionPermissions.LIST]))
   @Get('sessions')
   getSessions(
-    @Query('name') name,
-    @Query('location') location,
-    @Query('skip') skip, 
-    @Query('limit') limit
+    @Query() { name, location, skip, limit }:SessionRequestDto
   ):Promise<SessionListResponse> {
     return this.cmsService.findSessions({ name, location, skip, limit });
   }
@@ -31,24 +55,12 @@ export class CmsController {
    * get next session
    * @returns 
    */
-  @UseGuards(PermissionGuard([SessionPermissions.READ]))
+  @ApiBearerAuth('bearer')
   @UseGuards(AuthGuard)
+  @UseGuards(PermissionGuard([SessionPermissions.READ]))
   @Get('sessions/next')
   getNextSession():Promise<SessionFullResponse> {
     return this.cmsService.getNextSession();
-  }
-
-
-  /**
-   * get session by id
-   * @param id 
-   * @returns 
-   */
-  @UseGuards(PermissionGuard([SessionPermissions.READ]))
-  @UseGuards(AuthGuard)
-  @Get('sessions/:id')
-  getSessionById(@Param('id') id):Promise<SessionFullResponse> {
-    return this.cmsService.getSessionById(id);
   }
 
 
@@ -67,10 +79,8 @@ export class CmsController {
    * @param id 
    * @returns 
    */
-  @UseGuards(PermissionGuard([SessionPermissions.READ]))
-  @UseGuards(AuthGuard)
   @Get('pages/:id')
-  getPageById(@Param('id') id):Promise<SessionFullResponse> {
+  getPageById(@Param('id') id):Promise<PageFullResponse> {
     return this.cmsService.getPageById(id);
   }
 }

@@ -1,10 +1,12 @@
 import { Get, Injectable } from '@nestjs/common';
 import { 
-  createClient, PlainClientAPI, 
+  CollectionProp,
+  createClient, EntryProps, PlainClientAPI, 
   QueryOptions 
 } from 'contentful-management';
 import config from './contentful.config';
-import { ExtendedQueryOptions, FilterParam, PageFullResponse, PageListResponse, SessionFullResponse, SessionListResponse } from './cms.interface';
+import { ExtendedQueryOptions, FilterParam, PageFullResponse, PageListResponse, Session, SessionFull, SessionFullResponse, SessionListResponse } from './cms.interface';
+import contentfulConfig from './contentful.config';
 
 
 @Injectable()
@@ -51,6 +53,39 @@ export class CmsService {
     });
   }
 
+  async createSession({ name, location, date }: Session) {
+    
+    try {
+      const latlng = location.split(',');
+      const entry = await this.client.entry.create({
+        contentTypeId: config.contentTypeId.sessions,
+      }, { fields: {
+        name: {
+        [contentfulConfig.locale.gb]: name
+        },
+        location: {
+          [contentfulConfig.locale.gb]: { lat: Number(latlng[0]), lon: Number(latlng[1])}
+        },
+        date: {
+          [contentfulConfig.locale.gb]: date
+        }
+      }});
+
+      return entry;
+    } catch(e) {
+      throw e;
+    }
+  }
+
+  async publishSession(id: string) {
+    try {
+      const entry = await this.client.entry.get({ entryId: id });
+      await this.client.entry.publish({ entryId: id }, entry);
+    } catch(e) {
+      throw e;
+    }
+  }
+
 
   /**
    * GET sessions
@@ -74,7 +109,7 @@ export class CmsService {
 
   async getNextSession(): Promise<SessionFullResponse> {
     const curDate = new Date();
-    const res = await this.client.entry.getPublished({
+    const res = await this.client.entry.getPublished<SessionFull>({
       query:{
         content_type: config.contentTypeId.sessions,
         [filterBy('date', 'gte')]: curDate.toISOString()
@@ -117,8 +152,8 @@ export class CmsService {
    * @param restQuery 
    * @returns 
    */
-  async getListByContentType(contentType:string, restQuery: QueryOptions) {
-    return await this.client.entry.getMany({
+  async getListByContentType<T>(contentType:string, restQuery: QueryOptions) {
+    return await this.client.entry.getMany<T>({
       query: {
         content_type: contentType,
         ...restQuery

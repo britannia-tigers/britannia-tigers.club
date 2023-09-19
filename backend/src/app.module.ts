@@ -1,18 +1,24 @@
 import { Module } from '@nestjs/common';
 import { join } from 'path';
 import { CmsModule } from './cms/cms.module';
-import { ConfigModule } from './config.module';
-import { StaticModule } from './static.module';
+import { ConfigModule } from "@nestjs/config";
 import { UserModule } from './user/user.module';
+import { ServeStaticModule } from '@nestjs/serve-static';
 
 const isDev = process.env.NODE_ENV === 'development'
 const envFilePath = isDev ? ['.dev.env', '.env'] : ['.env']
-const rootPath = isDev ? join(__dirname, '..', '..', 'dist', 'public') : join(__dirname, '..', 'public')
+const rootPath = isDev ? join(__dirname, '..', '..', 'output', 'public') : join(__dirname, '..', 'public')
 
 
 @Module({
   imports: [
-    StaticModule(rootPath),
+    ConfigModule.forRoot({
+      isGlobal: true,
+      envFilePath
+    }),
+    ServeStaticModule.forRoot({
+      rootPath
+    }),
     CmsModule,
     UserModule
   ]

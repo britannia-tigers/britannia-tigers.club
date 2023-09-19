@@ -14,10 +14,7 @@ export enum EditorPermissions {
   DELETE = 'delete:editors'
 }
 
-export enum AdminPermissions {
-  CREATE= 'create:admins',
-  READ = 'read:admins',
-  WRITE = 'write:admins',
-  LIST = 'list:admins',
-  DELETE = 'delete:admins'
+export enum SelfPermissions {
+  READ='read:self',
+  WRITE='write:self'
 }
