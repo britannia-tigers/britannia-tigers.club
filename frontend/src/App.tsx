@@ -8,6 +8,7 @@ import { Calendar } from './pages/Calendar'
 import { Navi } from './components/Navi'
 import { Grommet, Page } from 'grommet'
 import { theme } from './configs/theme'
+import { User } from './components/User'
 
 function App() {
 
@@ -17,6 +18,7 @@ function App() {
         <Router>
           <Auth>
             <Navi />
+            <User />
             <Routes>
               <Route path='/calendar' element={<Restricted><Calendar /></Restricted>} />
               <Route path='/profile' element={<Restricted><Profile /></Restricted>} />

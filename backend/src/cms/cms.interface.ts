@@ -15,6 +15,7 @@ export interface Session {
   name: string
   location: string
   date: string
+  participants?: string[];
 }
 
 export interface SessionFull extends Session {

@@ -1,21 +1,26 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsBoolean, IsNumber, IsString } from "class-validator";
+import { IsArray, IsBoolean, IsNumber, IsString } from "class-validator";
 import { PaginationQueryOptions } from "contentful-management";
 
 
 
 export class SessionDto {
+
   @IsString()
-  @ApiProperty({ required: true })
+  @ApiProperty({ required: false })
   readonly name:string;
 
   @IsString()
-  @ApiProperty({ required: true })
+  @ApiProperty({ required: false })
   readonly location:string;
 
   @IsString()
-  @ApiProperty({ required: true })
+  @ApiProperty({ required: false })
   readonly date:string;
+
+  @IsArray()
+  @ApiProperty({ required: false })
+  readonly participants: string[];
 
 }
 
@@ -29,4 +34,10 @@ export class SessionRequestDto extends SessionDto implements PaginationQueryOpti
   @IsNumber()
   @ApiProperty({ required: false })
   readonly skip:number;
+}
+
+export class AddParticipantsDto {
+  @IsString()
+  @ApiProperty({ required: true })
+  readonly userIds: string[]
 }

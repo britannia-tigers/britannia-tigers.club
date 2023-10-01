@@ -34,9 +34,12 @@
     "contentful-management": "^10.45.0",
     "express-oauth2-jwt-bearer": "^1.5.0",
     "jwks-rsa": "^3.0.1",
+    "moment": "^2.29.4",
+    "moment-timezone": "^0.5.43",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.8.1",
-    "stripe": "^13.6.0"
+    "stripe": "^13.6.0",
+    "twilio": "^4.17.0"
   },
   "devDependencies": {
     "@nestjs/cli": "^10.0.0",
