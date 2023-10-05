@@ -17,7 +17,8 @@ jobs:
   #     - run:
   #         name: test
   #         command: 'npm run test:ci'
-  build-deploy-prod:
+
+  build-prod:
     docker:
       - image: cimg/node:18.18.0
     steps:
@@ -28,17 +29,26 @@ jobs:
           name: install_packages
           command: |
             make install
+      - run:
+          name: make_packages
+          command: |
+            make build
       - save_cache:
           key: dependency-cache-{{ checksum "package-lock.json" }}
           paths: 
             - ./node_modules
-      - run:
-          name: make_build
-          command: |
-            make build
-      - run:
-          name: deploy-heroku-prod
-          command: git push https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_PIPELINE.git main
+      - persist_to_workspace:
+          root: ~/app
+          paths:
+            - .
+  deploy-prod:
+    - checkout
+    - attach_workspace:
+      at: ~/app
+    - run:
+        name: deploy-heroku-prod
+        command: git push https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_PIPELINE.git main
+
 workflows:
   version: 2
   build-test-deploy-prod:
@@ -47,10 +57,14 @@ workflows:
       #       filters:
       #         branches:
       #           only: main
-      - build-deploy-prod:
-            # requires:
-            #   - build-and-test
-            filters:
-              branches:
-                only: main
+      - build-prod:
+          filters:
+            branches:
+              only: main
+      - deploy-prod:
+          requires:
+            - build-prod
+          filters:
+            branches:
+              only: main
       
