@@ -72,6 +72,4 @@ workflows:
       #         only: main
       - heroku/deploy-via-git:
           app-name: $HEROKU_APP_NAME
-          post-deploy:
-            - run: make install && make build
       
