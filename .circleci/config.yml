@@ -23,6 +23,10 @@ jobs:
     steps:
       - checkout
       - run:
+          name: install_packages
+          command: |
+            make install
+      - run:
           name: make_build
           command: |
             make build
