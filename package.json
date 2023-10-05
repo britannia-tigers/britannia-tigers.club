@@ -23,10 +23,10 @@
   },
   "homepage": "https://github.com/h3nr7/britannia-tigers.club#readme",
   "devDependencies": {
-    "concurrently": "^8.2.1"
   },
   "dependencies": {
-    "cross-env": "^7.0.3"
+    "cross-env": "^7.0.3",
+    "concurrently": "^8.2.1"
   }
 }
 
