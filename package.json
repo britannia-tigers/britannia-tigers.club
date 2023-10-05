@@ -9,7 +9,9 @@
     "dev:be": "npm run --prefix backend watch",
     "dev": "concurrently 'npm:dev:*'",
     "build:fe": "npm run --prefix frontend build",
-    "build:be": "npm run --prefix backend build"
+    "build:be": "npm run --prefix backend build",
+    "start": "cross-env NODE_ENV=production node output/build/dist/main.js"
+
   },
   "repository": {
     "type": "git",

@@ -3,7 +3,7 @@ import { CmsService } from './cms.service';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { PermissionGuard } from 'src/auth/permission.guard';
 import { SessionPermissions } from './cms.permissions';
-import { PageFullResponse, PageListResponse, SessionFullResponse, SessionListResponse } from './cms.interface';
+import { PageFullResponse, PageListResponse, SessionFullResponse, SessionListResponse, SponsorListResponse } from './cms.interface';
 import { AddParticipantsDto, SessionDto, SessionRequestDto } from './cms.dto';
 import { ApiBearerAuth, ApiBody, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { MailService } from 'src/messaging/mail.service';
@@ -12,6 +12,7 @@ import { SmsService } from 'src/messaging/sms.service';
 import smsConfig from 'src/messaging/sms.config';
 import contentfulConfig from './contentful.config';
 import { getNextDayOfWeek } from 'src/utils/dateTime.utils';
+import { AssetProps, CollectionProp } from 'contentful-management';
 
 
 @Controller('api')
@@ -146,6 +147,18 @@ export class CmsController {
   @Get('sessions/next')
   getNextSession():Promise<SessionFullResponse> {
     return this.cmsService.getNextSession();
+  }
+
+  @ApiTags('Sponsors')
+  @Get('sponsors')
+  getSponsors(@Query('skip') skip, @Query('limit') limit): Promise<SponsorListResponse> {
+    return this.cmsService.getSponsors({ skip, limit });
+  }
+
+  @ApiTags('Assets')
+  @Get('assets')
+  getAssets(): Promise<CollectionProp<AssetProps>> {
+    return this,this.cmsService.getAllAssets();
   }
 
 

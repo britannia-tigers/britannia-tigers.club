@@ -1,19 +1,33 @@
 // import { useAuth0 } from "@auth0/auth0-react";
-import { Link, useNavigate, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Parallax, IParallax, ParallaxLayer } from '@react-spring/parallax'
 import { ResizedSection } from "../components/ResizedSection";
-import { PropsWithChildren, useCallback, useEffect, useRef, useState } from "react";
+import { PropsWithChildren, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useWindowSize } from "../hooks/windowSize";
 import { useNaviStore } from "../stores/NaviStore";
 import { CenteredOuterContainer, InnerContainer, InnerContent, InnerSubTitle, InnerTitle } from "../components/InnerContainer";
 import mainBg from '../../public/abhishek-chandra-kXJksx1kdJ0-unsplash@0.5x.jpg';
 import contactBg from '../../public/joshua-kantarges-N_7Kb4hpaoU-unsplash@0.5x.jpg';
-import { Box, Grid } from "grommet";
+import unknownBg from '../../public/unknown.png';
+import unknownBg1 from '../../public/unknown2.png';
+import unknownBg2 from '../../public/unknown3.png';
+
+import igIcon from '../../public/instagram.svg';
+import tiktokIcon from '../../public/tiktok.svg';
+import threadIcon from '../../public/thread.svg';
+import twitterIcon from '../../public/twitter.svg';
+import { Avatar, Box, Button, Grid } from "grommet";
 import GoogleMapReact from 'google-map-react';
 import { MapMarker } from "../components/MapMarker";
 import { Emblem } from "../components/Emblem";
+import { Navi } from "../components/Navi";
+import { User } from "../components/User";
+import { SocialIcon } from "../components/SocialIcon";
+import { useSponsors } from "../api/sponsors";
+import { SponsorImg } from "../components/SponsorImg";
 
-const TOTAL_PAGES = 4;
+
+const TOTAL_PAGES = 5;
 const PAGE_OFFSET = 0.25;
 const GOOGLE_API_KEY = import.meta.env.VITE_GOOGLE_MAP_API as string;
 const GOOGLE_MAP_ID = import.meta.env.VITE_GOOGLE_MAP_ID as string;
@@ -27,29 +41,58 @@ const DEFAULT_MAP_ZOOM = 15;
 export function Main() {
 
   const { pathname } = useLocation();
-  const navigate = useNavigate();
-  const [scrolling, setScrolling] = useState(false);
+  const [, setScrolling] = useState(false);
   
-
   const parallaxRef = useRef<IParallax>(null);
   const [, winHeight] = useWindowSize();
   const { setTextColor, setBgDark } = useNaviStore();
   
   const naviTextColorArr = [
     {
+      name: 'story',
       textColor: 'white',
       isBgDark: true
     }, {
+      name: 'team',
       textColor: 'white',
       isBgDark: true
     }, {
       textColor: 'black',
       isBgDark: false
     }, {
+      name: 'contact',
       textColor: 'white',
       isBgDark: true
+    },
+    {
+      name: 'sponsors',
+      textColor: 'black',
+      isBgDark: false
     }
   ]
+
+  useEffect(() => {
+    console.log(pathname)
+    if(parallaxRef.current?.scrollTo) {
+      const { scrollTo } = parallaxRef.current;
+      switch(pathname.replace('/', '')) {
+        case '':
+          scrollTo(0);
+          break;
+        case 'story':
+          scrollTo(1);
+          break;
+        case 'team':
+          scrollTo(2);
+          break;
+        case 'contact':
+          scrollTo(3);
+          break;
+        case 'sponsors':
+          scrollTo(4);
+      }
+    }
+  }, [pathname])
 
   /**
    * scroll handler to calculate which page it is on
@@ -61,6 +104,7 @@ export function Main() {
       setTextColor(naviTextColorArr[cOffset].textColor)
       setBgDark(naviTextColorArr[cOffset].isBgDark)
       setScrolling(true)
+      
     }
   }, [winHeight, parallaxRef.current])
   
@@ -83,12 +127,17 @@ export function Main() {
 
 
   return (
-    <Parallax pages={TOTAL_PAGES} ref={parallaxRef} className='my-class-name'>
-      <MainPage offset={0} />
-      <StoryPage offset={1}/>
-      <MemberPage offset={2}/>
-      <ContactPage offset={3}/>
-    </Parallax>
+    <>
+      <Navi />
+      <User />
+      <Parallax pages={TOTAL_PAGES} ref={parallaxRef} className='my-class-name'>
+        <MainPage offset={0} />
+        <StoryPage offset={1}/>
+        <MemberPage offset={2}/>
+        <ContactPage offset={3}/>
+        <SponsorPage offset={4} />
+      </Parallax>
+    </>
   )
 }
 
@@ -129,12 +178,59 @@ export function StoryPage({ offset }:PropsWithChildren<PageProps>) {
 }
 
 export function MemberPage({ offset }:PropsWithChildren<PageProps>) {
+
+  const colors = [
+    '#63D3BF',
+    '#D36363',
+    '#D0D363',
+    '#D063D3'
+  ]
+
+  const unknown = [
+    unknownBg,
+    unknownBg1,
+    unknownBg2
+  ]
+
+  const members = useMemo(() => {
+    const m = []
+
+    let i = 0
+    while(i < 15) {
+      const c = Math.floor(Math.random() * colors.length)
+      const u = Math.floor(Math.random() * unknown.length)
+      m.push({ picture: unknown[u], bgColor: colors[c] })
+      i++
+    }
+
+    return m
+  }, [])
+
+
   return (
     <ResizedSection bgColor="white" color="black">
-      <InnerContainer>
-        <InnerTitle>Tigers Team</InnerTitle>
-      </InnerContainer>
-      {offset}
+      <ParallaxLayer offset={2} speed={0.75}>
+        <InnerContainer>
+          <InnerTitle>Tigers Team</InnerTitle>
+          <Box justify="center">  
+            <Box 
+              wrap={true} 
+              pad="none"
+              justify="center" 
+              direction="row">
+                { members.map(s => (
+                <Avatar 
+                  margin="small"
+                  size="xlarge"
+                  src={s.picture} 
+                  background={s.bgColor}
+                  onClick={() => {} }/>
+                )) }
+            </Box>
+          </Box>
+
+        </InnerContainer>
+      </ParallaxLayer>
     </ResizedSection>
   )
 }
@@ -176,7 +272,8 @@ export function ContactPage({ offset }:PropsWithChildren<PageProps>) {
             options={{
               fullscreenControl: false,
               zoomControl: false,
-              mapId: GOOGLE_MAP_ID
+              mapId: GOOGLE_MAP_ID,
+              scrollwheel: false
             }}
             >
             <MapMarker 
@@ -184,10 +281,45 @@ export function ContactPage({ offset }:PropsWithChildren<PageProps>) {
               lng={BRITANNIA_LATLNG[1]} />
           </GoogleMapReact>
           </Box>
-          <Box background="white" gridArea="bot1">asdfasdfas dafsdfasdf</Box>
-          <Box background="light-5" gridArea="bot2">asdfasdfas dafsdfasdf</Box>
+          <Box background="light-2" gridArea="bot1" pad={{vertical: 'large', horizontal: 'large'}}>
+            <h3>Follow us</h3>
+            <p>Please follow and subscribe to our social media for latest news and updates.</p>
+            <Box alignSelf="center" gap="small" direction="row" pad={{vertical: 'large', horizontal: 'none'}}>
+              <SocialIcon link='https://www.instagram.com/britanniatigersclub/' src={igIcon} />
+              <SocialIcon link='https://www.tiktok.com/@britannia.tigers' src={tiktokIcon} />
+              <SocialIcon link='https://www.threads.net/@britanniatigersclub' src={threadIcon} />
+              <SocialIcon link='https://twitter.com/britanniatigers' src={twitterIcon} />
+            </Box>
+          </Box>
+          <Box background="dark-1" gridArea="bot2" pad={{vertical: 'large', horizontal: 'large'}}>
+            <h3>Join us</h3>
+            <p>For any enquiries: <br />contact@britannia-tigers.club</p>
+            <Box alignSelf="center" gap="small" direction="row" pad={{vertical: 'large', horizontal: 'none'}}>
+              <Button alignSelf="center" primary size="small" label="Let's talk" />
+            </Box>
+          </Box>
       </Grid>
     </ResizedSection>
+  )
+}
+
+function SponsorPage({ offset }:PropsWithChildren<PageProps>) {
+
+  const sponsors = useSponsors();
+  console.log(sponsors)
+
+  return (
+    <ResizedSection bgColor="white" color="black">
+      <ParallaxLayer offset={4} speed={0.5}>
+        <InnerContainer>
+          <InnerTitle>Sponsors</InnerTitle>
+          <Box gap="medium" justify="center" direction="row" pad={{ top: 'none', bottom: 'large', horizontal: 'none'}}>
+            { sponsors.map(s => <SponsorImg width={200} height={200} src={s.logo.url} />) }
+          </Box>
+        </InnerContainer>
+      </ParallaxLayer>
+    </ResizedSection>
+
   )
 }
 

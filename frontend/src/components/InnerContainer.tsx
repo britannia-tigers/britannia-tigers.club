@@ -74,5 +74,7 @@ interface InnerContentProps {
 }
 
 export const InnerContent = styled.div<InnerContentProps>`
+  margin: 0;
+  padding: 20px 45px 20px;
 
 `

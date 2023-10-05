@@ -22,6 +22,18 @@ export interface SessionFull extends Session {
   radius: string
 }
 
+export interface Sponsor {
+  name: string
+  description?: string
+  logo: string
+  priority?: number
+  amount: number
+  website?: string
+  email?: string
+  startDate: string
+  endDate: string
+}
+
 export interface ExtendedQueryOptions extends QueryOptions {
   name?: string
   location?: string
@@ -32,6 +44,7 @@ export type Response<T> = CollectionProp<EntryProps<T>>;
 
 export type PageListResponse = Response<Page>;
 export type SessionListResponse = Response<Session>;
+export type SponsorListResponse = Response<Sponsor>;
 
 export type SessionFullResponse = EntryProps<SessionFull>;
 export type PageFullResponse = EntryProps<PageFull>;

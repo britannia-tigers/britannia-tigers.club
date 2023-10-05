@@ -4,8 +4,9 @@ import {
   createClient, EntryProps, PlainClientAPI, 
   QueryOptions
 } from 'contentful-management';
+import { createClient as createDeliveryClient, ContentfulClientApi, ChainModifiers } from 'contentful'
 import config from './contentful.config';
-import { ExtendedQueryOptions, FilterParam, PageFullResponse, PageListResponse, Session, SessionFull, SessionFullResponse, SessionListResponse } from './cms.interface';
+import { ExtendedQueryOptions, FilterParam, PageFullResponse, PageListResponse, Session, SessionFull, SessionFullResponse, SessionListResponse, Sponsor, SponsorListResponse } from './cms.interface';
 import contentfulConfig from './contentful.config';
 
 
@@ -15,6 +16,7 @@ export class CmsService {
   spaceId:string;
   environment:string;
   client:PlainClientAPI;
+  deliveryClient: ContentfulClientApi<undefined>;
 
   constructor() {
 
@@ -31,6 +33,7 @@ export class CmsService {
         environmentId
       }
     });
+
   }
 
   checkToken() {
@@ -219,6 +222,24 @@ export class CmsService {
         ...rest
       }
     });
+  }
+  
+
+  /**
+   * get all sponsors
+   * @param q 
+   * @returns 
+   */
+  async getSponsors(q: ExtendedQueryOptions = {}): Promise<SponsorListResponse> {
+    return await this.getListByContentType<Sponsor>(config.contentTypeId.sponsors, q);
+  }
+
+  /**
+   * get all assets
+   * @returns 
+   */
+  async getAllAssets() {
+    return (await this.client.asset.getMany({ query: {  } }));
   }
 
 

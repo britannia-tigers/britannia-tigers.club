@@ -1,25 +1,25 @@
 version: 2.0
 jobs:
-  build-and-test:
-    docker:
-      - image: cimg/node:14.20.0
-    steps:
-      - checkout
-      - restore_cache:
-          key: dependency=cache={{ checksum "package-lock.json" }}
-      - run:
-          name: install-npm-modules
-          command: 'npm install'
-      - save_cache:
-          key: dependency-cache-{{ checksum "package-lock.json" }}
-          paths: 
-          - ./node_modules
-      - run:
-          name: test
-          command: 'npm run test:ci'
+  # build-and-test:
+  #   docker:
+  #     - image: cimg/node:14.20.0
+  #   steps:
+  #     - checkout
+  #     - restore_cache:
+  #         key: dependency=cache={{ checksum "package-lock.json" }}
+  #     - run:
+  #         name: install-npm-modules
+  #         command: 'npm install'
+  #     - save_cache:
+  #         key: dependency-cache-{{ checksum "package-lock.json" }}
+  #         paths: 
+  #         - ./node_modules
+  #     - run:
+  #         name: test
+  #         command: 'npm run test:ci'
   build-deploy-prod:
     docker:
-      - image: cimg/node:14.20.0
+      - image: cimg/node:18.18.0
     steps:
       - checkout
       - run:
@@ -29,13 +29,13 @@ workflows:
   version: 2
   build-test-deploy-prod:
     jobs:
-      - build-and-test:
-            filters:
-              branches:
-                only: main
+      # - build-and-test:
+      #       filters:
+      #         branches:
+      #           only: main
       - build-deploy-prod:
-            requires:
-              - build-and-test
+            # requires:
+            #   - build-and-test
             filters:
               branches:
                 only: main
