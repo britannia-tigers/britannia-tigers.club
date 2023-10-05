@@ -1,6 +1,5 @@
 
 install:
-	npm install
 	cd frontend && npm install
 	cd backend && npm install
 
@@ -21,7 +20,7 @@ copy-install-be:
 delete-dist:
 	rm -rf output
 
-build: delete-dist build-fe build-be copy-install-be
+build: build-fe build-be copy-install-be
 
 dev:
 	npm run dev
