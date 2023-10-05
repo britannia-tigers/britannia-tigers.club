@@ -10,7 +10,8 @@
     "dev": "concurrently 'npm:dev:*'",
     "build:fe": "npm run --prefix frontend build",
     "build:be": "npm run --prefix backend build",
-    "start": "cross-env NODE_ENV=production node output/build/dist/main.js"
+    "start": "cross-env NODE_ENV=production node output/build/dist/main.js",
+    "postinstall": "make install && make build"
   },
   "repository": {
     "type": "git",
