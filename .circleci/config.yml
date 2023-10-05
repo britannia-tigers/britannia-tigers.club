@@ -37,17 +37,6 @@ jobs:
           key: dependency-cache-{{ checksum "package-lock.json" }}
           paths: 
             - ./node_modules
-      - persist_to_workspace:
-          root: ~/project
-          paths:
-            - .
-  deploy-prod:
-    docker:
-      - image: cimg/node:18.18.0
-    steps:
-      - checkout
-      - attach_workspace:
-          at: ~/project
       - run:
           name: deploy-heroku-prod
           command: git push https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_PIPELINE.git main
@@ -60,13 +49,7 @@ workflows:
       #       filters:
       #         branches:
       #           only: main
-      - build-prod:
-          filters:
-            branches:
-              only: main
       - deploy-prod:
-          requires:
-            - build-prod
           filters:
             branches:
               only: main
