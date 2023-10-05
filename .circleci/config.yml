@@ -1,6 +1,10 @@
 version: 2.1
 orbs:
   heroku: circleci/heroku@2.0
+parameters:
+  app-name:
+    type: string
+    default: $HEROKU_PIPELINE
 # jobs:
   # build-and-test:
   #   docker:
