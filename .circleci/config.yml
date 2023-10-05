@@ -73,8 +73,5 @@ workflows:
       - heroku/deploy-via-git:
           app-name: $HEROKU_APP_NAME
           post-steps:
-            - run: npm install -g typescript
-            - run: npm install -g nest/cli
-            - run: make install
-            - run: make build
+            - run: make install && make build
       
