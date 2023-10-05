@@ -22,7 +22,8 @@ jobs:
       - image: cimg/node:18.18.0
     steps:
       - checkout
-      - make_build:
+      - run:
+          name: make_build
           command: |
             make build
       - run:
