@@ -49,7 +49,7 @@ workflows:
       #       filters:
       #         branches:
       #           only: main
-      - deploy-prod:
+      - build-prod:
           filters:
             branches:
               only: main
