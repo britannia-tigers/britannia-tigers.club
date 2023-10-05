@@ -1,4 +1,6 @@
-version: 2.0
+version: 2.1
+orbs:
+  heroku: circleci/heroku@2.0
 jobs:
   # build-and-test:
   #   docker:
@@ -38,14 +40,20 @@ jobs:
           paths: 
             - ./node_modules
 
-  build-prod:
+  deploy-prod:
+    executor: heroku/default
     docker:
       - image: cimg/node:18.18.0
     steps:
       - checkout
-      - run:
-          name: deploy-heroku-prod
-          command: git push https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_PIPELINE.git main
+      - heroku/install
+      - heroku/deploy-via-git:
+          post-steps:
+            - run: make install
+            - run: make build
+      # - run:
+      #     name: deploy-heroku-prod
+      #     command: git push https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_PIPELINE.git main
 
 workflows:
   version: 2
@@ -55,7 +63,7 @@ workflows:
       #       filters:
       #         branches:
       #           only: main
-      - build-prod:
+      - deploy-prod:
           filters:
             branches:
               only: main
