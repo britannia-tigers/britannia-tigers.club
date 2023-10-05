@@ -10,7 +10,7 @@ import { WebhookModule } from './webhook/webhook.module';
 
 const isDev = process.env.NODE_ENV === 'development'
 const envFilePath = isDev ? ['.dev.env', '.env'] : ['.env']
-const rootPath = isDev ? join(__dirname, '..', '..', 'output', 'public') : join(__dirname, 'output', 'public')
+const rootPath = isDev ? join(__dirname, '..', '..', 'output', 'public') : join(__dirname, '../../..', 'output', 'public')
 
 
 @Module({
