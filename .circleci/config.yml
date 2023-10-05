@@ -71,9 +71,8 @@ workflows:
       #         only: main
       - heroku/deploy-via-git:
           post-steps:
-            - run: make install
-            - run: make build
-          pre-steps:
             - run: npm install -g typescript
             - run: npm install -g nest/cli
+            - run: make install
+            - run: make build
       
