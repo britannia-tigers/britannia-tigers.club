@@ -1,7 +1,7 @@
 version: 2.1
 orbs:
   heroku: circleci/heroku@2.0
-jobs:
+# jobs:
   # build-and-test:
   #   docker:
   #     - image: cimg/node:14.20.0
@@ -20,40 +20,42 @@ jobs:
   #         name: test
   #         command: 'npm run test:ci'
 
-  build-test:
-    docker:
-      - image: cimg/node:18.18.0
-    steps:
-      - checkout
-      - restore_cache:
-          key: dependency=cache={{ checksum "package-lock.json" }}
-      - run:
-          name: install_packages
-          command: |
-            make install
-      - run:
-          name: make_packages
-          command: |
-            make build
-      - save_cache:
-          key: dependency-cache-{{ checksum "package-lock.json" }}
-          paths: 
-            - ./node_modules
+  # build-test:
+  #   docker:
+  #     - image: cimg/node:18.18.0
+  #   steps:
+  #     - checkout
+  #     - restore_cache:
+  #         key: dependency=cache={{ checksum "package-lock.json" }}
+  #     - run:
+  #         name: install_packages
+  #         command: |
+  #           make install
+  #     - run:
+  #         name: make_packages
+  #         command: |
+  #           make build
+  #     - save_cache:
+  #         key: dependency-cache-{{ checksum "package-lock.json" }}
+  #         paths: 
+  #           - ./node_modules
 
-  deploy-prod:
-    executor: heroku/default
-    docker:
-      - image: cimg/node:18.18.0
-    steps:
-      - checkout
-      - heroku/install
-      - heroku/deploy-via-git:
-          post-steps:
-            - run: make install
-            - run: make build
+  # deploy-prod:
+  #   executor: heroku/default
+  #   docker:
+  #     - image: cimg/node:18.18.0
+  #   steps:
+  #     - checkout
+  #     - heroku/install
+  #     - heroku/deploy-via-git:
+  #         post-steps:
+  #           - run: make install
+  #           - run: make build
       # - run:
       #     name: deploy-heroku-prod
       #     command: git push https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_PIPELINE.git main
+
+
 
 workflows:
   version: 2
@@ -63,8 +65,15 @@ workflows:
       #       filters:
       #         branches:
       #           only: main
-      - deploy-prod:
-          filters:
-            branches:
-              only: main
+      # - deploy-prod:
+      #     filters:
+      #       branches:
+      #         only: main
+      - heroku/deploy-via-git:
+          post-steps:
+            - run: make install
+            - run: make build
+          pre-steps:
+            - run: npm install -g typescript
+            - run: npm install -g nest/cli
       
