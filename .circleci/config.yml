@@ -1,12 +1,7 @@
 version: 2.1
 orbs:
   heroku: circleci/heroku@2.0
-parameters:
-  app-name:
-    description:
-      The name of your Heroku app. May also refer to an environment variable.
-    type: string
-    default: $HEROKU_APP_NAME
+
 # jobs:
   # build-and-test:
   #   docker:
@@ -76,6 +71,7 @@ workflows:
       #       branches:
       #         only: main
       - heroku/deploy-via-git:
+          app-name: $HEROKU_APP_NAME
           post-steps:
             - run: npm install -g typescript
             - run: npm install -g nest/cli
