@@ -174,8 +174,6 @@ export function StoryPage({ offset }:PropsWithChildren<PageProps>) {
         <p>The Britannia Tigers have undergone a commendable evolution, beginning as a group of basketball enthusiasts in early 2010 in Hackney, East London. This journey has transformed them into a more diverse and inclusive club, where people from various ethnicities, genders, and backgrounds have found a welcoming and open environment to come together and play.</p>
 
         <p>With this strong foundation of inclusivity, we have formed a competitive team of individuals who are eager to participate in recreational leagues and tournaments in the future.</p>
-          {offset}
-          <Link to='/profile'>profile</Link> <Link to='/login'>login</Link>
         </InnerSubTitle>
       </InnerContainer>
       </ParallaxLayer>
