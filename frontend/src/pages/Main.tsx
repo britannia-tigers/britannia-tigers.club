@@ -171,9 +171,9 @@ export function StoryPage({ offset }:PropsWithChildren<PageProps>) {
       <InnerContainer>
           <InnerTitle>Our Story</InnerTitle>
         <InnerSubTitle>
-          <p>Bacon ipsum dolor amet short loin pig ground round, beef filet mignon chuck venison frankfurter sausage.</p>
-          <p>Strip steak pork belly fatback doner, salami kielbasa spare ribs venison rump leberkas. Tail sausage meatloaf, chuck fatback filet mignon tenderloin pork belly jowl pig salami swine biltong.</p>
-          <p>Leberkas burgdoggen rump, bresaola chislic jerky flank meatloaf salami beef landjaeger ribeye.</p>
+        <p>The Britannia Tigers have undergone a commendable evolution, beginning as a group of basketball enthusiasts in early 2010 in Hackney, East London. This journey has transformed them into a more diverse and inclusive club, where people from various ethnicities, genders, and backgrounds have found a welcoming and open environment to come together and play.</p>
+
+        <p>With this strong foundation of inclusivity, we have formed a competitive team of individuals who are eager to participate in recreational leagues and tournaments in the future.</p>
           {offset}
           <Link to='/profile'>profile</Link> <Link to='/login'>login</Link>
         </InnerSubTitle>
