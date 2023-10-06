@@ -16,7 +16,7 @@ import igIcon from '../../public/instagram.svg';
 import tiktokIcon from '../../public/tiktok.svg';
 import threadIcon from '../../public/thread.svg';
 import twitterIcon from '../../public/twitter.svg';
-import { Avatar, Box, Button, Grid } from "grommet";
+import { Avatar, Box, Button, Grid, Paragraph } from "grommet";
 import GoogleMapReact from 'google-map-react';
 import { MapMarker } from "../components/MapMarker";
 import { Emblem } from "../components/Emblem";
@@ -26,6 +26,8 @@ import { SocialIcon } from "../components/SocialIcon";
 import { useSponsors } from "../api/sponsors";
 import { SponsorImg } from "../components/SponsorImg";
 import { BrowserView, MobileView } from "react-device-detect";
+import { WIP } from "../components/WIP";
+import { SubTitle } from "../components/Titles";
 
 
 const TOTAL_PAGES = 5;
@@ -236,6 +238,25 @@ export function MemberPage({ offset }:PropsWithChildren<PageProps>) {
           </Box>
 
         </InnerContainer>
+      </ParallaxLayer>
+      {/* temporary until team players are decided */}
+      <ParallaxLayer offset={2} speed={0.25}>
+        <WIP>
+          <SubTitle>2023-2024 Team trial</SubTitle>
+          <Paragraph margin={{ top: 'none', bottom: 'medium' }}>Would you like to compete with us for the up coming season?  Sign up to our trial session on
+            the 19th Oct!
+          </Paragraph>
+          <Paragraph color='dark-1' size='small' margin={{ top: 'none', bottom: 'none' }}>
+            Haggerston School<br />Weymouth Terrace<br/>
+            London E2 8LS<br/>
+          </Paragraph>
+          <Paragraph size="small" margin={{ top: 'none', bottom: 'large' }}>
+            <a target="_blank" href='https://www.google.com/maps/dir//haggerston+school/data=!4m6!4m5!1m1!4e2!1m2!1m1!1s0x48761cbf134d1105:0x877e35d372be628f?sa=X&ved=2ahUKEwjR_Z-uneGBAxUaQUEAHWFdAScQ9Rd6BAhYEAA&ved=2ahUKEwjR_Z-uneGBAxUaQUEAHWFdAScQ9Rd6BAhkEAQ'>
+              How to get there
+            </a>
+          </Paragraph>
+          <Button onClick={() => window.open('https://awp4c37iy5z.typeform.com/to/Qc9QoWfL', "tigers_trial_signup")} alignSelf="start" size='small' primary label='Sign up' />
+        </WIP>
       </ParallaxLayer>
     </ResizedSection>
   )

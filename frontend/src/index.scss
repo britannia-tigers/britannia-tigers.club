@@ -11,6 +11,19 @@ html, body {
   font-weight: 400;
 }
 
+a {
+  color: black;
+  transition: color 0.35 ease-in-out;
+
+  &:hover {
+    text-decoration: none;
+  }
+
+  &:visited {
+    color: black;
+  }
+}
+
 h1 {
   font-family: "din-2014-narrow", sans-serif;
   font-weight: 700;

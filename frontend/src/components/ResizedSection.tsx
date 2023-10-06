@@ -48,6 +48,7 @@ interface iContainer {
 }
 
 const Container = styled.div<iContainer>`
+    /* DO NOT Put position: relative here or it will break the page */
     width: ${props => props.width}px;
     height: ${props => props.height}px;
     color: ${props => props.color};
