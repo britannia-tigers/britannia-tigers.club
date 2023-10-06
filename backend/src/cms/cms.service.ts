@@ -2,10 +2,11 @@ import { Get, Injectable } from '@nestjs/common';
 import { 
   CollectionProp,
   createClient, EntryProps, PlainClientAPI, 
-  QueryOptions 
+  QueryOptions
 } from 'contentful-management';
+import { createClient as createDeliveryClient, ContentfulClientApi, ChainModifiers } from 'contentful'
 import config from './contentful.config';
-import { ExtendedQueryOptions, FilterParam, PageFullResponse, PageListResponse, Session, SessionFull, SessionFullResponse, SessionListResponse } from './cms.interface';
+import { ExtendedQueryOptions, FilterParam, PageFullResponse, PageListResponse, Session, SessionFull, SessionFullResponse, SessionListResponse, Sponsor, SponsorListResponse } from './cms.interface';
 import contentfulConfig from './contentful.config';
 
 
@@ -15,6 +16,7 @@ export class CmsService {
   spaceId:string;
   environment:string;
   client:PlainClientAPI;
+  deliveryClient: ContentfulClientApi<undefined>;
 
   constructor() {
 
@@ -31,6 +33,7 @@ export class CmsService {
         environmentId
       }
     });
+
   }
 
   checkToken() {
@@ -53,6 +56,12 @@ export class CmsService {
     });
   }
 
+
+  /**
+   * Create a session
+   * @param param0 
+   * @returns 
+   */
   async createSession({ name, location, date }: Session) {
     
     try {
@@ -61,7 +70,7 @@ export class CmsService {
         contentTypeId: config.contentTypeId.sessions,
       }, { fields: {
         name: {
-        [contentfulConfig.locale.gb]: name
+          [contentfulConfig.locale.gb]: name
         },
         location: {
           [contentfulConfig.locale.gb]: { lat: Number(latlng[0]), lon: Number(latlng[1])}
@@ -77,6 +86,69 @@ export class CmsService {
     }
   }
 
+
+  /**
+   * Update a session
+   * @param entryId 
+   * @param param1 
+   * @returns 
+   */
+  async updateSession(entryId: string, { name, location, date, participants}:Partial<Session>) {
+    try {
+      const sess = await this.getSessionById(entryId);
+      const localGb = contentfulConfig.locale.gb;
+
+      console.log(sess.fields);
+
+      let fields = { 
+        name: name ? { [contentfulConfig.locale.gb]: name } : sess.fields.name,
+        location: location ? { [contentfulConfig.locale.gb]: location } : sess.fields.location,
+        date: date ? { [contentfulConfig.locale.gb]: date } : sess.fields.date,
+        participants: participants ? { [contentfulConfig.locale.gb]: participants } : sess.fields.participants
+      };
+
+      const res = await this.client.entry.update({ entryId }, {
+        sys: sess.sys,
+        fields
+      });
+      console.log('patched: ', res)
+      return res;
+    } catch(e) {
+      console.error(e);
+      throw e;
+    }
+  }
+
+
+  /**
+   * Add a participant to a session
+   * @param entryId 
+   * @param userId 
+   * @returns 
+   */
+  async addParticipant(entryId: string, userIds: string[]) {
+
+    const sess = await this.getSessionById(entryId);
+    const oParticipants = sess.fields.participants[contentfulConfig.locale.gb];
+    const nParticipants = [...(new Set([...oParticipants, ...userIds]))]
+
+    let fields = { 
+      ...sess.fields,
+      participants: { [contentfulConfig.locale.gb]: nParticipants }
+    };
+
+    const res = await this.client.entry.update({ entryId }, {
+      sys: sess.sys,
+      fields
+    });
+    return res;
+  }
+
+
+  /**
+   * Publish a session
+   * @param id 
+   */
   async publishSession(id: string) {
     try {
       const entry = await this.client.entry.get({ entryId: id });
@@ -107,6 +179,11 @@ export class CmsService {
     });
   }
 
+
+  /**
+   * get next upcoming session
+   * @returns 
+   */
   async getNextSession(): Promise<SessionFullResponse> {
     const curDate = new Date();
     const res = await this.client.entry.getPublished<SessionFull>({
@@ -118,6 +195,7 @@ export class CmsService {
 
     return res.items[0];
   }
+
 
   /**
    * Find a session by query
@@ -145,6 +223,25 @@ export class CmsService {
       }
     });
   }
+  
+
+  /**
+   * get all sponsors
+   * @param q 
+   * @returns 
+   */
+  async getSponsors(q: ExtendedQueryOptions = {}): Promise<SponsorListResponse> {
+    return await this.getListByContentType<Sponsor>(config.contentTypeId.sponsors, q);
+  }
+
+  /**
+   * get all assets
+   * @returns 
+   */
+  async getAllAssets() {
+    return (await this.client.asset.getMany({ query: {  } }));
+  }
+
 
   /**
    * Base get list by Content type

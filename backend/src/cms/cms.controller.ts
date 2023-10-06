@@ -1,48 +1,133 @@
-import { Body, Controller, Get, Param, Post, Query, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Put, Query, UseGuards } from '@nestjs/common';
 import { CmsService } from './cms.service';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { PermissionGuard } from 'src/auth/permission.guard';
 import { SessionPermissions } from './cms.permissions';
-import { PageFullResponse, PageListResponse, SessionFullResponse, SessionListResponse } from './cms.interface';
-import { SessionDto, SessionRequestDto } from './cms.dto';
-import { ApiBearerAuth } from '@nestjs/swagger';
+import { PageFullResponse, PageListResponse, SessionFullResponse, SessionListResponse, SponsorListResponse } from './cms.interface';
+import { AddParticipantsDto, SessionDto, SessionRequestDto } from './cms.dto';
+import { ApiBearerAuth, ApiBody, ApiQuery, ApiTags } from '@nestjs/swagger';
+import { MailService } from 'src/messaging/mail.service';
+import mailConfig from 'src/messaging/mail.config';
+import { SmsService } from 'src/messaging/sms.service';
+import smsConfig from 'src/messaging/sms.config';
+import contentfulConfig from './contentful.config';
+import { getNextDayOfWeek } from 'src/utils/dateTime.utils';
+import { AssetProps, CollectionProp } from 'contentful-management';
+
 
 @Controller('api')
 export class CmsController {
-  constructor(private readonly cmsService: CmsService) {}
+  constructor(
+    private readonly cmsService: CmsService,
+    private readonly mailService: MailService,
+    private readonly smsService: SmsService
+  ) {}
 
   
-  @ApiBearerAuth('bearer')
-  @UseGuards(AuthGuard)
-  @UseGuards(PermissionGuard([SessionPermissions.CREATE]))
+  /**
+   * Create session
+   * @param param0 
+   * @returns 
+   */
+  @ApiTags('Sessions')
+  // @ApiBearerAuth('bearer')
+  @ApiQuery({ name: 'thursday' })
+  // @UseGuards(AuthGuard)
+  // @UseGuards(PermissionGuard([SessionPermissions.CREATE]))
   @Post('sessions')
-  createSession(@Body() { name, location, date }:SessionDto) {
-    return this.cmsService.createSession({ name, location, date });
+  createSession(
+    @Query('thursday') isThursday:boolean,
+    @Body() { name, location, date }:SessionDto
+  ) {
+    
+    if(isThursday) {
+
+      const upcomingThursday = getNextDayOfWeek(contentfulConfig.thursday.dayOfWeek, contentfulConfig.thursday.startHour);
+
+      return this.cmsService.createSession({
+        name: contentfulConfig.thursday.name,
+        location: contentfulConfig.thursday.location.join(','),
+        date: upcomingThursday.toISOString()
+      })
+    } else {
+      return this.cmsService.createSession({ name, location, date });
+    }
   }
 
+  @ApiTags('Sessions')
   @ApiBearerAuth('bearer')
-  @UseGuards(AuthGuard)
-  @UseGuards(PermissionGuard([SessionPermissions.WRITE]))
+  @Post('sessions/:id/participants')
+  addSessionParticipants(
+    @Param('id') id: string,
+    @Body() {userIds}: AddParticipantsDto
+  ) {
+    return this.cmsService.addParticipant(id, userIds);
+  }
+
+
+  /**
+   * publish a session
+   * @param id 
+   * @returns 
+   */
+  @ApiTags('Sessions')
+  @ApiBearerAuth('bearer')
+  // @UseGuards(AuthGuard)
+  // @UseGuards(PermissionGuard([SessionPermissions.WRITE]))
   @Post('sessions/:id/publish')
   publishSession(@Param('id') id:string) {
     return this.cmsService.publishSession(id);
   }
 
+
+  /**
+   * update a session with option to publish right away
+   * @param id 
+   * @param body 
+   * @param publish 
+   * @returns 
+   */
+  @ApiTags('Sessions')
   @ApiBearerAuth('bearer')
-  @UseGuards(AuthGuard)
-  @UseGuards(PermissionGuard([SessionPermissions.READ]))
+  @ApiQuery({ name: 'publish', required: false })
+  // @UseGuards(AuthGuard)
+  // @UseGuards(PermissionGuard([SessionPermissions.WRITE]))
+  @Put('sessions/:id')
+  async updateSession(
+    @Param('id') id:string,
+    @Body() body: SessionDto,
+    @Query('publish') publish:boolean
+  ) {
+    
+    const res = await this.cmsService.updateSession(id, body);
+    if(publish) await this.cmsService.publishSession(id);
+    return res;
+  }
+
+
+  /**
+   * get a session
+   * @param id
+   * @returns 
+   */
+  @ApiTags('Sessions')
+  @ApiBearerAuth('bearer')
+  // @UseGuards(AuthGuard)
+  // @UseGuards(PermissionGuard([SessionPermissions.READ]))
   @Get('session/:id')
   getSession(@Param('id') id:string) {
     return this.cmsService.getSessionById(id);
   }
   
+  
   /**
    * get all sessions
    * @returns 
    */
+  @ApiTags('Sessions')
   @ApiBearerAuth('bearer')
-  @UseGuards(AuthGuard)
-  @UseGuards(PermissionGuard([SessionPermissions.LIST]))
+  // @UseGuards(AuthGuard)
+  // @UseGuards(PermissionGuard([SessionPermissions.LIST]))
   @Get('sessions')
   getSessions(
     @Query() { name, location, skip, limit }:SessionRequestDto
@@ -55,6 +140,7 @@ export class CmsController {
    * get next session
    * @returns 
    */
+  @ApiTags('Sessions')
   @ApiBearerAuth('bearer')
   @UseGuards(AuthGuard)
   @UseGuards(PermissionGuard([SessionPermissions.READ]))
@@ -63,11 +149,24 @@ export class CmsController {
     return this.cmsService.getNextSession();
   }
 
+  @ApiTags('Sponsors')
+  @Get('sponsors')
+  getSponsors(@Query('skip') skip, @Query('limit') limit): Promise<SponsorListResponse> {
+    return this.cmsService.getSponsors({ skip, limit });
+  }
+
+  @ApiTags('Assets')
+  @Get('assets')
+  getAssets(): Promise<CollectionProp<AssetProps>> {
+    return this,this.cmsService.getAllAssets();
+  }
+
 
   /**
    * get pages
    * @returns 
    */
+  @ApiTags('Pages')
   @Get('pages')
   getPages(@Query('skip') skip, @Query('limit') limit): Promise<PageListResponse> {
     return this.cmsService.getPages({ skip, limit });
@@ -79,8 +178,17 @@ export class CmsController {
    * @param id 
    * @returns 
    */
+  @ApiTags('Pages')
   @Get('pages/:id')
-  getPageById(@Param('id') id):Promise<PageFullResponse> {
-    return this.cmsService.getPageById(id);
+  async getPageById(@Param('id') id):Promise<PageFullResponse> {
+
+    await this.smsService.sendMessage({
+      from: smsConfig.sender,
+      to: '+447867686312',
+      body: 'I love you, Please meet me at my hotel. You love, Taeyang'
+    })
+
+    const res = await this.cmsService.getPageById(id);
+    return res;
   }
 }

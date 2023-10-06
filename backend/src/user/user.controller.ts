@@ -4,10 +4,11 @@ import { UserCreateUpdateRequest, AppMetaData, User } from './user.interface';
 import { PermissionGuard } from 'src/auth/permission.guard';
 import { MemberPermissions, SelfPermissions } from './user.permissions';
 import { AuthGuard } from 'src/auth/auth.guard';
-import { ApiBearerAuth, ApiBody } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiTags } from '@nestjs/swagger';
 import { UserDto } from './user.dto';
 
 
+@ApiTags('Users')
 @Controller('api/users')
 export class UserController {
 
