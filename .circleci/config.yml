@@ -61,8 +61,7 @@ jobs:
     docker:
       - image: cimg/node:18.18.0
     steps:
-      - heroku/deploy-via-git:
-          app-name: $HEROKU_APP_NAME
+      - heroku/deploy-via-git
 
 
 
