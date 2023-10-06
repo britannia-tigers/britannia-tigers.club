@@ -1,6 +1,7 @@
 import { Nav } from 'grommet'
 import { Link, useNavigate } from 'react-router-dom'
 import styled from "styled-components"
+import { BrowserView, MobileView, isBrowser, isMobile } from 'react-device-detect';
 import { useNaviStore } from '../stores/NaviStore';
 
 
@@ -11,20 +12,25 @@ export function Navi() {
 
   return (
     <NaviContainer>
-      <MainTitle 
-        onClick={() => navigate('/')}
-        isDark={bgIsDark} 
-        color={textColor} >
-          Britannia<br/>Tigers<br/>Club
-      </MainTitle>
-      <NavLinks isDark={bgIsDark} gap='xsmall' color={textColor} direction='column' alignContent='stretch'>
-        <Link to='/story'>Story</Link>
-        <Link to='/team'>Team</Link>
-        <Link to='/session'>Session</Link>
-        <Link to='/contact'>Contact</Link>
-        <Link to='/sponsors'>Sponsors</Link>
-      </NavLinks>
-    </NaviContainer>
+        <BrowserView>
+          <MainTitle 
+            onClick={() => navigate('/')}
+            isDark={bgIsDark} 
+            color={textColor} >
+              Britannia<br/>Tigers<br/>Club
+          </MainTitle>
+          <NavLinks isDark={bgIsDark} gap='xsmall' color={textColor} direction='column' alignContent='stretch'>
+            <Link to='/story'>Story</Link>
+            <Link to='/team'>Team</Link>
+            {/* <Link to='/session'>Session</Link> */}
+            <Link to='/contact'>Contact</Link>
+            <Link to='/sponsors'>Sponsors</Link>
+          </NavLinks>
+         </BrowserView>
+         <MobileView>
+          
+         </MobileView>
+      </NaviContainer>
   )
 }
 

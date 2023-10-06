@@ -25,6 +25,7 @@ import { User } from "../components/User";
 import { SocialIcon } from "../components/SocialIcon";
 import { useSponsors } from "../api/sponsors";
 import { SponsorImg } from "../components/SponsorImg";
+import { BrowserView, MobileView } from "react-device-detect";
 
 
 const TOTAL_PAGES = 5;
@@ -129,7 +130,7 @@ export function Main() {
   return (
     <>
       <Navi />
-      <User />
+      {/* <User /> */}
       <Parallax pages={TOTAL_PAGES} ref={parallaxRef} className='my-class-name'>
         <MainPage offset={0} />
         <StoryPage offset={1}/>
@@ -149,11 +150,16 @@ export function MainPage({ offset }:PropsWithChildren<PageProps>) {
 
   return (
     <ResizedSection bgVignette={true} bgImg={mainBg}>
-      <ParallaxLayer offset={0} speed={0.5}>
-        <CenteredOuterContainer>
-          <Emblem />
-        </CenteredOuterContainer>
-      </ParallaxLayer>
+      <BrowserView>
+        <ParallaxLayer offset={0} speed={0.5}>
+          <CenteredOuterContainer>
+            <Emblem />
+          </CenteredOuterContainer>
+        </ParallaxLayer>
+      </BrowserView>
+      <MobileView>
+
+      </MobileView>
     </ResizedSection>
   )
 }

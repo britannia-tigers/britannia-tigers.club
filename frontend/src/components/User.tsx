@@ -4,6 +4,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
 import { useNaviStore } from '../stores/NaviStore';
 import { useCallback } from 'react';
+import { BrowserView, MobileView } from 'react-device-detect';
 
 
 export function User() {
@@ -33,17 +34,22 @@ export function User() {
     <UserContainer 
       bgIsDark={bgIsDark}
       textColor={textColor}>
-      { isAuthenticated ? (
-        <Avatar 
-          src={user?.picture} 
-          background="light-1" 
-          onClick={() => isAuthenticated && navigate('/profile')}/>
-      ) : (
-        <UserButtonContainer>
-          <h4 onClick={signupHandler}>Become a Member</h4>
-          <Button onClick={loginHandler} size='small' primary label='Login'/>
-        </UserButtonContainer>
-      )}
+      <BrowserView>
+        { isAuthenticated ? (
+          <Avatar 
+            src={user?.picture} 
+            background="light-1" 
+            onClick={() => isAuthenticated && navigate('/profile')}/>
+        ) : (
+          <UserButtonContainer>
+            <h4 onClick={signupHandler}>Become a Member</h4>
+            <Button onClick={loginHandler} size='small' primary label='Login'/>
+          </UserButtonContainer>
+        )}
+      </BrowserView>
+      <MobileView>
+        
+      </MobileView>
     </UserContainer>
   )
 }
