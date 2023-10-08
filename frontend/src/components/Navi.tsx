@@ -11,7 +11,9 @@ export function Navi() {
   const navigate = useNavigate()
 
   return (
-    <NaviContainer>
+    <NaviContainer 
+      onScroll={e => console.log('me scroll')}
+      onTouchMove={e => console.log('me move')}>
         <BrowserView>
           <MainTitle 
             onClick={() => navigate('/')}
@@ -35,15 +37,15 @@ export function Navi() {
 }
 
 const NaviContainer = styled.header`
-  left: 0;
-  top: 0;
+  left: 30px;
+  top: 40px;
   position: fixed;
   z-index: 99;
 `
 
 const NavLinks = styled(Nav)<IMainTitle>`
   margin: 0;
-  padding: 0 35px;
+  padding-left: 5px;
 
   a {
     padding: 0;
@@ -72,7 +74,7 @@ interface IMainTitle {
 export const MainTitle = styled.h1<IMainTitle>`
   cursor: pointer;
   margin: 0;
-  padding: 40px 30px 30px 30px;
+  padding: 0 0 30px 0;
   text-transform: uppercase;
   line-height: 1em;
   font-size: 64px;

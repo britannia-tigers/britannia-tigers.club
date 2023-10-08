@@ -12,7 +12,7 @@ import { Logout } from './pages/Logout'
 function App() {
 
   return (
-    <Grommet theme={theme}>
+    <Grommet full theme={theme}>
       <Page>
         <Router>
           <Auth>

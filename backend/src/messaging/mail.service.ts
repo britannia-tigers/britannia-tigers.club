@@ -22,6 +22,8 @@ export class MailService {
    */
   async sendMail({
     to,
+    cc,
+    bcc,
     from,
     dynamicTemplateData,
     templateId
@@ -32,6 +34,8 @@ export class MailService {
         from,
         personalizations: [{
           to,
+          cc,
+          bcc,
           dynamicTemplateData
         }],
         templateId
@@ -39,7 +43,9 @@ export class MailService {
 
       return res[0];
     } catch(e) {
-      console.error(e.message);
+      console.error({
+        from, to, dynamicTemplateData, templateId
+      }, e.code, e.message);
       throw e;
     }
   }

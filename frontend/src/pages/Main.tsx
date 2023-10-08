@@ -28,7 +28,10 @@ import { SponsorImg } from "../components/SponsorImg";
 import { BrowserView, MobileView } from "react-device-detect";
 import { WIP } from "../components/WIP";
 import { SubTitle } from "../components/Titles";
-
+import { ContactForm, ContactFormDataProps } from "../components/ContactForm";
+import { FormCheckmark } from "grommet-icons";
+import { ToastContainer, toast } from 'react-toastify'
+import { sendEnquiries } from "../api/notifications";
 
 const TOTAL_PAGES = 5;
 const PAGE_OFFSET = 0.25;
@@ -48,7 +51,7 @@ export function Main() {
   
   const parallaxRef = useRef<IParallax>(null);
   const [, winHeight] = useWindowSize();
-  const { setTextColor, setBgDark } = useNaviStore();
+  const { setTextColor, setBgDark, setFormVisible } = useNaviStore();
   
   const naviTextColorArr = [
     {
@@ -75,7 +78,6 @@ export function Main() {
   ]
 
   useEffect(() => {
-    console.log(pathname)
     if(parallaxRef.current?.scrollTo) {
       const { scrollTo } = parallaxRef.current;
       switch(pathname.replace('/', '')) {
@@ -126,13 +128,32 @@ export function Main() {
       cur.removeEventListener('scroll', handleScroll)
       cur.removeEventListener('scrollend', handleScrollEnd)
     }
-  }, [parallaxRef.current?.container.current])
+  }, [winHeight, parallaxRef.current?.container.current])
+
+
+  const formHandler = useMemo(() => async (data: Partial<ContactFormDataProps>) => {
+    try {
+      await sendEnquiries(data)
+      setFormVisible(false)
+      toast.success(
+        <Paragraph size="small" margin='0px'>
+          Enquiry submitted successfully!
+        </Paragraph>
+      )
+    } catch(e) {
+      toast.error(
+        <Paragraph size="small" margin='0px'>
+          {(e as Error).message}
+        </Paragraph>
+      )
+    }
+  }, [])
 
 
   return (
     <>
-      <Navi />
       {/* <User /> */}
+      <Navi />
       <Parallax pages={TOTAL_PAGES} ref={parallaxRef} className='my-class-name'>
         <MainPage offset={0} />
         <StoryPage offset={1}/>
@@ -140,6 +161,14 @@ export function Main() {
         <ContactPage offset={3}/>
         <SponsorPage offset={4} />
       </Parallax>
+      <ContactForm title="Join us" onSubmit={formHandler}/>
+      <ToastContainer 
+          position="top-right"
+          closeButton={false}
+          hideProgressBar={true}
+          closeOnClick
+          />
+
     </>
   )
 }
@@ -243,7 +272,7 @@ export function MemberPage({ offset }:PropsWithChildren<PageProps>) {
       <ParallaxLayer offset={2} speed={0.25}>
         <WIP>
           <SubTitle>2023-2024 Team trial</SubTitle>
-          <Paragraph margin={{ top: 'none', bottom: 'medium' }}>Would you like to compete with us for the up coming season?  Sign up to our trial session on
+          <Paragraph margin={{ top: 'none', bottom: 'medium' }}>Would you like to compete with us for the upcoming season?  Sign up to our trial session on
             the 19th Oct!
           </Paragraph>
           <Paragraph color='dark-1' size='small' margin={{ top: 'none', bottom: 'none' }}>
@@ -264,8 +293,7 @@ export function MemberPage({ offset }:PropsWithChildren<PageProps>) {
 
 export function ContactPage({ offset }:PropsWithChildren<PageProps>) {
 
-
-  console.log(GOOGLE_API_KEY);
+  const { setFormVisible } = useNaviStore()
 
   return (
     <ResizedSection bgColor="grey" color="black">
@@ -320,9 +348,13 @@ export function ContactPage({ offset }:PropsWithChildren<PageProps>) {
           </Box>
           <Box background="dark-1" gridArea="bot2" pad={{vertical: 'large', horizontal: 'large'}}>
             <h3>Join us</h3>
-            <p>For any enquiries: <br />contact@britannia-tigers.club</p>
+            <p>For any enquiries, please use our enquiry form below.</p>
             <Box alignSelf="center" gap="small" direction="row" pad={{vertical: 'large', horizontal: 'none'}}>
-              <Button alignSelf="center" primary size="small" label="Let's talk" />
+              <Button 
+                onClick={() => setFormVisible(true)}
+                alignSelf="center" 
+                primary size="small" 
+                label="Let's talk" />
             </Box>
           </Box>
       </Grid>
@@ -333,7 +365,6 @@ export function ContactPage({ offset }:PropsWithChildren<PageProps>) {
 function SponsorPage({ offset }:PropsWithChildren<PageProps>) {
 
   const sponsors = useSponsors();
-  console.log(sponsors)
 
   return (
     <ResizedSection bgColor="white" color="black">
