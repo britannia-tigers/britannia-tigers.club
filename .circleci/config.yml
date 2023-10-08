@@ -33,6 +33,14 @@ workflows:
             branches:
               only: main
       - heroku/deploy-via-git:
+          name: 'deploy to uat'
+          requires:
+            - 'build and test'
+          app-name: $HEROKU_UAT_APP_NAME
+          filters:
+            branches:
+              only: uat
+      - heroku/deploy-via-git:
           name: 'deploy to prod'
           requires:
             - 'build and test'
