@@ -35,6 +35,6 @@ workflows:
       - heroku/deploy-via-git:
           name: 'deploy to prod'
           requires:
-            - build-and-test
+            - 'build and test'
           app-name: $HEROKU_APP_NAME
       
