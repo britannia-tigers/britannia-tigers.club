@@ -152,7 +152,7 @@ export function Main() {
 
   return (
     <>
-      {/* <User /> */}
+      <User />
       <Navi />
       <Parallax pages={TOTAL_PAGES} ref={parallaxRef} className='my-class-name'>
         <MainPage offset={0} />
