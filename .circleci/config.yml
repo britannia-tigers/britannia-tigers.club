@@ -28,6 +28,7 @@ workflows:
   test-deploy:
     jobs:
       - build-and-test:
+          name: 'build and test'
           filters:
             branches:
               only: main
