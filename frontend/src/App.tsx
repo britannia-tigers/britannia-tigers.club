@@ -5,14 +5,14 @@ import { Callback } from './pages/Callback'
 import { Main } from './pages/Main'
 import { Profile } from './pages/Profile'
 import { Calendar } from './pages/Calendar'
-import { Grommet, Page } from 'grommet'
+import { Grommet, Page, ThemeType } from 'grommet'
 import { theme } from './configs/theme'
 import { Logout } from './pages/Logout'
 
 function App() {
 
   return (
-    <Grommet full theme={theme}>
+    <Grommet full theme={theme as ThemeType}>
       <Page>
         <Router>
           <Auth>
