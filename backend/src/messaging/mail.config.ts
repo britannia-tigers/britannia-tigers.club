@@ -1,7 +1,7 @@
 export default {
   sender: 'contact@britannia-tigers.club',
   template: {
-    genericEnquiry: '',
+    genericEnquiry: 'd-376a61c787d3430a94f7cde46fcdabac',
     sessionBookingSuccess: '',
     sessionBookingFailed: '',
     sessionPaymentSuccess: 'd-7f784b22951a4dad8eb3fa5c70ae0518',
