@@ -19,7 +19,7 @@ export const useNaviStore = create<iNavi>((set) => ({
     textColor: 'white'
   },
   form: {
-    isVisible: true
+    isVisible: false
   },
   setTextColor: (textColor: string) => set(state => ({ navi: { ...state.navi, textColor } })),
   setBgDark: (bgIsDark: boolean) => set(state => ({ navi: { ...state.navi, bgIsDark } })),
