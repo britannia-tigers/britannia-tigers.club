@@ -42,4 +42,7 @@ workflows:
           requires:
             - 'build and test'
           app-name: $HEROKU_APP_NAME
+          filters:
+            branches:
+              only: main
       
