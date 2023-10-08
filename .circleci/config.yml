@@ -25,26 +25,33 @@ jobs:
 
 workflows:
   version: 2
-  test-deploy:
+  test-deploy-uat:
     jobs:
       - build-and-test:
-          name: 'build and test'
-      - heroku/deploy-via-git:
-          name: 'deploy to uat'
-          requires:
-            - 'build and test'
-          app-name: $HEROKU_UAT_APP_NAME
+          name: 'build and test uat'
           filters:
             branches:
               only: uat
       - heroku/deploy-via-git:
-          name: 'deploy to prod'
+          name: 'deploy to uat'
           requires:
-            - 'build and test'
-          app-name: $HEROKU_APP_NAME
+            - 'build and test uat'
+          app-name: $HEROKU_UAT_APP_NAME
           filters:
             branches:
-              only: main
+              only: uat
+  test-deploy-prod:
+    jobs:  
+      - build-and-test:
+          name: 'build and test'
+          filters:
             tags:
               only: /^v.*/
-      
+      - heroku/deploy-via-git:
+          name: 'deploy to prod'
+          requires:
+            - 'build and test prod'
+          app-name: $HEROKU_APP_NAME
+          filters:
+            tags:
+              only: /^v.*/
