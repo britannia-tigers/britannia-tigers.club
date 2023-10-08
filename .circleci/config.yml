@@ -29,9 +29,6 @@ workflows:
     jobs:
       - build-and-test:
           name: 'build and test'
-          filters:
-            branches:
-              only: main
       - heroku/deploy-via-git:
           name: 'deploy to uat'
           requires:
