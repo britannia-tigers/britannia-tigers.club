@@ -48,7 +48,7 @@ workflows:
             tags:
               only: /^v.*/
             branches:
-              ignore: /.*/
+              only: main
       - heroku/deploy-via-git:
           name: 'deploy to prod'
           requires:
