@@ -101,36 +101,35 @@ export function ContactForm({ title, animDuration = 350, onSubmit }: PropsWithCh
                   <SubTitle marginBottom="12px">{title}</SubTitle>
                   <Paragraph size="small" margin='0px'>Pleae fill in the required fields (*)</Paragraph>
                     <TextInput 
-                      // required
-                      // validate={[{ 
-                      //   regexp: /^[a-z]/i,
-                      //   message: 'Name can only contain alphabets'
-                      // }]}
+                      required
+                      validate={[{ 
+                        regexp: /^[a-z]/i,
+                        message: 'Name can only contain alphabets'
+                      }]}
                       name='name'
                       onChange={inputHandler}
                       label="Name *"
                       placeholder='Full name' />
                     <TextInput 
-                      // required
-                      // validate={{ 
-                      //   regexp: /^[_a-z0-9-]+(\.[_a-z0-9-]+)*(\+[a-z0-9-]+)?@[a-z0-9-]+(\.[a-z0-9-]+)*$/i,
-                      //   message: 'Email is invalid'
-                      // }}
+                      required
+                      validate={{ 
+                        regexp: /^[_a-z0-9-]+(\.[_a-z0-9-]+)*(\+[a-z0-9-]+)?@[a-z0-9-]+(\.[a-z0-9-]+)*$/i,
+                        message: 'Email is invalid'
+                      }}
                       name='email'
                       onChange={inputHandler}
                       label="Email *"
                       placeholder='Email address' />
                     <TextInput
                       name='phone'
-                      // validate={{
-                      //   regexp: /^[0-9]*$/i,
-                      //   message: 'Phone number is invalid'
-                      // }}
+                      validate={{
+                        message: 'Phone number is invalid'
+                      }}
                       onChange={inputHandler}
                       label="Phone"
                       placeholder='Contact number' />
                     <TextArea 
-                      // required
+                      required
                       name='message'
                       onChange={inputHandler}
                       label="Message *"
