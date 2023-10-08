@@ -1,7 +1,7 @@
 import { ThemeType } from "grommet";
 
 
-export const theme: ThemeType = {
+export const theme /*: ThemeType*/ = {
   global: {
     font: {
       family: "din-2014, sans-serif",
