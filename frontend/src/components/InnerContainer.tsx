@@ -64,6 +64,10 @@ export const InnerTitle = styled.h3<InnerTitleProps>`
   margin: 0;
 `
 
+export const MobileInnerTitle = styled(InnerTitle)<InnerTitleProps>`
+  padding: 0px 30px 30px 0px;
+`
+
 export const InnerSubTitle = styled.h4`
   margin: 0;
   padding: 0 45px;

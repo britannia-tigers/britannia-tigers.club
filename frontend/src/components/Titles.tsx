@@ -12,6 +12,10 @@ export const SubTitle = styled.h3<SubTitleProps>`
   margin-bottom: ${props => props.marginBottom || '36px'};
 `
 
+export const MobileSubTitle = styled(SubTitle)<SubTitleProps>`
+  padding: 0 30px 0px;
+`;
+
 export const Paragraph = styled(GPara)`
   margin: 0;
   padding: 0;

@@ -15,7 +15,7 @@ interface iNavi {
 
 export const useNaviStore = create<iNavi>((set) => ({
   navi: {
-    bgIsDark: false,
+    bgIsDark: true,
     textColor: 'white'
   },
   form: {

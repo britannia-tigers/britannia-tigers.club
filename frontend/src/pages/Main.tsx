@@ -5,7 +5,7 @@ import { ResizedSection } from "../components/ResizedSection";
 import { PropsWithChildren, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useWindowSize } from "../hooks/windowSize";
 import { useNaviStore } from "../stores/NaviStore";
-import { CenteredOuterContainer, InnerContainer, InnerContent, InnerSubTitle, InnerTitle } from "../components/InnerContainer";
+import { CenteredOuterContainer, InnerContainer, InnerContent, InnerSubTitle, InnerTitle, MobileInnerTitle } from "../components/InnerContainer";
 import mainBg from '../../public/abhishek-chandra-kXJksx1kdJ0-unsplash@0.5x.jpg';
 import contactBg from '../../public/joshua-kantarges-N_7Kb4hpaoU-unsplash@0.5x.jpg';
 import unknownBg from '../../public/unknown.png';
@@ -25,9 +25,9 @@ import { User } from "../components/User";
 import { SocialIcon } from "../components/SocialIcon";
 import { useSponsors } from "../api/sponsors";
 import { SponsorImg } from "../components/SponsorImg";
-import { BrowserView, MobileView } from "react-device-detect";
+import { BrowserView, MobileView, isMobile } from "react-device-detect";
 import { WIP } from "../components/WIP";
-import { SubTitle } from "../components/Titles";
+import { MobileSubTitle, SubTitle } from "../components/Titles";
 import { ContactForm, ContactFormDataProps } from "../components/ContactForm";
 import { FormCheckmark } from "grommet-icons";
 import { ToastContainer, toast } from 'react-toastify'
@@ -200,7 +200,12 @@ export function StoryPage({ offset }:PropsWithChildren<PageProps>) {
     <ResizedSection>
       <ParallaxLayer offset={1} speed={0.75}>
       <InnerContainer>
+        <BrowserView>
           <InnerTitle>Our Story</InnerTitle>
+        </BrowserView>
+        <MobileView>
+          <MobileInnerTitle>Our Story</MobileInnerTitle>
+        </MobileView>
         <InnerSubTitle>
           <p>The Britannia Tigers have undergone a commendable evolution, beginning as a group of basketball enthusiasts in early 2010 in Hackney, East London.</p>
           
@@ -248,7 +253,12 @@ export function MemberPage({ offset }:PropsWithChildren<PageProps>) {
     <ResizedSection bgColor="white" color="black">
       <ParallaxLayer offset={2} speed={0.75}>
         <InnerContainer>
-          <InnerTitle>Tigers Team</InnerTitle>
+          <BrowserView>
+            <InnerTitle>Tigers Team</InnerTitle>
+          </BrowserView>
+          <MobileView>
+            <MobileInnerTitle>Tigers Team</MobileInnerTitle>
+          </MobileView>
           <Box justify="center">  
             <Box 
               wrap={true} 
@@ -271,20 +281,42 @@ export function MemberPage({ offset }:PropsWithChildren<PageProps>) {
       {/* temporary until team players are decided */}
       <ParallaxLayer offset={2} speed={0.25}>
         <WIP>
-          <SubTitle>2023-2024 Team trial</SubTitle>
-          <Paragraph margin={{ top: 'none', bottom: 'medium' }}>Would you like to compete with us for the upcoming season?  Sign up to our trial session on
-            the 19th Oct!
-          </Paragraph>
-          <Paragraph color='dark-1' size='small' margin={{ top: 'none', bottom: 'none' }}>
-            Haggerston School<br />Weymouth Terrace<br/>
-            London E2 8LS<br/>
-          </Paragraph>
-          <Paragraph size="small" margin={{ top: 'none', bottom: 'large' }}>
-            <a target="_blank" href='https://www.google.com/maps/dir//haggerston+school/data=!4m6!4m5!1m1!4e2!1m2!1m1!1s0x48761cbf134d1105:0x877e35d372be628f?sa=X&ved=2ahUKEwjR_Z-uneGBAxUaQUEAHWFdAScQ9Rd6BAhYEAA&ved=2ahUKEwjR_Z-uneGBAxUaQUEAHWFdAScQ9Rd6BAhkEAQ'>
-              How to get there
-            </a>
-          </Paragraph>
-          <Button onClick={() => window.open('https://awp4c37iy5z.typeform.com/to/Qc9QoWfL', "tigers_trial_signup")} alignSelf="start" size='small' primary label='Sign up' />
+          <BrowserView>
+            <SubTitle>2023-2024 Team trial</SubTitle>
+            <Paragraph margin={{ top: 'none', bottom: 'medium' }}>Would you like to compete with us for the upcoming season?  Sign up to our trial session on
+              the 19th Oct!
+            </Paragraph>
+            <Paragraph color='dark-1' size='small' margin={{ top: 'none', bottom: 'none' }}>
+              Haggerston School<br />Weymouth Terrace<br/>
+              London E2 8LS<br/>
+            </Paragraph>
+            <Paragraph size="small" margin={{ top: 'none', bottom: 'large' }}>
+              <a target="_blank" href='https://www.google.com/maps/dir//haggerston+school/data=!4m6!4m5!1m1!4e2!1m2!1m1!1s0x48761cbf134d1105:0x877e35d372be628f?sa=X&ved=2ahUKEwjR_Z-uneGBAxUaQUEAHWFdAScQ9Rd6BAhYEAA&ved=2ahUKEwjR_Z-uneGBAxUaQUEAHWFdAScQ9Rd6BAhkEAQ'>
+                How to get there
+              </a>
+            </Paragraph>
+            <Button onClick={() => window.open('https://awp4c37iy5z.typeform.com/to/Qc9QoWfL', "tigers_trial_signup")} alignSelf="start" size='small' primary label='Sign up' />
+          </BrowserView>
+          <MobileView>
+            <Box pad={{vertical: '0px', horizontal: '30px'}}>
+              <SubTitle>
+                2023-2024 Team trial
+              </SubTitle>
+              <Paragraph margin={{ top: 'none', bottom: 'medium' }}>Would you like to compete with us for the upcoming season?  Sign up to our trial session on
+                the 19th Oct!
+              </Paragraph>
+              <Paragraph color='dark-1' size='small' margin={{ top: 'none', bottom: 'none' }}>
+                Haggerston School<br />Weymouth Terrace<br/>
+                London E2 8LS<br/>
+              </Paragraph>
+              <Paragraph size="small" margin={{ top: 'none', bottom: 'large' }}>
+                <a target="_blank" href='https://www.google.com/maps/dir//haggerston+school/data=!4m6!4m5!1m1!4e2!1m2!1m1!1s0x48761cbf134d1105:0x877e35d372be628f?sa=X&ved=2ahUKEwjR_Z-uneGBAxUaQUEAHWFdAScQ9Rd6BAhYEAA&ved=2ahUKEwjR_Z-uneGBAxUaQUEAHWFdAScQ9Rd6BAhkEAQ'>
+                  How to get there
+                </a>
+              </Paragraph>
+              <Button onClick={() => window.open('https://awp4c37iy5z.typeform.com/to/Qc9QoWfL', "tigers_trial_signup")} alignSelf="start" size='small' primary label='Sign up' />
+            </Box>
+          </MobileView>
         </WIP>
       </ParallaxLayer>
     </ResizedSection>
@@ -300,41 +332,43 @@ export function ContactPage({ offset }:PropsWithChildren<PageProps>) {
       <Grid 
         width='100%'
         height='100%'
-        rows={['55%', '45%']}
-        columns={['1/3', '1/3', '1/3']}
-        areas={[
+        rows={isMobile ? ['30%', '40%', '30%'] : ['55%', '45%']}
+        columns={isMobile ? ['1', '1', '1']: ['1/3', '1/3', '1/3']}
+        areas={isMobile ? [['bot2'], ['bot0'], ['bot1']] : [
           ['top', 'top', 'top'],
           ['bot0', 'bot1', 'bot2']
         ]}
         gap='none'>
-          <Box 
-            background={{
-              image: `url(${contactBg})`,
-              position: 'center',
-              repeat: 'no-repeat',
-              size: 'cover'
-            }} 
-            gridArea="top">
-              <InnerContainer paddingTop={0}>
-                <InnerTitle style={{color: 'white'}}>Contact</InnerTitle>
-              </InnerContainer>
+          <BrowserView>
+            <Box 
+              background={{
+                image: `url(${contactBg})`,
+                position: 'center',
+                repeat: 'no-repeat',
+                size: 'cover'
+              }} 
+              gridArea="top">
+                <InnerContainer paddingTop={0}>
+                    <InnerTitle style={{color: 'white'}}>Contact</InnerTitle>
+                </InnerContainer>
             </Box>
+          </BrowserView>
           <Box background="light-5" gridArea="bot0">
-          <GoogleMapReact
-            bootstrapURLKeys={{ key: GOOGLE_API_KEY }}
-            defaultCenter={{ lat: BRITANNIA_LATLNG[0], lng: BRITANNIA_LATLNG[1] }}
-            defaultZoom={DEFAULT_MAP_ZOOM}
-            options={{
-              fullscreenControl: false,
-              zoomControl: false,
-              mapId: GOOGLE_MAP_ID,
-              scrollwheel: false
-            }}
-            >
-            <MapMarker 
-              lat={BRITANNIA_LATLNG[0]}
-              lng={BRITANNIA_LATLNG[1]} />
-          </GoogleMapReact>
+            <GoogleMapReact
+              bootstrapURLKeys={{ key: GOOGLE_API_KEY }}
+              defaultCenter={{ lat: BRITANNIA_LATLNG[0], lng: BRITANNIA_LATLNG[1] }}
+              defaultZoom={DEFAULT_MAP_ZOOM}
+              options={{
+                fullscreenControl: false,
+                zoomControl: false,
+                mapId: GOOGLE_MAP_ID,
+                scrollwheel: false
+              }}
+              >
+              <MapMarker 
+                lat={BRITANNIA_LATLNG[0]}
+                lng={BRITANNIA_LATLNG[1]} />
+            </GoogleMapReact>
           </Box>
           <Box background="light-2" gridArea="bot1" pad={{vertical: 'large', horizontal: 'large'}}>
             <h3>Follow us</h3>
@@ -370,9 +404,14 @@ function SponsorPage({ offset }:PropsWithChildren<PageProps>) {
     <ResizedSection bgColor="white" color="black">
       <ParallaxLayer offset={4} speed={0.5}>
         <InnerContainer>
-          <InnerTitle>Sponsors</InnerTitle>
-          <Box gap="medium" justify="center" direction="row" pad={{ top: 'none', bottom: 'large', horizontal: 'none'}}>
-            { sponsors.map(s => <SponsorImg width={200} height={200} src={s.logo.url} />) }
+          <BrowserView>
+            <InnerTitle>Sponsors</InnerTitle>
+          </BrowserView>
+          <MobileView>
+            <MobileInnerTitle>Sponsors</MobileInnerTitle>
+          </MobileView>
+          <Box wrap={true} gap={isMobile ? "none" : "medium"} justify="center" align="center" direction="row" pad={{ top: 'none', bottom: 'large', horizontal: 'none'}}>
+            { sponsors.map(s => <SponsorImg width={150} height={150} src={s.logo.url} />) }
           </Box>
         </InnerContainer>
       </ParallaxLayer>
