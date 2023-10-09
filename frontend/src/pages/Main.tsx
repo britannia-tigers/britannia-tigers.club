@@ -379,7 +379,7 @@ export function ContactPage({ offset }:PropsWithChildren<PageProps>) {
             <h3>Join us</h3>
             <p>For any enquiries, please use our enquiry form below.</p>
             <Box alignSelf={isMobile ? "left" : "center"} gap="small" direction="row" 
-              pad={isMobile ? { top: 'medium' } :{vertical: 'large', horizontal: 'none'}}>
+              pad={isMobile ? { top: 'small' } :{vertical: 'large', horizontal: 'none'}}>
               <Button 
                 onClick={() => setFormVisible(true)}
                 primary size="small" 

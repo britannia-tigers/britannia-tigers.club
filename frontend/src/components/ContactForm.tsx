@@ -77,8 +77,8 @@ export function ContactForm({ title, animDuration = 350, onSubmit }: PropsWithCh
         }} 
         overflow='auto'
         height={{
-          height: '80%',
-          min: '720px',
+          height: isMobile ? '100vh' : '80%',
+          min: isMobile ? 'auto' : '720px',
           max: '100%'
         }}>
           <CardHeader 
