@@ -339,7 +339,7 @@ export function ContactPage({ offset }:PropsWithChildren<PageProps>) {
           ['bot0', 'bot1', 'bot2']
         ]}
         gap='none'>
-          <BrowserView>
+          {!isMobile && (
             <Box 
               background={{
                 image: `url(${contactBg})`,
@@ -352,7 +352,7 @@ export function ContactPage({ offset }:PropsWithChildren<PageProps>) {
                     <InnerTitle style={{color: 'white'}}>Contact</InnerTitle>
                 </InnerContainer>
             </Box>
-          </BrowserView>
+          )}
           <Box background="light-5" gridArea="bot0">
             <GoogleMapReact
               bootstrapURLKeys={{ key: GOOGLE_API_KEY }}

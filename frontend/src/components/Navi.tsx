@@ -9,6 +9,11 @@ import { useState } from 'react';
 import { Close } from './Close';
 
 
+
+/**
+ * Navi component
+ * @returns 
+ */
 export function Navi() {
 
   const { navi: { bgIsDark, textColor } } = useNaviStore();
