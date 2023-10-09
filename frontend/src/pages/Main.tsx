@@ -163,7 +163,7 @@ export function Main() {
       </Parallax>
       <ContactForm title="Join us" onSubmit={formHandler}/>
       <ToastContainer 
-          position="top-right"
+          position={isMobile ? "top-center" : "top-right"}
           closeButton={false}
           hideProgressBar={true}
           closeOnClick
