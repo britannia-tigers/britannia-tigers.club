@@ -163,7 +163,7 @@ export function Main() {
       </Parallax>
       <ContactForm title="Join us" onSubmit={formHandler}/>
       <ToastContainer 
-          position={isMobile ? "top-center" : "top-right"}
+          position={isMobile ? "top-center": "top-right"}
           closeButton={false}
           hideProgressBar={true}
           closeOnClick
@@ -378,7 +378,8 @@ export function ContactPage({ offset }:PropsWithChildren<PageProps>) {
           <Box background="dark-1" gridArea="bot2" pad={{vertical: 'large', horizontal: 'large'}}>
             <h3>Join us</h3>
             <p>For any enquiries, please use our enquiry form below.</p>
-            <Box alignSelf={isMobile ? "left" : "center"} gap="small" direction="row" pad={{vertical: 'large', horizontal: 'none'}}>
+            <Box alignSelf={isMobile ? "left" : "center"} gap="small" direction="row" 
+              pad={isMobile ? { top: 'medium' } :{vertical: 'large', horizontal: 'none'}}>
               <Button 
                 onClick={() => setFormVisible(true)}
                 primary size="small" 
