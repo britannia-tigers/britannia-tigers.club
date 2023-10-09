@@ -6,6 +6,7 @@ import { AnimationType } from "grommet/utils";
 import { Close } from "./Close";
 import { TextInput } from "./TextInput";
 import { TextArea } from "./TextArea";
+import { isMobile } from "react-device-detect";
 
 
 export interface ContactFormDataProps {
@@ -94,7 +95,10 @@ export function ContactForm({ title, animDuration = 350, onSubmit }: PropsWithCh
             onSubmit={submitHandler} 
             style={{ margin: '12px 0px' }} >
               <CardBody
-                pad={{
+                pad={isMobile ? {
+                  horizontal: '30px',
+                  vertical: '0'
+                } : {
                   horizontal: '100px',
                   vertical: '0'
                 }} >
@@ -136,7 +140,11 @@ export function ContactForm({ title, animDuration = 350, onSubmit }: PropsWithCh
                       placeholder="You message"/>
                 </CardBody>
             <CardFooter
-              pad={{
+              pad={isMobile ? {
+                horizontal: '30px',
+                top: '30px',
+                bottom: '30px'
+              } : {
                 horizontal: '100px',
                 top: '30px',
                 bottom: '30px'

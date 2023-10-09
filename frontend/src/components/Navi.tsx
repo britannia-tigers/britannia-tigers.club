@@ -54,7 +54,6 @@ export function Navi() {
           {isMobileOpen && (
             <Layer
               position="right"
-              
               modal
             >
               <NavLinks 
@@ -63,12 +62,12 @@ export function Navi() {
                 color='black' 
                 direction='column' 
                 alignContent='stretch'>
-                <Link to='/' onTouchEnd={() => setIsMobileOpen(false)}>Home</Link>
-                <Link to='/story' onTouchEnd={() => setIsMobileOpen(false)}>Story</Link>
-                <Link to='/team' onTouchEnd={() => setIsMobileOpen(false)}>Team</Link>
+                <Link to='/'>Home</Link>
+                <Link to='/story'>Story</Link>
+                <Link to='/team'>Team</Link>
                 {/* <Link to='/session'>Session</Link> */}
-                <Link to='/contact' onTouchEnd={() => setIsMobileOpen(false)}>Contact</Link>
-                <Link to='/sponsors' onTouchEnd={() => setIsMobileOpen(false)}>Sponsors</Link>
+                <Link to='/contact'>Contact</Link>
+                <Link to='/sponsors'>Sponsors</Link>
               </NavLinks>
             </Layer>
           )}

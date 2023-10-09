@@ -25,7 +25,7 @@ import { User } from "../components/User";
 import { SocialIcon } from "../components/SocialIcon";
 import { useSponsors } from "../api/sponsors";
 import { SponsorImg } from "../components/SponsorImg";
-import { BrowserView, MobileView, isMobile } from "react-device-detect";
+import { BrowserView, MobileOnlyView, MobileView, isMobile } from "react-device-detect";
 import { WIP } from "../components/WIP";
 import { MobileSubTitle, SubTitle } from "../components/Titles";
 import { ContactForm, ContactFormDataProps } from "../components/ContactForm";
@@ -181,16 +181,11 @@ export function MainPage({ offset }:PropsWithChildren<PageProps>) {
 
   return (
     <ResizedSection bgVignette={true} bgImg={mainBg}>
-      <BrowserView>
         <ParallaxLayer offset={0} speed={0.5}>
           <CenteredOuterContainer>
-            <Emblem />
+            <Emblem height={isMobile ? '80px' : '115px'}/>
           </CenteredOuterContainer>
         </ParallaxLayer>
-      </BrowserView>
-      <MobileView>
-
-      </MobileView>
     </ResizedSection>
   )
 }
@@ -372,8 +367,8 @@ export function ContactPage({ offset }:PropsWithChildren<PageProps>) {
           </Box>
           <Box background="light-2" gridArea="bot1" pad={{vertical: 'large', horizontal: 'large'}}>
             <h3>Follow us</h3>
-            <p>Please follow and subscribe to our social media for latest news and updates.</p>
-            <Box alignSelf="center" gap="small" direction="row" pad={{vertical: 'large', horizontal: 'none'}}>
+            <p>Follow our social media for the latest news and updates.</p>
+            <Box alignSelf={isMobile ? "left" : "center"} gap="small" direction="row" pad={{vertical: 'large', horizontal: 'none'}}>
               <SocialIcon link='https://www.instagram.com/britanniatigersclub/' src={igIcon} />
               <SocialIcon link='https://www.tiktok.com/@britannia.tigers' src={tiktokIcon} />
               <SocialIcon link='https://www.threads.net/@britanniatigersclub' src={threadIcon} />
@@ -383,10 +378,9 @@ export function ContactPage({ offset }:PropsWithChildren<PageProps>) {
           <Box background="dark-1" gridArea="bot2" pad={{vertical: 'large', horizontal: 'large'}}>
             <h3>Join us</h3>
             <p>For any enquiries, please use our enquiry form below.</p>
-            <Box alignSelf="center" gap="small" direction="row" pad={{vertical: 'large', horizontal: 'none'}}>
+            <Box alignSelf={isMobile ? "left" : "center"} gap="small" direction="row" pad={{vertical: 'large', horizontal: 'none'}}>
               <Button 
                 onClick={() => setFormVisible(true)}
-                alignSelf="center" 
                 primary size="small" 
                 label="Let's talk" />
             </Box>
