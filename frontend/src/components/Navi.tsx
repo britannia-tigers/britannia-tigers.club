@@ -7,6 +7,7 @@ import { Menu } from 'grommet-icons';
 import { Burger } from './Burger';
 import { useState } from 'react';
 import { Close } from './Close';
+import { Emblem } from './Emblem';
 
 
 
@@ -40,6 +41,7 @@ export function Navi() {
           </NavLinks>
          </BrowserView>
          <MobileView>
+          <Emblem  height='45px' style={{ position:'fixed', left: '30px', top: '25px'  }}/>
           <Box direction='row-reverse' pad={{ vertical: '30px', horizontal: '30px' }} margin='none'>
             {isMobileOpen ? (
               <Close
@@ -115,7 +117,7 @@ const NavLinks = styled(Nav)<IMainTitle>`
 interface IMainTitle {
   isDark: boolean
   color: string
-
+  fontSize?: string
 }
 
 export const MainTitle = styled.h1<IMainTitle>`
@@ -124,7 +126,8 @@ export const MainTitle = styled.h1<IMainTitle>`
   padding: 0 0 30px 0;
   text-transform: uppercase;
   line-height: 1em;
-  font-size: 64px;
+  font-size: ${props => props.fontSize || '64px'};
   color: ${props => props.color};
   transition: color 0.25s ease-in-out;
+  text-shadow: 1px 2px 0px rgba(0,0,0,1);
 `;
