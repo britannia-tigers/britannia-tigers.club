@@ -33,7 +33,7 @@ export function MainPage({ offset }:PropsWithChildren<PageProps>) {
                 <MainTitle 
                   fontSize="48px"
                   onClick={() => navigate('/')}
-                  isDark={bgIsDark} 
+                  bgIsDark={bgIsDark} 
                   color={textColor} >
                     Britannia<br/>Tigers<br/>Club
                 </MainTitle>
