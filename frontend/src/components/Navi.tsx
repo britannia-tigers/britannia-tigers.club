@@ -28,11 +28,11 @@ export function Navi() {
         <BrowserView>
           <MainTitle 
             onClick={() => navigate('/')}
-            isDark={bgIsDark} 
+            bgIsDark={bgIsDark} 
             color={textColor} >
               Britannia<br/>Tigers<br/>Club
           </MainTitle>
-          <NavLinks isDark={bgIsDark} gap='xsmall' color={textColor} direction='column' alignContent='stretch'>
+          <NavLinks gap='xsmall' color={textColor} direction='column' alignContent='stretch'>
             <Link to='/story'>Story</Link>
             <Link to='/team'>Team</Link>
             {/* <Link to='/session'>Session</Link> */}
@@ -59,7 +59,6 @@ export function Navi() {
               modal
             >
               <NavLinks 
-                isDark={bgIsDark} 
                 gap='xsmall' 
                 color='black' 
                 direction='column' 
@@ -86,7 +85,12 @@ const NaviContainer = styled.header`
   z-index: 99;
 `
 
-const NavLinks = styled(Nav)<IMainTitle>`
+interface INaviLinks {
+  color: string
+  fontSize?: string
+}
+
+const NavLinks = styled(Nav)<INaviLinks>`
   margin: 0;
   text-align: ${isMobile ? 'right' : 'left'};
   padding-left: 5px;
@@ -115,7 +119,7 @@ const NavLinks = styled(Nav)<IMainTitle>`
 `
 
 interface IMainTitle {
-  isDark: boolean
+  bgIsDark: boolean
   color: string
   fontSize?: string
 }
@@ -129,5 +133,5 @@ export const MainTitle = styled.h1<IMainTitle>`
   font-size: ${props => props.fontSize || '64px'};
   color: ${props => props.color};
   transition: color 0.25s ease-in-out;
-  text-shadow: 1px 2px 0px rgba(0,0,0,1);
+  text-shadow: 1px 2px 0px ${props => props.bgIsDark ? 'rgba(0,0,0,1)' : 'rgba(255,255,255,1)'};
 `;
