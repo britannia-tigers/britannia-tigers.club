@@ -231,7 +231,7 @@ export class CmsService {
    * @returns 
    */
   async getSponsors(q: ExtendedQueryOptions = {}): Promise<SponsorListResponse> {
-    return await this.getListByContentType<Sponsor>(config.contentTypeId.sponsors, q);
+    return await this.getListByContentType<Sponsor>(config.contentTypeId.sponsors, q);  
   }
 
   /**
@@ -250,7 +250,8 @@ export class CmsService {
    * @returns 
    */
   async getListByContentType<T>(contentType:string, restQuery: QueryOptions) {
-    return await this.client.entry.getMany<T>({
+    
+    return await this.client.entry.getPublished<T>({
       query: {
         content_type: contentType,
         ...restQuery
