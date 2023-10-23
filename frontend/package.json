@@ -31,6 +31,7 @@
     "grommet": "^2.33.2",
     "grommet-icons": "^4.11.0",
     "i": "^0.3.7",
+    "moment": "^2.29.4",
     "npm": "^10.1.0",
     "react": "^18.2.0",
     "react-device-detect": "^2.2.3",

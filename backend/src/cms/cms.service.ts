@@ -8,6 +8,7 @@ import { createClient as createDeliveryClient, ContentfulClientApi, ChainModifie
 import config from './contentful.config';
 import { ExtendedQueryOptions, FilterParam, PageFullResponse, PageListResponse, Session, SessionFull, SessionFullResponse, SessionListResponse, Sponsor, SponsorListResponse } from './cms.interface';
 import contentfulConfig from './contentful.config';
+import * as moment from 'moment';
 
 
 @Injectable()
@@ -204,7 +205,7 @@ export class CmsService {
    */
   async findSessions(q: ExtendedQueryOptions = {}): Promise<SessionListResponse> {
 
-    const { name, location, radius, ...rest } = q;
+    const { name, date, startDate, endDate, location, radius, ...rest } = q;
 
     let restQuery = {};
     if(name) {
@@ -213,6 +214,24 @@ export class CmsService {
     if(location) {
       const r = radius || 1; //default 1km
       restQuery = { ...restQuery, [filterBy('location', 'within')]: `${location},${r}` }
+    }
+
+    console.log('tata: ', moment(date))
+
+    if(date && moment(date).isValid()) {
+      // when a date is given
+
+      const dStart = moment(date).startOf('day').toISOString();
+      const dEnd = moment(date).endOf('day').toISOString();
+      restQuery = {...restQuery, [filterBy('date', 'lte')]: dEnd, [filterBy('date', 'gt')]: dStart }
+
+    } else if(startDate && endDate && moment(startDate).isValid() && moment(endDate).isValid()) {
+      // when a date range is given
+
+      const dStart = moment(startDate).startOf('day').toISOString();
+      const dEnd = moment(endDate).endOf('day').toISOString();
+      restQuery = {...restQuery, [filterBy('date', 'lte')]: dEnd, [filterBy('date', 'gt')]: dStart }
+
     }
 
     return this.client.entry.getPublished({

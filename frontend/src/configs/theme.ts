@@ -1,4 +1,5 @@
 import { ThemeType } from "grommet";
+import { css } from "styled-components";
 
 
 export const theme = {
@@ -15,6 +16,9 @@ export const theme = {
       focus: '#F7EC13',
       "status-ok": '#F7EC13' 
     },
+    focus: {
+      shadow: 'none'
+    }
   },
   button: {
     padding: {
@@ -48,6 +52,25 @@ export const theme = {
       border: {
         color: 'transparent'
       }
+    }
+  },
+  calendar: {
+    extend: css`
+      box-shadow: none;
+      align-items: center;
+    `,
+    day: {
+      extend: css`
+        align-items: center;
+        border-radius: 2px;
+        :hover {
+          background: rgba(0, 0, 0, 0.1);
+        }
+      `
+    },
+    medium: {
+      fontSize: '14px',
+      daySize: '30px'
     }
   }
 } as ThemeType

@@ -16,6 +16,7 @@ import { ContactPage } from "./components/ContactPage";
 import { StoryPage } from "./components/StoryPage";
 import { MemberPage } from "./components/MemberPage";
 import { MainPage } from "./components/MainPage";
+import { User } from "../../components/User";
 
 const TOTAL_PAGES = 5;
 const PAGE_OFFSET = 0.25;
@@ -140,7 +141,7 @@ export function Main() {
 
   return (
     <>
-      {/* <User /> */}
+      <User />
       <Navi />
       <Parallax pages={TOTAL_PAGES} ref={parallaxRef} className='my-class-name'>
         <MainPage offset={0} />
