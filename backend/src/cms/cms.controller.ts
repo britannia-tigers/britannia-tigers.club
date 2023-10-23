@@ -130,9 +130,17 @@ export class CmsController {
   // @UseGuards(PermissionGuard([SessionPermissions.LIST]))
   @Get('sessions')
   getSessions(
-    @Query() { name, location, skip, limit }:SessionRequestDto
+    @Query() { 
+      name, location, skip, limit,
+      date, startDate, endDate
+    }:SessionRequestDto
+
+
   ):Promise<SessionListResponse> {
-    return this.cmsService.findSessions({ name, location, skip, limit });
+    return this.cmsService.findSessions({ 
+      name, location, skip, limit,
+      date, startDate, endDate
+    });
   }
 
 

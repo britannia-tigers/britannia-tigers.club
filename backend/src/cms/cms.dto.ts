@@ -18,6 +18,14 @@ export class SessionDto {
   @ApiProperty({ required: false })
   readonly date:string;
 
+  @IsString()
+  @ApiProperty({ required: false })
+  readonly startDate:string;
+
+  @IsString()
+  @ApiProperty({ required: false })
+  readonly endDate:string;
+
   @IsArray()
   @ApiProperty({ required: false })
   readonly participants: string[];

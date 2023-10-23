@@ -59,6 +59,22 @@ export interface Asset {
   file?:LocaleFile
 }
 
+export interface SessionRequest {
+  name: LocaleBase
+  date: LocaleBase
+  location: LocaleBase<{lon: string, lat: string}>
+  participants: LocaleBase<string[]>
+  paidParticipants: LocaleBase<string[]>
+}
+
+export interface SessionResponse {
+  name: string
+  date: string
+  location: [string, string]
+  participants: string[]
+  paidParticipants: string[]
+}
+
 export interface Sponsor {
   name: LocaleBase
   description?: LocaleBase

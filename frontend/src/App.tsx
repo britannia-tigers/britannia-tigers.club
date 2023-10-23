@@ -4,11 +4,12 @@ import { Auth, Restricted } from './hooks/auth'
 import { Callback } from './pages/Callback'
 import { Main } from './pages/Main'
 import { Profile } from './pages/Profile'
-import { Calendar } from './pages/Calendar'
 import { Grommet, Page, ThemeType } from 'grommet'
 import { theme } from './configs/theme'
 import { Logout } from './pages/Logout'
 import { Helmet } from 'react-helmet';
+import { Session } from './pages/Session'
+
 function App() {
 
   return (
@@ -27,8 +28,8 @@ function App() {
         <Router>
           <Auth>
             <Routes>
-              <Route path='/calendar' element={<Restricted><Calendar /></Restricted>} />
               <Route path='/profile' element={<Restricted><Profile /></Restricted>} />
+              <Route path='/session' element={<Session />} />
               <Route path='/callback' element={<Callback />} />
               <Route path='/logout' element={<Logout />} />
               <Route index element={<Main />} />
