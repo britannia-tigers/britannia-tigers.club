@@ -48,9 +48,13 @@ const sessionsResponseConverter = (
 )  => {
 
   return items.map(cur => ({
+      id: cur.sys.id,
       name: cur.fields.name[GB_LOCALE],
       date: cur.fields.date[GB_LOCALE],
       location: [cur.fields.location[GB_LOCALE].lon, cur.fields.location[GB_LOCALE].lat] as [string, string],
+      locationName: cur.fields.locationName[GB_LOCALE],
+      price: cur.fields.price[GB_LOCALE],
+      discount: cur.fields.discount[GB_LOCALE],
       participants: cur.fields.participants[GB_LOCALE],
       paidParticipants: cur.fields.participants[GB_LOCALE]
   }))
@@ -75,18 +79,18 @@ const sessionsResponseConverter = (
 //   }, {} as { [id: string]: SessionResponse })
 // }
 
-export function useSessions(props:ApiSessionGetQuery) {
+export function useSessions({ startDate, endDate, date, ...restProps }:ApiSessionGetQuery) {
 
   const [sessions, setSessions] = useState([] as SessionResponse[])
 
   useEffect(() => {
     async function fetch() {
-      const d = await getSessions(props)
+      const d = await getSessions({ startDate, endDate, date, ...restProps })
       setSessions(d)
     }
 
     fetch()
-  }, [])
+  }, [startDate, endDate, date])
 
   return sessions
 }

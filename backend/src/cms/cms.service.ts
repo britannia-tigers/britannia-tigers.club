@@ -216,8 +216,6 @@ export class CmsService {
       restQuery = { ...restQuery, [filterBy('location', 'within')]: `${location},${r}` }
     }
 
-    console.log('tata: ', moment(date))
-
     if(date && moment(date).isValid()) {
       // when a date is given
 

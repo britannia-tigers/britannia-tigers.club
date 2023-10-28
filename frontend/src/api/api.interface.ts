@@ -61,16 +61,25 @@ export interface Asset {
 
 export interface SessionRequest {
   name: LocaleBase
+  description?: LocaleBase
   date: LocaleBase
   location: LocaleBase<{lon: string, lat: string}>
+  locationName: LocaleBase
+  price: LocaleBase<number>
+  discount: LocaleBase<number>
   participants: LocaleBase<string[]>
   paidParticipants: LocaleBase<string[]>
 }
 
 export interface SessionResponse {
+  id: string
   name: string
+  description?: string
   date: string
+  price: number
+  discount: number
   location: [string, string]
+  locationName: string
   participants: string[]
   paidParticipants: string[]
 }

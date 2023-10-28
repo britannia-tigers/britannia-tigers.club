@@ -9,7 +9,7 @@ interface InnerContainerProps {
 }
 
 interface InnerTitleProps {
-
+  bottomPadding?: 'large' | 'small'
 }
 
 interface InnerProps {
@@ -39,7 +39,7 @@ const Inner = styled.div<InnerProps>`
   };
   display: block;
   width: 680px;
-  height: auto;
+  height: fill-available;
 `
 
 export function InnerContainer({ children, title, paddingTop = 'thick'}:PropsWithChildren<InnerContainerProps>) {
@@ -60,7 +60,7 @@ export const InnerTitle = styled.h3<InnerTitleProps>`
   text-align: right;
   font-size: 36px;
   text-transform: uppercase;
-  padding: 0 0 90px 0;
+  padding: 0 0 ${props => props.bottomPadding === 'large'  ? '90px' : '42px'} 0;
   margin: 0;
 `
 
