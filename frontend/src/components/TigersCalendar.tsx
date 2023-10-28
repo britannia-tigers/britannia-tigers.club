@@ -2,27 +2,67 @@ import { Box, CalendarHeaderProps, Calendar as GCalendar, Grid, Paragraph } from
 import moment, { Moment } from "moment"
 import { Next, Previous, Calendar as CalIcon } from 'grommet-icons'
 import { isMobile } from "react-device-detect"
-import { useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import { useSessions } from "../api/sessions"
+import { SessionResponse } from "../api/api.interface"
 
 interface ICalendar {
   size?: string
   curDate: Moment
   onDateSelect: (date:string | string[]) => void
+  onSessions: (sess: SessionResponse[]) => void
 }
 
+interface IDay {
+  isSelected: boolean
+  isInRange: boolean
+  activeMomentDates: Moment[]
+  date: Date
+  day: number
+}
+
+
+/**
+ * Calendar of Tigers with sessions
+ * @param param0 
+ * @returns 
+ */
 export function Calendar({ 
-  curDate, size, onDateSelect 
+  curDate, size, onDateSelect, onSessions
 }: ICalendar) {
 
+
+  /**
+   * generate variable with curDate changes
+   */
+  const [startDate, endDate, lastMonth, nextMonth] = useMemo(() => {
+    const sDate = curDate.clone().startOf('month');
+    const eDate = curDate.clone().endOf('month');
+
+    const nextMonthFirstDate = curDate.clone().add(1, 'month').startOf('month');
+    const lastMonthLastDate = curDate.clone().subtract(1, 'month').endOf('month');
+    
+    return [sDate, eDate, lastMonthLastDate, nextMonthFirstDate];
+  }, [curDate])
+
+  /**
+   * get sessions within the month
+   */
   const sess = useSessions({
-    startDate: curDate.startOf('month').toISOString(),
-    endDate: curDate.endOf('month').toISOString()
+    startDate: startDate.toISOString(),
+    endDate: endDate.toISOString()
   })
 
-  console.log(curDate, sess.map(s => s.date))
-
+  /**
+   * redate with start of the day
+   */
   const dates = sess.map(({ date }) => moment(date).startOf('day').toISOString())
+
+  /**
+   * filter out day that is not today
+   */
+  useEffect(() => onSessions(sess.filter(s => moment(s.date).isSame(curDate, 'day'))), [sess, curDate]);
+
 
   return (
     <Box 
@@ -30,40 +70,47 @@ export function Calendar({
       elevation="medium" 
       height='350px'
       width='320px'>
-        <GCalendar
-          daysOfWeek
-          animate={false}
-          fill={true}
-          header={v => <Header {...v} onReset={() => onDateSelect(moment().startOf('day').toISOString())}/>}
-          firstDayOfWeek={0}
-          dates={dates}
-          color="black"
-          size={size}
-          showAdjacentDays={false}
-          onReference={r => console.log(r)}
-          onSelect={select => onDateSelect(select)}
-        >
-          {props => <Day {...props} curDate={curDate}/>}
-        </GCalendar>
+          <GCalendar
+            daysOfWeek
+            animate={false}
+            fill={true}
+            header={({ date }) => (
+              <Header
+                date={date} 
+                onPreviousMonth={() => onDateSelect(lastMonth.toISOString())}
+                onNextMonth={() => onDateSelect(nextMonth.toISOString())}
+                onReset={() => onDateSelect(moment().startOf('day').toISOString())}
+              />
+            )}
+            firstDayOfWeek={0}
+            date={curDate.toISOString()}
+            color="black"
+            size={size}
+            showAdjacentDays={false}
+            onReference={r => console.log('on Reference: ', r)}
+            onSelect={select => onDateSelect(select)}
+          >
+            {props => <Day {...props} activeMomentDates={dates.map(d => moment(d))}/>}
+          </GCalendar>
     </Box>
   )
 }
 
-interface IDay {
-  isSelected: boolean
-  curDate: Moment
-  date: Date
-  day: number
-}
 
+
+/**
+ * Day component of the tigers calendar
+ * @param param0 
+ * @returns 
+ */
 function Day({
   isSelected,
-  curDate,
+  activeMomentDates,
   date,
   day
 }:IDay) {
 
-  console.log('box: ', curDate.toISOString(), date)
+  const isActiveDate = activeMomentDates.find(m => m.isSame(date))?.isValid();
 
   return (
     <Box 
@@ -73,17 +120,15 @@ function Day({
       justify='center' 
       align="center"
       border={{
-        color: curDate.isSame(date) ? 'brand' : 'none',
-        // size: '2px'
+        color: isSelected ? 'brand' : 'none'
       }}
     >
       <Box
         margin='2px'
         pad='5px'
-        // background={curDate.isSame(date) ? 'brand' : 'none'}
         style={{
           boxSizing: 'border-box',
-          color: isSelected ? '#d5ca00' : 'none'
+          color: isActiveDate ? '#d5ca00' : 'none'
         }}
         round='2px'>
         {day}
@@ -100,13 +145,10 @@ function Day({
  */
 function Header({
   date,
-  locale,
   onPreviousMonth,
   onNextMonth,
-  onReset,
-  previousInBound,
-  nextInBound,
-}:CalendarHeaderProps & { onReset: () => void }) {
+  onReset
+}:Partial<CalendarHeaderProps> & { onReset: () => void }) {
   const moDate = moment(date)
   const month = moDate.format('MMM')
   const year = moDate.year()
@@ -120,10 +162,10 @@ function Header({
       <Box gridArea="monthYear"><Paragraph margin='none'>
           {month} {year}
         </Paragraph></Box>
-      <Box gap="xsmall" gridArea="icons" direction="row-reverse" justify="start" align="center">
-        <Next onClick={onNextMonth} color="black" size="18px"/>
-        <Previous onClick={onPreviousMonth} color="black" size="18px"/>
-        <CalIcon onClick={onReset} color="black" size="18px"/> 
+      <Box gap="xsmall" gridArea="icons" direction="row-reverse" justify="start" align="center" style={{ paddingBottom: '4px' }}>
+        <Next onClick={onNextMonth} color="black" size="18px" style={{ cursor: 'pointer' }}/>
+        <Previous onClick={onPreviousMonth} color="black" size="18px" style={{ cursor: 'pointer' }}/>
+        <CalIcon onClick={onReset} color="black" size="18px" style={{ cursor: 'pointer' }}/> 
       </Box>
     </Grid>
   )

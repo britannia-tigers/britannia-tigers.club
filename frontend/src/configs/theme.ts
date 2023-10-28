@@ -24,6 +24,16 @@ export const theme = {
     padding: {
       vertical: '0px',
       horizontal: '12px'
+    },
+    primary: {
+
+    },
+    disabled: {
+      opacit: 1,
+      border: {
+        color: 'rgba(170, 170, 170, 1)'
+      },
+      color: 'rgba(180, 180, 180, 1)'
     }
   },
   formField: {
