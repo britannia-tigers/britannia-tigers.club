@@ -40,6 +40,7 @@
     "@typescript-eslint/parser": "^6.0.0",
     "auth0": "^4.0.1",
     "class-validator": "^0.14.0",
+    "cloudinary": "^1.41.0",
     "contentful": "^10.5.1",
     "contentful-management": "^10.45.0",
     "cross-env": "^7.0.3",
@@ -81,5 +82,8 @@
     ],
     "coverageDirectory": "../coverage",
     "testEnvironment": "node"
+  },
+  "devDependencies": {
+    "@types/multer": "^1.4.9"
   }
 }

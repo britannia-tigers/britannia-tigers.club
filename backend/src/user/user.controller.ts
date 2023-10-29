@@ -1,18 +1,23 @@
-import { Body, Controller, Get, Headers, Param, Patch, Post, Put, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Headers, Param, Patch, Post, Put, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
 import { UserService } from './user.service';
 import { UserCreateUpdateRequest, AppMetaData, User } from './user.interface';
 import { PermissionGuard } from 'src/auth/permission.guard';
 import { MemberPermissions, SelfPermissions } from './user.permissions';
 import { AuthGuard } from 'src/auth/auth.guard';
-import { ApiBearerAuth, ApiBody, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiConsumes, ApiTags } from '@nestjs/swagger';
 import { UserDto } from './user.dto';
+import { CloudinaryService } from 'src/media/cloudinary.service';
 
 
 @ApiTags('Users')
 @Controller('api/users')
 export class UserController {
 
-  constructor(private readonly userService: UserService) {}
+  constructor(
+    private readonly userService: UserService,
+    private readonly cloudinaryService: CloudinaryService
+  ) {}
 
 
   /**
@@ -106,6 +111,47 @@ export class UserController {
       app_metadata: appMetaData,
       connection: 'Username-Password-Authentication'
     });
+  }
+
+
+  /**
+   * Upload an avatar
+   * @param file 
+   */
+  @ApiBearerAuth('bearer')
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        // comment: { type: 'string' },
+        // outletId: { type: 'integer' },
+        file: {
+          type: 'string',
+          format: 'binary',
+        },
+      },
+    },
+  })
+  @Post('self/upload')
+  @UseInterceptors(FileInterceptor('file'))
+  @UseGuards(AuthGuard)
+  async uploadAvatar(
+    @Headers('authorization') authToken,
+    @UploadedFile() file: Express.Multer.File
+  ) {
+    try {
+      const self = await this.userService.getSelf(authToken.split(' ')[1]);
+      const cldRes = await this.cloudinaryService.upload(file);
+      const profileUrl = this.cloudinaryService.avatarCrop(cldRes.public_id, cldRes.format);
+      
+      return await this.userService.updateUser(self.user_id, {
+        picture: profileUrl
+      });
+      
+    } catch(e) {
+      throw e;
+    }
   }
 
 

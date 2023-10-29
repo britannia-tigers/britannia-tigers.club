@@ -3,8 +3,8 @@ import moment, { Moment } from "moment"
 import { Next, Previous, Calendar as CalIcon } from 'grommet-icons'
 import { isMobile } from "react-device-detect"
 import { useEffect, useMemo, useState } from "react"
-import { useSessions } from "../api/sessions"
 import { SessionResponse } from "../api/api.interface"
+import { useSessions } from "../hooks/sessions"
 
 interface ICalendar {
   size?: string

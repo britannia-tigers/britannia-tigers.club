@@ -20,7 +20,7 @@ function createPermissionGuard(requiredRoutePermissions: string[]) {
       const res = context.switchToHttp().getResponse();
 
       const tester = promisify(claimCheck(p => {
-        console.log('pppppp: ', p)
+        console.log('permission guard claimcheck: ', p)
         return true;
       }))
 

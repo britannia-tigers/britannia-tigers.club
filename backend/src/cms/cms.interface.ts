@@ -15,7 +15,14 @@ export interface Session {
   name: string
   location: string
   date: string
-  participants?: string[];
+  locationName?: string
+  type?: string
+  description?: string
+  participants?: string[]
+  paidParticipants?: string[]
+  isBookingAvailable?: boolean
+  price?: number
+  discount?: number
 }
 
 export interface SessionFull extends Session {

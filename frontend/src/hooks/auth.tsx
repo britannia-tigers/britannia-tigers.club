@@ -1,4 +1,4 @@
-import { useMemo, useEffect, PropsWithChildren } from 'react'
+import { useMemo, useEffect, PropsWithChildren, useState } from 'react'
 
 import { Auth0Provider, AppState, useAuth0 } from '@auth0/auth0-react'
 import { useNavigate, useLocation } from 'react-router-dom'
@@ -58,4 +58,20 @@ export function Restricted({ children }: PropsWithChildren) {
   return isLoading ? <>loading...</> : isAuthenticated ? (
     children
   ) : null
+}
+
+export function useAuthToken() {
+  const { getAccessTokenSilently } = useAuth0();
+  const [authToken, setAuthToken] = useState<string>()
+
+  useEffect(() => {
+    async function fetch() {
+      const token = await getAccessTokenSilently();
+      setAuthToken(token);
+    }
+
+    fetch();
+  }, [])
+
+  return authToken;
 }

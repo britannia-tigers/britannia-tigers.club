@@ -127,7 +127,7 @@ export class CmsService {
    * @param userId 
    * @returns 
    */
-  async addParticipant(entryId: string, userIds: string[]) {
+  async addParticipants(entryId: string, userIds: string[]) {
 
     const sess = await this.getSessionById(entryId);
     const oParticipants = sess.fields.participants[contentfulConfig.locale.gb];
@@ -143,6 +143,25 @@ export class CmsService {
       fields
     });
     return res;
+  }
+
+  async removeParticipants(entryId: string, userIds: string[]) {
+    const sess = await this.getSessionById(entryId);
+    const oParticipants:string[] = sess.fields.participants[contentfulConfig.locale.gb];
+
+    const nParticipants = oParticipants.filter(p => !userIds.includes(p))
+
+    let fields = { 
+      ...sess.fields,
+      participants: { [contentfulConfig.locale.gb]: nParticipants }
+    };
+
+    const res = await this.client.entry.update({ entryId }, {
+      sys: sess.sys,
+      fields
+    });
+    return res;
+
   }
 
 
