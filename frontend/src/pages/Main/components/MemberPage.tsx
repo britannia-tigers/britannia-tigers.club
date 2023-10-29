@@ -72,7 +72,7 @@ export function MemberPage({ offset }:PropsWithChildren<PageProps>) {
         </InnerContainer>
       </ParallaxLayer>
       {/* temporary until team players are decided */}
-      <ParallaxLayer offset={2} speed={0.25}>
+      {/* <ParallaxLayer offset={2} speed={0.25}>
         <WIP>
           <BrowserView>
             <SubTitle>2023-2024 Team trial</SubTitle>
@@ -111,7 +111,7 @@ export function MemberPage({ offset }:PropsWithChildren<PageProps>) {
             </Box>
           </MobileView>
         </WIP>
-      </ParallaxLayer>
+      </ParallaxLayer> */}
     </ResizedSection>
   )
 }
