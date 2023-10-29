@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, Put, Query, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Headers, Param, Post, Put, Query, UseGuards } from '@nestjs/common';
 import { CmsService } from './cms.service';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { PermissionGuard } from 'src/auth/permission.guard';
@@ -13,6 +13,7 @@ import smsConfig from 'src/messaging/sms.config';
 import contentfulConfig from './contentful.config';
 import { getNextDayOfWeek } from 'src/utils/dateTime.utils';
 import { AssetProps, CollectionProp } from 'contentful-management';
+import { UserService } from 'src/user/user.service';
 
 
 @Controller('api')
@@ -20,7 +21,8 @@ export class CmsController {
   constructor(
     private readonly cmsService: CmsService,
     private readonly mailService: MailService,
-    private readonly smsService: SmsService
+    private readonly smsService: SmsService,
+    private readonly userService: UserService
   ) {}
 
   
@@ -54,6 +56,13 @@ export class CmsController {
     }
   }
 
+
+  /**
+   * Add list of participants to session
+   * @param id 
+   * @param param1 
+   * @returns 
+   */
   @ApiTags('Sessions')
   @ApiBearerAuth('bearer')
   @Post('sessions/:id/participants')
@@ -61,7 +70,45 @@ export class CmsController {
     @Param('id') id: string,
     @Body() {userIds}: AddParticipantsDto
   ) {
-    return this.cmsService.addParticipant(id, userIds);
+    return this.cmsService.addParticipants(id, userIds);
+  }
+
+
+  /**
+   * Add self to list of participants
+   * @param id 
+   * @param param1 
+   * @returns 
+   */
+  @ApiTags('Sessions')
+  @ApiBearerAuth('bearer')
+  @Post('sessions/:id/participants/self')
+  @UseGuards(AuthGuard)
+  async addSelfToSession(
+    @Headers('authorization') authToken,
+    @Param('id') id: string,
+  ) {
+    const user = await this.userService.getSelf(authToken.split(' ')[1]);
+    return this.cmsService.addParticipants(id, [user.user_id]);
+  }
+
+
+  /**
+   * Delete self from list of participants
+   * @param authToken 
+   * @param id 
+   * @returns 
+   */
+  @ApiTags('Sessions')
+  @ApiBearerAuth('bearer')
+  @Delete('sessions/:id/participants/self')
+  @UseGuards(AuthGuard)
+  async removeSelfToSession(
+    @Headers('authorization') authToken,
+    @Param('id') id: string,
+  ) {
+    const user = await this.userService.getSelf(authToken.split(' ')[1]);
+    return this.cmsService.removeParticipants(id, [user.user_id]);
   }
 
 
@@ -112,13 +159,12 @@ export class CmsController {
    */
   @ApiTags('Sessions')
   @ApiBearerAuth('bearer')
-  // @UseGuards(AuthGuard)
   // @UseGuards(PermissionGuard([SessionPermissions.READ]))
-  @Get('session/:id')
+  @Get('sessions/:id')
   getSession(@Param('id') id:string) {
     return this.cmsService.getSessionById(id);
   }
-  
+
   
   /**
    * get all sessions

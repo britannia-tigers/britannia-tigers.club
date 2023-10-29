@@ -3,6 +3,7 @@ import { GB_LOCALE, ItemResponse, ListResponse, SessionRequest, SessionResponse 
 import { useEffect, useState } from 'react'
 
 export interface ApiSessionGetQuery {
+  id?: string
   date?: string
   startDate?: string
   endDate?: string
@@ -11,6 +12,26 @@ export interface ApiSessionGetQuery {
   skip?: number
   limit?: number
 
+}
+
+export async function addSelfToSession(authToken:string, id:string) {
+  const res = await axios.post<ItemResponse<SessionRequest>>(`/api/sessions/${id}/participants/self`, {}, {
+    headers: {
+      Authorization: `bearer ${authToken}`
+    }
+  });
+
+  return convertOne(res.data);
+}
+
+/**
+ * get a session by id
+ * @param id 
+ * @returns 
+ */
+export async function getSessionById(id:string) {
+  const sessionsRes = await axios.get<ItemResponse<SessionRequest>>(`/api/sessions/${id}`);
+  return convertOne(sessionsRes.data);
 }
 
 /**
@@ -46,18 +67,31 @@ export async function getSessions({
 const sessionsResponseConverter = (
   items: ItemResponse<SessionRequest>[]
 )  => {
+  return items.map(convertOne);
+}
 
-  return items.map(cur => ({
-      id: cur.sys.id,
-      name: cur.fields.name[GB_LOCALE],
-      date: cur.fields.date[GB_LOCALE],
-      location: [cur.fields.location[GB_LOCALE].lon, cur.fields.location[GB_LOCALE].lat] as [string, string],
-      locationName: cur.fields.locationName[GB_LOCALE],
-      price: cur.fields.price[GB_LOCALE],
-      discount: cur.fields.discount[GB_LOCALE],
-      participants: cur.fields.participants[GB_LOCALE],
-      paidParticipants: cur.fields.participants[GB_LOCALE]
-  }))
+
+/**
+ * convert one session item response
+ * @param cur 
+ * @returns 
+ */
+function convertOne(cur:ItemResponse<SessionRequest>) {
+  return {
+    id: cur.sys.id,
+    name: cur.fields.name[GB_LOCALE],
+    type: cur.fields.type[GB_LOCALE],
+    date: cur.fields.date[GB_LOCALE],
+    description: cur.fields.description && cur.fields.description[GB_LOCALE],
+    location: [cur.fields.location[GB_LOCALE].lon, cur.fields.location[GB_LOCALE].lat] as [string, string],
+    locationName: cur.fields.locationName[GB_LOCALE],
+    price: cur.fields.price[GB_LOCALE],
+    discount: cur.fields.discount[GB_LOCALE],
+    participants: cur.fields.participants && cur.fields.participants[GB_LOCALE],
+    paidParticipants: cur.fields.paidParticipants && cur.fields.paidParticipants[GB_LOCALE],
+    isBookingAvailable: cur.fields.isBookingAvailable && cur.fields.isBookingAvailable[GB_LOCALE]
+
+  }
 }
 
 
@@ -78,19 +112,3 @@ const sessionsResponseConverter = (
 
 //   }, {} as { [id: string]: SessionResponse })
 // }
-
-export function useSessions({ startDate, endDate, date, ...restProps }:ApiSessionGetQuery) {
-
-  const [sessions, setSessions] = useState([] as SessionResponse[])
-
-  useEffect(() => {
-    async function fetch() {
-      const d = await getSessions({ startDate, endDate, date, ...restProps })
-      setSessions(d)
-    }
-
-    fetch()
-  }, [startDate, endDate, date])
-
-  return sessions
-}

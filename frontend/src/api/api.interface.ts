@@ -61,6 +61,7 @@ export interface Asset {
 
 export interface SessionRequest {
   name: LocaleBase
+  type: LocaleBase
   description?: LocaleBase
   date: LocaleBase
   location: LocaleBase<{lon: string, lat: string}>
@@ -69,11 +70,13 @@ export interface SessionRequest {
   discount: LocaleBase<number>
   participants: LocaleBase<string[]>
   paidParticipants: LocaleBase<string[]>
+  isBookingAvailable: LocaleBase<boolean>
 }
 
 export interface SessionResponse {
   id: string
   name: string
+  type: string
   description?: string
   date: string
   price: number
@@ -82,6 +85,7 @@ export interface SessionResponse {
   locationName: string
   participants: string[]
   paidParticipants: string[]
+  isBookingAvailable: boolean
 }
 
 export interface Sponsor {

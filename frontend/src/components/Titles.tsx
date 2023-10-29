@@ -11,6 +11,10 @@ interface ParagraphProps {
   bold?: boolean
 }
 
+interface SubParagraphProps {
+  isLink?: boolean
+}
+
 export const SubTitle = styled.h3<SubTitleProps>`
   font-size: 24px;
   margin:0;
@@ -38,9 +42,14 @@ export const Paragraph = styled(GPara)<ParagraphProps>`
   font-weight: ${props => props.bold ? 'bold' : 'normal'}
 `
 
-export const SubParagraph = styled(GPara)`
+export const SubParagraph = styled(GPara)<SubParagraphProps>`
   margin: 0;
   padding: 0;
   font-size: 12px;
   line-height: 1.3em;
+  
+  &:hover {
+    cursor: ${props => props.isLink ? 'pointer' : 'default'};
+    text-decoration: ${props => props.isLink ? 'underline' : 'none'};
+  }
 `

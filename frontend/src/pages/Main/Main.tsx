@@ -34,6 +34,10 @@ export function Main() {
   const [, winHeight] = useWindowSize();
   const { setTextColor, setBgDark, setFormVisible } = useNaviStore();
   
+  // initially set 
+  useEffect(() => setTextColor('#ffffff'), []);
+
+
   const naviTextColorArr = [
     {
       name: 'story',

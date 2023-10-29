@@ -1,17 +1,18 @@
-import { Box, Button, Grid, ResponsiveContext } from "grommet";
+import { Box, Grid, ResponsiveContext } from "grommet";
 import { InnerContainer, InnerTitle } from "../components/InnerContainer";
 import { WhitePage } from "../components/WhitePage";
 import { Calendar } from "../components/TigersCalendar";
 import { useNavigate, useSearchParams, useLocation } from "react-router-dom";
-import Mo, { Moment } from 'moment'
+import Mo from 'moment'
 import { useContext, useEffect, useMemo, useState } from "react";
 import moment from "moment";
-import { useSessions } from "../api/sessions";
-import { SessionTitles } from "../components/SessionTitles";
-import { Paragraph, SmallSubTitle, SubTitle } from "../components/Titles";
+import { Paragraph, SmallSubTitle } from "../components/Titles";
 import { SessionResponse } from "../api/api.interface";
 import { formatDateTime } from "../helpers/displayHelpers";
 import { Previous } from "../components/Previous";
+import { SessionItem } from "../components/SessionItem";
+import { User } from "../components/User";
+import { useNaviStore } from "../stores/NaviStore";
 
 
 /**
@@ -20,8 +21,11 @@ import { Previous } from "../components/Previous";
  */
 export function Session() {
 
+  const { setTextColor } = useNaviStore();
   const [searchParams, setSearchParams] = useSearchParams()
   const sDate = searchParams.get('date') || undefined
+
+  useEffect(() => setTextColor('#000000'), []);
 
   const [sessions, setSessions] = useState<SessionResponse[]>();
 
@@ -88,15 +92,18 @@ export function Session() {
               curDate={momentDate}/>
           </Box>
           <Box gridArea="events">
-            {sessions && sessions.length > 0 ? sessions.map(sess => (
+            {sessions && sessions.length > 0 ? sessions.sort((a, b) => moment(a.date).diff(b.date, 'second')).map(sess => (
               <SessionItem 
                 id={sess.id}
                 title={sess.name} 
+                type={sess.type}
                 description={sess.description}
                 date={moment(sess.date)}
-                location={sess.locationName}
+                location={sess.location}
+                locationName={sess.locationName}
                 price={sess.price}
                 discount={sess.discount}
+                isBookingAvailable={sess.isBookingAvailable}
               />
             )) : (
               <>              
@@ -112,6 +119,8 @@ export function Session() {
         </Grid>
 
       </InnerContainer>
+      <User />
+
       <Previous 
         onClick={() => navigate('/')}
         style={{
@@ -123,66 +132,6 @@ export function Session() {
   )
 }
 
-
-interface SessionItemProps {
-  id: string
-  title: string
-  date: Moment
-  location: string
-  description?: string
-  price: number
-  discount: number
-}
-
-function SessionItem({
-  id, 
-  title,
-  date,
-  location,
-  description,
-  price,
-  discount
-}: SessionItemProps) {
-
-  const disabled = moment().isAfter(date);
-  const navigate = useNavigate();
-  return (
-    <Box 
-      margin={{ bottom: 'medium' }}
-      pad={{ bottom: 'medium' }}
-      border={{
-        side: 'bottom',
-        style: 'dashed',
-        color: '#999999'
-      }}
-    >
-      <SessionTitles
-        title={title}
-        date={date}
-        location={location}
-      />
-      <Paragraph marginTop="18px" marginBottom="18px">
-        {description || 'A friendly session at a prime location.'}
-        {disabled && (
-          <><br/> This session is passed, move on...</>
-        )}
-      </Paragraph>
-      <Paragraph bold>£{price} (£{(discount * price).toFixed(2)} for members)</Paragraph>
-      <Box align="start" pad={{
-        top: 'small',
-        bottom: 'xsmall'
-      }}>
-        <Button 
-          size='small' 
-          disabled={disabled} 
-          primary 
-          label='BOOK' 
-          onClick={() => !disabled && navigate(`/session/${id}`)}
-          type="submit"/>
-      </Box>
-    </Box>
-  );
-}
 
 /**
  * format url date
