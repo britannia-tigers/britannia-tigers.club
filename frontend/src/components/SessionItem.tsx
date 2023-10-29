@@ -71,13 +71,17 @@ export function SessionItem({
         top: 'small',
         bottom: 'xsmall'
       }}>
-        {!isMatch && isAuthenticated ? (
+        {isMatch ? (
+           <Box>
+           <Paragraph>Feel free to come and watch us.</Paragraph>
+         </Box>
+        ) : isAuthenticated ? (
           <Button 
             size='small' 
             disabled={passed || !isBookingAvailable} 
             primary 
             label='BOOK' 
-            onClick={() => bookSession(token || '', id)}
+            onClick={() => !passed && isBookingAvailable && token && bookSession(token, id)}
             type="submit"/>
         ): (
           <Box>
