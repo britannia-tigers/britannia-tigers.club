@@ -1,4 +1,4 @@
-import { Box, Button } from "grommet"
+import { Box, Button, ResponsiveContext } from "grommet"
 import moment, { Moment } from "moment"
 import { Link, useNavigate } from "react-router-dom"
 import { SessionTitles } from "./SessionTitles"
@@ -6,6 +6,7 @@ import { Paragraph } from "./Titles"
 import { useAuth0 } from "@auth0/auth0-react"
 import { useBookSession } from "../hooks/sessions"
 import { useAuthToken } from "../hooks/auth"
+import { MouseEvent, useCallback, useContext } from "react"
 
 
 interface SessionItemProps {
@@ -34,6 +35,7 @@ export function SessionItem({
   isBookingAvailable
 }: SessionItemProps) {
 
+  const windowSize = useContext(ResponsiveContext)
   const passed = moment().isAfter(date);
   const { isAuthenticated, user } = useAuth0()
 
@@ -42,11 +44,30 @@ export function SessionItem({
   const token = useAuthToken();
   const isMatch = type === 'friendly' || type === 'tournament';
 
-  console.log('token', token);
+
+  /**
+   * click handler
+   */
+  const clickHandler = useCallback(() => {
+    async function fetch() {
+      if(!passed && isBookingAvailable && token) {
+        try {
+          await bookSession(token, id);
+          navigate(`/session/${id}?status=success`)
+        } catch(e) {
+          navigate(`/session/${id}/?status=error&message${(e as Error)?.message || 'Unknown message'}`)
+        }
+      }
+    }
+
+    fetch()
+
+  }, [passed, isBookingAvailable, token])
+
 
   return (
     <Box 
-      margin={{ bottom: 'medium' }}
+      margin={windowSize === 'small' ? { top: 'none', bottom: 'large'} : { bottom: 'medium' }}
       pad={{ bottom: 'medium' }}
       border={{
         side: 'bottom',
@@ -62,26 +83,37 @@ export function SessionItem({
       />
       <Paragraph marginTop="18px" marginBottom="18px">
         {description || 'A friendly session at a prime location.'}
-        {passed && (
-          <><br/> This session is passed, move on...</>
-        )}
       </Paragraph>
       {!isMatch && <Paragraph bold>£{price.toFixed(2)} (£{(discount * price).toFixed(2)} for members)</Paragraph>}
-      <Box align="start" pad={{
-        top: 'small',
-        bottom: 'xsmall'
-      }}>
-        {isMatch ? (
+      <Box 
+        align="start" 
+        margin={{
+          bottom: 'none'       
+        }}
+        pad={windowSize === 'small' ? {
+          top: 'none',
+          bottom: 'medium'       
+        } : {
+          top: 'small',
+          bottom: 'xsmall'
+        }}
+      >
+        {passed ? (
+          <Box>
+            <Paragraph>This session has passed, move on...</Paragraph>
+          </Box>
+        ): isMatch ? (
            <Box>
-           <Paragraph>Feel free to come and watch us.</Paragraph>
+           <Paragraph>This is a team/members only event, however feel free to come and cheer for us!</Paragraph>
          </Box>
         ) : isAuthenticated ? (
           <Button 
+            margin={windowSize === 'small' ? { top: 'medium' } : { top: 'small' }}
             size='small' 
             disabled={passed || !isBookingAvailable} 
             primary 
             label='BOOK' 
-            onClick={() => !passed && isBookingAvailable && token && bookSession(token, id)}
+            onClick={clickHandler}
             type="submit"/>
         ): (
           <Box>

@@ -2,6 +2,7 @@ import { Paragraph as GPara } from "grommet";
 import styled from "styled-components";
 
 interface SubTitleProps {
+  marginTop?: string
   marginBottom?: string
 }
 
@@ -27,6 +28,7 @@ export const SmallSubTitle = styled.h3<SubTitleProps>`
   margin:0;
   padding: 0;
   text-transform: capitalize;
+  margin-top: ${props => props.marginTop || 0};
   margin-bottom: ${props => props.marginBottom || '36px'};
 `
 

@@ -1,18 +1,24 @@
 import { useAuth0 } from '@auth0/auth0-react'
-import { Header, Nav , Avatar, Box, Button } from 'grommet'
+import { Header, Nav , Avatar, Box, Button, ResponsiveContext } from 'grommet'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
 import { useNaviStore } from '../stores/NaviStore';
-import { useCallback } from 'react';
+import { useCallback, useContext } from 'react';
 import { BrowserView, MobileView } from 'react-device-detect';
 
+interface UserProps {
+  showInMobileView?: boolean
+  notFixed?: boolean
+}
 
-export function User() {
+export function User({ showInMobileView, notFixed }: UserProps) {
+
+  // const windowSize = useContext(ResponsiveContext)
 
   const { pathname } = useLocation();
   const { navi: { bgIsDark, textColor } } = useNaviStore();
   const navigate = useNavigate()
-  const { isAuthenticated, user, loginWithRedirect } = useAuth0()
+  const { isLoading, isAuthenticated, user, loginWithRedirect } = useAuth0()
 
   const loginHandler = useCallback(() => {
     loginWithRedirect({
@@ -30,8 +36,11 @@ export function User() {
     })
   }, [pathname])
 
-  return (
+  return isLoading ? (
+    <></>
+  ) : (
     <UserContainer 
+      isNotFixed={notFixed}
       bgIsDark={bgIsDark}
       textColor={textColor}>
       <BrowserView>
@@ -47,9 +56,21 @@ export function User() {
           </UserButtonContainer>
         )}
       </BrowserView>
-      <MobileView>
-        
-      </MobileView>
+      {showInMobileView && (
+        <MobileView>
+          { isAuthenticated ? (
+            <Avatar 
+              src={user?.picture} 
+              background="light-1" 
+              onClick={() => isAuthenticated && navigate('/profile')}/>
+          ) : (
+            <UserButtonContainer>
+              <h4 onClick={signupHandler}>Become a Member</h4>
+              <Button onClick={loginHandler} size='small' primary label='Login'/>
+            </UserButtonContainer>
+          )}
+        </MobileView>
+      )}
     </UserContainer>
   )
 }
@@ -59,16 +80,18 @@ const UserButtonContainer = styled.div`
   flex-flow: row;
   align-items: center;
   justify-content: center;
+  padding-top: 10px;
 `
 
 interface UserContainerProps {
   bgIsDark: boolean
   textColor: string
+  isNotFixed?: boolean
 }
 
 const UserContainer = styled.div<UserContainerProps>`
-  position: fixed;
-  padding: 40px 30px 30px 30px;
+  position: ${props => props.isNotFixed ? 'relative' : 'fixed'};
+  padding: 30px 30px 30px 30px;
   right: 0;
   top: 0;
   z-index: 99;

@@ -122,7 +122,7 @@ export class CmsService {
 
 
   /**
-   * Add a participant to a session
+   * Add a participant to a session and publish straight away
    * @param entryId 
    * @param userId 
    * @returns 
@@ -138,13 +138,20 @@ export class CmsService {
       participants: { [contentfulConfig.locale.gb]: nParticipants }
     };
 
-    const res = await this.client.entry.update({ entryId }, {
+    const res = await this.client.entry.publish({ entryId }, {
       sys: sess.sys,
       fields
     });
+
     return res;
   }
 
+  /**
+   * remove participants from session and publish straight away
+   * @param entryId 
+   * @param userIds 
+   * @returns 
+   */
   async removeParticipants(entryId: string, userIds: string[]) {
     const sess = await this.getSessionById(entryId);
     const oParticipants:string[] = sess.fields.participants[contentfulConfig.locale.gb];
@@ -156,7 +163,7 @@ export class CmsService {
       participants: { [contentfulConfig.locale.gb]: nParticipants }
     };
 
-    const res = await this.client.entry.update({ entryId }, {
+    const res = await this.client.entry.publish({ entryId }, {
       sys: sess.sys,
       fields
     });

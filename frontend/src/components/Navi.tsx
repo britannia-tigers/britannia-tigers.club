@@ -8,6 +8,7 @@ import { Burger } from './Burger';
 import { useState } from 'react';
 import { Close } from './Close';
 import { Emblem } from './Emblem';
+import { User } from './User';
 
 
 
@@ -69,6 +70,7 @@ export function Navi() {
                 <Link to='/session'>Session</Link>
                 <Link to='/contact'>Contact</Link>
                 <Link to='/sponsors'>Sponsors</Link>
+                <User notFixed={true} showInMobileView={true}/>
               </NavLinks>
             </Layer>
           )}
