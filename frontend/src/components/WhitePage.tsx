@@ -11,7 +11,7 @@ import { Close } from "grommet-icons";
 interface WhitePageProps {
   bgColor?: string
   textColor?: string
-  backTo?: string
+  backTo?: string | number
 }
 
 export function WhitePage({ children, backTo, bgColor = 'white', textColor = 'black' }: PropsWithChildren<WhitePageProps>) {
@@ -25,7 +25,8 @@ export function WhitePage({ children, backTo, bgColor = 'white', textColor = 'bl
         {children}
       {backTo ? (
         <CloseContainer>
-          <Close color={textColor} onClick={() => navigate(backTo)}/>
+          {/* A bit stupid in the navigate function to avoid typescript error as it only recognis navigate as 2 different associated function */}
+          <Close color={textColor} onClick={() => typeof backTo === 'string' ? navigate(backTo) : navigate(backTo)}/>
         </CloseContainer>
       ) : null}
     </ResizedSection>

@@ -7,19 +7,16 @@ import { Box, Button, Grid } from "grommet"
 import GoogleMapReact from 'google-map-react';
 
 import { InnerContainer, InnerTitle } from "../../../components/InnerContainer"
-import { MapMarker } from "../../../components/MapMarker"
 import { SocialIcon } from "../../../components/SocialIcon"
 import contactBg from '../../../../public/joshua-kantarges-N_7Kb4hpaoU-unsplash@0.5x.jpg';
 import igIcon from '../../../../public/instagram.svg';
 import tiktokIcon from '../../../../public/tiktok.svg';
 import threadIcon from '../../../../public/thread.svg';
 import twitterIcon from '../../../../public/twitter.svg';
+import { Map, MapMarker } from "../../../components/Map"
 
 
-const GOOGLE_API_KEY = import.meta.env.VITE_GOOGLE_MAP_API as string;
-const GOOGLE_MAP_ID = import.meta.env.VITE_GOOGLE_MAP_ID as string;
-const BRITANNIA_LATLNG = [51.53515466169934, -0.08358571534486599];
-const DEFAULT_MAP_ZOOM = 15;
+const BRITANNIA_LNGLAT = [-0.08358571534486599, 51.53515466169934];
 
 
 export function ContactPage({ offset }:PropsWithChildren<PageProps>) {
@@ -53,21 +50,7 @@ export function ContactPage({ offset }:PropsWithChildren<PageProps>) {
             </Box>
           )}
           <Box background="light-5" gridArea="bot0">
-            <GoogleMapReact
-              bootstrapURLKeys={{ key: GOOGLE_API_KEY }}
-              defaultCenter={{ lat: BRITANNIA_LATLNG[0], lng: BRITANNIA_LATLNG[1] }}
-              defaultZoom={DEFAULT_MAP_ZOOM}
-              options={{
-                fullscreenControl: false,
-                zoomControl: false,
-                mapId: GOOGLE_MAP_ID,
-                scrollwheel: false
-              }}
-              >
-              <MapMarker
-                lat={BRITANNIA_LATLNG[0]}
-                lng={BRITANNIA_LATLNG[1]} />
-            </GoogleMapReact>
+            <Map lnglat={BRITANNIA_LNGLAT} />
           </Box>
           <Box background="light-2" gridArea="bot1" pad={{vertical: 'large', horizontal: 'large'}}>
             <h3>Follow us</h3>

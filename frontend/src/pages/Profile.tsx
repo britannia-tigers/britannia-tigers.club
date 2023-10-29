@@ -28,7 +28,7 @@ export function Profile() {
   }, [pathname])
 
   return (
-    <WhitePage backTo='/'>
+    <WhitePage backTo={-1}>
         <Helmet>
           <title>Profile</title>
         </Helmet>

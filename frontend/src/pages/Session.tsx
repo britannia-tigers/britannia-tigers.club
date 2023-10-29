@@ -1,5 +1,5 @@
 import { Box, Grid, ResponsiveContext } from "grommet";
-import { InnerContainer, InnerTitle } from "../components/InnerContainer";
+import { InnerContainer, InnerTitle, MobileInnerTitle } from "../components/InnerContainer";
 import { WhitePage } from "../components/WhitePage";
 import { Calendar } from "../components/TigersCalendar";
 import { useNavigate, useSearchParams, useLocation } from "react-router-dom";
@@ -13,6 +13,7 @@ import { Previous } from "../components/Previous";
 import { SessionItem } from "../components/SessionItem";
 import { User } from "../components/User";
 import { useNaviStore } from "../stores/NaviStore";
+import { BrowserView, MobileView } from "react-device-detect";
 
 
 /**
@@ -67,13 +68,20 @@ export function Session() {
   return (
     <WhitePage>
       <InnerContainer>
-        <InnerTitle bottomPadding="small" >Sessions</InnerTitle>
+        <BrowserView>
+          <InnerTitle bottomPadding="small" >Sessions</InnerTitle>
+        </BrowserView>
+        <MobileView>
+          <MobileInnerTitle bottomPadding="medium" >Sessions</MobileInnerTitle>
+        </MobileView>
+
         <Grid 
+          pad={windowSize === 'small' ? { horizontal: 'large', vertical: 'none' } : 'none'}
           responsive
-          columns={windowSize === 'small' ? ['1'] : ['1/2', '1/2']}
-          rows={windowSize === 'small' ? ['flex', 'flex'] : ['flex']}
+          columns={windowSize === 'small' ? ['flex'] : ['1/2', '1/2']}
+          rows={windowSize === 'small' ? ['auto', 'auto'] : ['flex']}
           gap={{
-            row: windowSize === 'small' ? 'large' : 'none',
+            row: windowSize === 'small' ? 'large' : 'medium',
             column: windowSize === 'small' ? 'none' : 'medium'
           }}
           areas={windowSize === 'small' ? [
@@ -119,14 +127,14 @@ export function Session() {
         </Grid>
 
       </InnerContainer>
-      <User />
+      <User showInMobileView={true}/>
 
       <Previous 
         onClick={() => navigate('/')}
         style={{
           position: 'fixed',
-          left: '30px',
-          top: '40px'
+          left: '20px',
+          top: '30px'
         }}/>
     </WhitePage>   
   )

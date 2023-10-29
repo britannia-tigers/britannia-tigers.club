@@ -1,8 +1,7 @@
-import { Box, CalendarHeaderProps, Calendar as GCalendar, Grid, Paragraph } from "grommet"
+import { Box, CalendarHeaderProps, Calendar as GCalendar, Grid, Paragraph, ResponsiveContext } from "grommet"
 import moment, { Moment } from "moment"
 import { Next, Previous, Calendar as CalIcon } from 'grommet-icons'
-import { isMobile } from "react-device-detect"
-import { useEffect, useMemo, useState } from "react"
+import { useContext, useEffect, useMemo, useState } from "react"
 import { SessionResponse } from "../api/api.interface"
 import { useSessions } from "../hooks/sessions"
 
@@ -62,11 +61,12 @@ export function Calendar({
    * filter out day that is not today
    */
   useEffect(() => onSessions(sess.filter(s => moment(s.date).isSame(curDate, 'day'))), [sess, curDate]);
+  const windowSize = useContext(ResponsiveContext)
 
 
   return (
     <Box 
-      pad='medium'
+      pad={windowSize === 'small' ? 'small' : 'medium'}
       elevation="medium" 
       height='350px'
       width='320px'>
@@ -149,15 +149,18 @@ function Header({
   onNextMonth,
   onReset
 }:Partial<CalendarHeaderProps> & { onReset: () => void }) {
+  
+  const windowSize = useContext(ResponsiveContext)
   const moDate = moment(date)
   const month = moDate.format('MMM')
   const year = moDate.year()
+
   return (
     <Grid
-      pad={{horizontal:'small', top: 'small', bottom: 'medium'}}
+      pad={windowSize === 'small' ? {horizontal:'small', top: 'medium', bottom: 'large'} : {horizontal:'small', top: 'small', bottom: 'medium'}}
       columns={['70%', '30%']}
       rows={['1']}
-      areas={isMobile ? [] : [['monthYear', 'icons']]}
+      areas={[['monthYear', 'icons']]}
     >
       <Box gridArea="monthYear"><Paragraph margin='none'>
           {month} {year}

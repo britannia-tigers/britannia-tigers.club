@@ -9,7 +9,7 @@ interface InnerContainerProps {
 }
 
 interface InnerTitleProps {
-  bottomPadding?: 'large' | 'small'
+  bottomPadding?: 'large' | 'small' | 'medium'
 }
 
 interface InnerProps {
@@ -60,12 +60,12 @@ export const InnerTitle = styled.h3<InnerTitleProps>`
   text-align: right;
   font-size: 36px;
   text-transform: uppercase;
-  padding: 0 0 ${props => props.bottomPadding === 'large'  ? '90px' : '42px'} 0;
+  padding: 0 0 ${props => props.bottomPadding === 'large'  ? '90px' : props.bottomPadding === 'medium' ? '60px' : '42px'} 0;
   margin: 0;
 `
 
 export const MobileInnerTitle = styled(InnerTitle)<InnerTitleProps>`
-  padding: 0px 30px 30px 0px;
+  padding: 0px 30px ${props => props.bottomPadding === 'large'  ? '90px' : props.bottomPadding === 'medium' ? '60px' : '42px'} 0px;
 `
 
 export const InnerSubTitle = styled.h4`
