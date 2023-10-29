@@ -29,7 +29,7 @@ export function Auth({ children }: PropsWithChildren) {
       clientId={clientId}
       authorizationParams={{
         audience: audience,
-        redirect_uri: redirectionUri,
+        redirect_uri: window.location.origin + redirectionUri,
         scope: [
           'openid',
           'profile',
