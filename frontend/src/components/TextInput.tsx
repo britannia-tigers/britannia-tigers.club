@@ -30,6 +30,7 @@ validateOn?: 'blur' | 'submit' | 'change'
 
 const Input = styled(GTextI)`
   padding: 6px 0px;
+  height: auto;
   border: 0;
   &:focus {
     box-shadow: none;
@@ -55,8 +56,8 @@ export function TextInput({
       onChange={onChange}
       value={value}
       htmlFor={id}
-      component={Input}>
-        {/* <Input 
+      >
+        <Input 
           name={name}
           value={value}
           onChange={onChange}
@@ -64,8 +65,7 @@ export function TextInput({
           required={required}
           id={id}
           placeholder={placeholder}
-
-        /> */}
+        /> 
     </FormField>
   )
 }

@@ -7,6 +7,7 @@ interface SubTitleProps {
 }
 
 interface ParagraphProps {
+  underline?: boolean
   marginBottom?: string
   marginTop?: string
   bold?: boolean
@@ -40,6 +41,7 @@ export const Paragraph = styled(GPara)<ParagraphProps>`
   padding: 0;
   font-size: 14px;
   line-height: 1.25em;
+  text-decoration: ${props => props.underline ? 'underline' : 'none'};
   margin: ${props => props.marginTop || '0px'} 0 ${props => props.marginBottom || '0px'};
   font-weight: ${props => props.bold ? 'bold' : 'normal'}
 `

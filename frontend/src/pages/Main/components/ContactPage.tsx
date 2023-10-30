@@ -44,7 +44,7 @@ export function ContactPage({ offset }:PropsWithChildren<PageProps>) {
                 size: 'cover'
               }} 
               gridArea="top">
-                <InnerContainer paddingTop={0}>
+                <InnerContainer paddingTop='medium'>
                     <InnerTitle style={{color: 'white'}}>Contact</InnerTitle>
                 </InnerContainer>
             </Box>

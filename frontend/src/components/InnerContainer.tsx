@@ -1,7 +1,7 @@
 import { PropsWithChildren } from "react";
 import styled from "styled-components";
 
-type PaddingTopType = 'thick' | 'thin' | number
+type PaddingTopType = 'large' | 'medium' | 'small' | number
 
 interface InnerContainerProps {
   paddingTop?: PaddingTopType
@@ -26,14 +26,15 @@ export const CenteredOuterContainer = styled.div`
 
 const Inner = styled.div<InnerProps>`
   padding-top: ${
-    props => props.paddingTop === 'thick' ? 
-      '135px' : props.paddingTop === 'thin' ? 
+    props => props.paddingTop === 'large' ? 
+      '135px' : props.paddingTop === 'medium' ? 
+      '72px' : props.paddingTop === 'small' ? 
       '30px' : typeof props.paddingTop === 'number' ?
       `${props.paddingTop}px` : 0
   };
   padding-bottom: ${
-    props => props.paddingTop === 'thick' ? 
-      '135px' : props.paddingTop === 'thin' ? 
+    props => props.paddingTop === 'large' ? 
+      '135px' : props.paddingTop === 'small' ? 
       '30px' : typeof props.paddingTop === 'number' ?
       `${props.paddingTop}px` : 0
   };
@@ -42,7 +43,7 @@ const Inner = styled.div<InnerProps>`
   height: fill-available;
 `
 
-export function InnerContainer({ children, title, paddingTop = 'thick'}:PropsWithChildren<InnerContainerProps>) {
+export function InnerContainer({ children, title, paddingTop = 'large'}:PropsWithChildren<InnerContainerProps>) {
 
 
   return (
