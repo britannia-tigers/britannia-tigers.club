@@ -20,6 +20,42 @@ export const theme = {
       shadow: 'none'
     }
   },
+  fileInput: {
+    pad: {
+      horizontal: 'small',
+      top: 'xsmall',
+      bottom: 'none'
+    },
+    border: false,
+    button: {
+      border: false,
+      // border: {
+      //   radius: '20px'
+      // },
+      // radius: '4px',
+      // background: {
+      //   color: '#333333'
+      // },
+      // color: 'white',
+      extend: css`
+        margin: 0;
+        margin-left: -24px;
+        padding: 0px;
+        font-size: 14px;
+        text-decoration: underline;
+        /* border-radius: 2px; */
+      `
+    },
+    message: {
+      size: 'small'
+    },
+    label: {
+      size: 'small'
+    },
+    hover: {
+      border: false
+    },
+  },
   button: {
     padding: {
       vertical: '0px',

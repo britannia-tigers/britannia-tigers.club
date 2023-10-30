@@ -3,7 +3,7 @@ import { ResizedSection } from "./ResizedSection";
 import styled from "styled-components";
 import closeImg from '../../public/close.svg';
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { Close } from "grommet-icons";
+import { Close } from "./Close";
 
 
 
