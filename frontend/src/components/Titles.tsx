@@ -1,4 +1,4 @@
-import { Paragraph as GPara } from "grommet";
+import { Paragraph as GPara, ParagraphProps as GParaProps } from "grommet";
 import styled from "styled-components";
 
 interface SubTitleProps {
@@ -6,7 +6,7 @@ interface SubTitleProps {
   marginBottom?: string
 }
 
-interface ParagraphProps {
+interface ParagraphProps extends GParaProps {
   underline?: boolean
   marginBottom?: string
   marginTop?: string

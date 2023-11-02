@@ -87,10 +87,11 @@ function convertOne(cur:ItemResponse<SessionRequest>) {
     locationName: cur.fields.locationName[GB_LOCALE],
     price: cur.fields.price[GB_LOCALE],
     discount: cur.fields.discount[GB_LOCALE],
+    maxParticipants: cur.fields.maxParticipants && cur.fields.maxParticipants[GB_LOCALE],
+    maxWaitingList: cur.fields.maxWaitingList && cur.fields.maxWaitingList[GB_LOCALE],
     participants: cur.fields.participants && cur.fields.participants[GB_LOCALE],
     paidParticipants: cur.fields.paidParticipants && cur.fields.paidParticipants[GB_LOCALE],
     isBookingAvailable: cur.fields.isBookingAvailable && cur.fields.isBookingAvailable[GB_LOCALE]
-
   }
 }
 

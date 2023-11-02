@@ -20,6 +20,9 @@ interface SessionItemProps {
   price: number
   discount: number
   isBookingAvailable: boolean
+  isBooked?: boolean
+  isPaid?: boolean
+  availability?: number
 }
 
 export function SessionItem({
@@ -32,12 +35,15 @@ export function SessionItem({
   description,
   price,
   discount,
-  isBookingAvailable
+  isBookingAvailable,
+  isBooked,
+  isPaid,
+  availability
 }: SessionItemProps) {
 
   const windowSize = useContext(ResponsiveContext)
   const passed = moment().isAfter(date);
-  const { isAuthenticated, user } = useAuth0()
+  const { isAuthenticated } = useAuth0()
 
   const navigate = useNavigate();
   const bookSession = useBookSession()
@@ -106,13 +112,37 @@ export function SessionItem({
            <Box>
            <Paragraph>This is a team/members only event, however feel free to come and cheer for us!</Paragraph>
          </Box>
-        ) : isAuthenticated ? (
+        ) : isPaid ? (
+          <Box>
+            <Paragraph>You are in!</Paragraph>
+          </Box>
+        ) : isBooked ? (
+          <>          
+            <Paragraph>Pay for you booking or you might lose it if there is a waiting list!</Paragraph>
+            <Box direction="row-responsive" gap="xsmall">    
+              <Button 
+                primary
+                margin={windowSize === 'small' ? { top: 'medium' } : { top: 'small' }}
+                size='small' 
+                disabled={passed || !isBookingAvailable} 
+                label='PAY' 
+                onClick={clickHandler} />
+              {!passed && isBookingAvailable && <Button 
+                secondary
+                margin={windowSize === 'small' ? { top: 'medium' } : { top: 'small' }}
+                size='small' 
+                disabled={passed || !isBookingAvailable} 
+                label='CANCEL' 
+                onClick={clickHandler} />}
+            </Box>
+          </>
+        ): isAuthenticated ? (
           <Button 
             margin={windowSize === 'small' ? { top: 'medium' } : { top: 'small' }}
             size='small' 
-            disabled={passed || !isBookingAvailable} 
-            primary 
+            disabled={passed || !isBookingAvailable}  
             label='BOOK' 
+            badge={availability}
             onClick={clickHandler}
             type="submit"/>
         ): (

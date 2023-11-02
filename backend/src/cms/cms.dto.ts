@@ -30,6 +30,9 @@ export class SessionDto {
   @ApiProperty({ required: false })
   readonly participants: string[];
 
+  @IsArray()
+  @ApiProperty({ required: false })
+  readonly paidParticipants: string[];
 }
 
 

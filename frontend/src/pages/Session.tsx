@@ -7,7 +7,7 @@ import Mo from 'moment'
 import { useContext, useEffect, useMemo, useState } from "react";
 import moment from "moment";
 import { Paragraph, SmallSubTitle } from "../components/Titles";
-import { SessionResponse } from "../api/api.interface";
+import { SessionResponse, UserSessionResponse } from "../api/api.interface";
 import { formatDateTime } from "../helpers/displayHelpers";
 import { Previous } from "../components/Previous";
 import { SessionItem } from "../components/SessionItem";
@@ -28,7 +28,7 @@ export function Session() {
 
   useEffect(() => setTextColor('#000000'), []);
 
-  const [sessions, setSessions] = useState<SessionResponse[]>();
+  const [sessions, setSessions] = useState<UserSessionResponse[]>();
 
   /**
    * set date accordingly
@@ -112,6 +112,9 @@ export function Session() {
                 price={sess.price}
                 discount={sess.discount}
                 isBookingAvailable={sess.isBookingAvailable}
+                isBooked={sess.booked}
+                isPaid={sess.paid}
+                availability={sess.maxParticipants && sess.maxWaitingList && (sess.maxParticipants - (sess.participants?.length || 0))}
               />
             )) : (
               <>              
