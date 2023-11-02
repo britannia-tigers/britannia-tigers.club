@@ -68,6 +68,8 @@ export interface SessionRequest {
   locationName: LocaleBase
   price: LocaleBase<number>
   discount: LocaleBase<number>
+  maxParticipants?: LocaleBase<number>
+  maxWaitingList?: LocaleBase<number>
   participants: LocaleBase<string[]>
   paidParticipants: LocaleBase<string[]>
   isBookingAvailable: LocaleBase<boolean>
@@ -83,9 +85,16 @@ export interface SessionResponse {
   discount: number
   location: [string, string]
   locationName: string
+  maxParticipants?: number
+  maxWaitingList?: number
   participants: string[]
   paidParticipants: string[]
   isBookingAvailable: boolean
+}
+
+export interface UserSessionResponse extends SessionResponse {
+  booked?: boolean
+  paid?: boolean
 }
 
 export interface Sponsor {

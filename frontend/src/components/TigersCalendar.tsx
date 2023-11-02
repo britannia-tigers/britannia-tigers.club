@@ -2,14 +2,15 @@ import { Box, CalendarHeaderProps, Calendar as GCalendar, Grid, Paragraph, Respo
 import moment, { Moment } from "moment"
 import { Next, Previous, Calendar as CalIcon } from 'grommet-icons'
 import { useContext, useEffect, useMemo, useState } from "react"
-import { SessionResponse } from "../api/api.interface"
+import { SessionResponse, UserSessionResponse } from "../api/api.interface"
 import { useSessions } from "../hooks/sessions"
+import { useAuth0 } from "@auth0/auth0-react"
 
 interface ICalendar {
   size?: string
   curDate: Moment
   onDateSelect: (date:string | string[]) => void
-  onSessions: (sess: SessionResponse[]) => void
+  onSessions: (sess: UserSessionResponse[]) => void
 }
 
 interface IDay {
@@ -44,6 +45,8 @@ export function Calendar({
     return [sDate, eDate, lastMonthLastDate, nextMonthFirstDate];
   }, [curDate])
 
+  const { isAuthenticated, user } = useAuth0();
+
   /**
    * get sessions within the month
    */
@@ -51,6 +54,7 @@ export function Calendar({
     startDate: startDate.toISOString(),
     endDate: endDate.toISOString()
   })
+
 
   /**
    * redate with start of the day

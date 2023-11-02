@@ -20,56 +20,52 @@ export const theme = {
       shadow: 'none'
     }
   },
-  fileInput: {
-    pad: {
-      horizontal: 'small',
-      top: 'xsmall',
-      bottom: 'none'
-    },
-    border: false,
-    button: {
-      border: false,
-      // border: {
-      //   radius: '20px'
-      // },
-      // radius: '4px',
-      // background: {
-      //   color: '#333333'
-      // },
-      // color: 'white',
-      extend: css`
-        margin: 0;
-        margin-left: -24px;
-        padding: 0px;
-        font-size: 14px;
-        text-decoration: underline;
-        /* border-radius: 2px; */
-      `
-    },
-    message: {
-      size: 'small'
-    },
-    label: {
-      size: 'small'
-    },
-    hover: {
-      border: false
-    },
-  },
   button: {
+    badge: {
+      container: {
+        extend: css`
+          margin-right: 5px;
+          margin-top: 20px;
+        `
+      },
+      text: {
+        size: {
+          medium: 'xsmall'
+        }
+      }
+    },
+    default: {
+      border: {
+        width: '1px'
+      },
+      background: {
+        color: 'black'
+      },
+      color: 'white'
+    },
     padding: {
       vertical: '0px',
       horizontal: '12px'
     },
     primary: {
-
+      background: {
+        color: 'brand'
+      },
+      border: { color: 'brand', width: '1px' },
+    },
+    secondary: {
+      border: { color: 'black', width: '1px' },
+      color: 'text'
     },
     disabled: {
       opacit: 1,
       border: {
+        color: 'rgba(170, 170, 170, 1)',
+      },
+      background: {
         color: 'rgba(170, 170, 170, 1)'
       },
-      color: 'rgba(180, 180, 180, 1)'
+      color: 'white'
     }
   },
   formField: {
