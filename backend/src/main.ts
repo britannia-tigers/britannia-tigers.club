@@ -7,7 +7,9 @@ const API_TITLE = process.env.API_TITLE || 'Britannia Tigers Local';
 const API_VERSION = process.env.API_VERSION || '0.1-alpha';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, {
+    rawBody: true
+  });
 
   const docConfig = new DocumentBuilder()
     .setTitle(API_TITLE)

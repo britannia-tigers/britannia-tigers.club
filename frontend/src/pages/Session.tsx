@@ -114,7 +114,7 @@ export function Session() {
                 isBookingAvailable={sess.isBookingAvailable}
                 isBooked={sess.booked}
                 isPaid={sess.paid}
-                availability={sess.maxParticipants && sess.maxWaitingList && (sess.maxParticipants - (sess.participants?.length || 0))}
+                availability={sess.maxParticipants && (sess.maxParticipants - (sess.participants?.length || 0))}
               />
             )) : (
               <>              

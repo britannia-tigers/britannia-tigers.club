@@ -75,10 +75,12 @@ export interface SessionRequest {
   isBookingAvailable: LocaleBase<boolean>
 }
 
+export type SessionType = 'scrimmage' | 'tournament' | 'friendly' | 'practice'
+
 export interface SessionResponse {
   id: string
   name: string
-  type: string
+  type: SessionType
   description?: string
   date: string
   price: number

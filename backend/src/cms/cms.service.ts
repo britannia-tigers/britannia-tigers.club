@@ -6,7 +6,7 @@ import {
 } from 'contentful-management';
 import { createClient as createDeliveryClient, ContentfulClientApi, ChainModifiers } from 'contentful'
 import config from './contentful.config';
-import { ExtendedQueryOptions, FilterParam, PageFullResponse, PageListResponse, Session, SessionFull, SessionFullResponse, SessionListResponse, Sponsor, SponsorListResponse } from './cms.interface';
+import { ExtendedQueryOptions, FilterParam, LocalisedSessionFull, PageFullResponse, PageListResponse, Session, SessionFullResponse, SessionListResponse, Sponsor, SponsorListResponse } from './cms.interface';
 import contentfulConfig from './contentful.config';
 import * as moment from 'moment';
 
@@ -97,9 +97,6 @@ export class CmsService {
   async updateSession(entryId: string, { name, location, date, participants}:Partial<Session>) {
     try {
       const sess = await this.getSessionById(entryId);
-      const localGb = contentfulConfig.locale.gb;
-
-      console.log(sess.fields);
 
       let fields = { 
         name: name ? { [contentfulConfig.locale.gb]: name } : sess.fields.name,
@@ -129,21 +126,37 @@ export class CmsService {
    */
   async addParticipants(entryId: string, userIds: string[]) {
 
-    const sess = await this.getSessionById(entryId);
-    const oParticipants = sess.fields.participants[contentfulConfig.locale.gb];
-    const nParticipants = [...(new Set([...oParticipants, ...userIds]))]
+    const entry = await this.getSessionById(entryId);
 
-    let fields = { 
-      ...sess.fields,
-      participants: { [contentfulConfig.locale.gb]: nParticipants }
-    };
+    if(!entry.fields.participants || !entry.fields.participants[contentfulConfig.locale.gb]) {
+      entry.fields.participants = { [contentfulConfig.locale.gb]: userIds };
+    } else {
+      entry.fields.participants[contentfulConfig.locale.gb] = [...new Set([...entry.fields.participants[contentfulConfig.locale.gb], ...userIds])]
+    }
 
-    const res = await this.client.entry.publish({ entryId }, {
-      sys: sess.sys,
-      fields
-    });
+    const res = await this.client.entry.update({ entryId }, entry);
+    return this.client.entry.publish({ entryId }, res);
+  }
 
-    return res;
+
+  /**
+   * add a paid participant to the sessiona and publish stragiht away
+   * @param entryId 
+   * @param userIds 
+   * @returns 
+   */
+  async addPaidParticipants(entryId: string, userIds: string[]) {
+
+    const entry = await this.getSessionById(entryId);
+
+    if(!entry.fields.paidParticipants || !entry.fields.paidParticipants[contentfulConfig.locale.gb]) {
+      entry.fields.paidParticipants = { [contentfulConfig.locale.gb]: userIds };
+    } else {
+      entry.fields.paidParticipants[contentfulConfig.locale.gb] = [...new Set([...entry.fields.paidParticipants[contentfulConfig.locale.gb], ...userIds])]
+    }
+
+    const res = await this.client.entry.update({ entryId }, entry);
+    return this.client.entry.publish({ entryId }, res);
   }
 
   /**
@@ -154,7 +167,7 @@ export class CmsService {
    */
   async removeParticipants(entryId: string, userIds: string[]) {
     const sess = await this.getSessionById(entryId);
-    const oParticipants:string[] = sess.fields.participants[contentfulConfig.locale.gb];
+    const oParticipants:string[] = sess.fields.participants ? sess.fields.participants[contentfulConfig.locale.gb] : [];
 
     const nParticipants = oParticipants.filter(p => !userIds.includes(p))
 
@@ -213,7 +226,7 @@ export class CmsService {
    */
   async getNextSession(): Promise<SessionFullResponse> {
     const curDate = new Date();
-    const res = await this.client.entry.getPublished<SessionFull>({
+    const res = await this.client.entry.getPublished<LocalisedSessionFull>({
       query:{
         content_type: config.contentTypeId.sessions,
         [filterBy('date', 'gte')]: curDate.toISOString()
