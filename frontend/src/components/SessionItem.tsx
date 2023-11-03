@@ -7,12 +7,16 @@ import { useAuth0 } from "@auth0/auth0-react"
 import { useBookSession } from "../hooks/sessions"
 import { useAuthToken } from "../hooks/auth"
 import { MouseEvent, useCallback, useContext } from "react"
+import { stripePayment } from "../configs/stripe"
+import { createSessionPayment } from "../api/payments"
+import { SessionType } from "../api/api.interface"
+import { AxiosResponse } from "axios"
 
 
 interface SessionItemProps {
   id: string
   title: string
-  type: string
+  type: SessionType
   date: Moment
   location: [string, string]
   locationName: string
@@ -48,20 +52,21 @@ export function SessionItem({
   const navigate = useNavigate();
   const bookSession = useBookSession()
   const token = useAuthToken();
+  const { user } = useAuth0();
   const isMatch = type === 'friendly' || type === 'tournament';
 
 
   /**
    * click handler
    */
-  const clickHandler = useCallback(() => {
+  const bookHandler = useCallback(() => {
     async function fetch() {
       if(!passed && isBookingAvailable && token) {
         try {
           await bookSession(token, id);
-          navigate(`/session/${id}?status=success`)
+          navigate(`/session/${id}?status=booking_success`)
         } catch(e) {
-          navigate(`/session/${id}/?status=error&message${(e as Error)?.message || 'Unknown message'}`)
+          navigate(`/session/${id}/?status=booking_error&message${(e as Error)?.message || 'Unknown message'}`)
         }
       }
     }
@@ -69,6 +74,30 @@ export function SessionItem({
     fetch()
 
   }, [passed, isBookingAvailable, token])
+
+  const paymentHandler = useCallback(async () => {
+    console.log('me clicked', type, user)
+    if(!user || !user.sub) {
+      console.error('no logged in user')
+      return;
+    }
+
+    switch(type) {
+      case 'scrimmage':
+        const scrimmagePriceIds = stripePayment.priceId[type];
+        const scrimmageRes = await createSessionPayment(id, user.sub, scrimmagePriceIds.standard)
+        window.location.href = scrimmageRes.url;
+        break;
+      case 'practice':
+        const practicePriceIds  = stripePayment.priceId[type];
+        const practiceRes = await createSessionPayment(id, user.sub, practicePriceIds.member)
+        
+        console.log(practiceRes)
+        window.location.href = practiceRes.url;
+        break;
+    }
+
+  }, [user, isBookingAvailable, token])
 
 
   return (
@@ -126,14 +155,14 @@ export function SessionItem({
                 size='small' 
                 disabled={passed || !isBookingAvailable} 
                 label='PAY' 
-                onClick={clickHandler} />
+                onClick={paymentHandler} />
               {!passed && isBookingAvailable && <Button 
                 secondary
                 margin={windowSize === 'small' ? { top: 'medium' } : { top: 'small' }}
                 size='small' 
                 disabled={passed || !isBookingAvailable} 
                 label='CANCEL' 
-                onClick={clickHandler} />}
+                onClick={bookHandler} />}
             </Box>
           </>
         ): isAuthenticated ? (
@@ -143,7 +172,7 @@ export function SessionItem({
             disabled={passed || !isBookingAvailable}  
             label='BOOK' 
             badge={availability}
-            onClick={clickHandler}
+            onClick={bookHandler}
             type="submit"/>
         ): (
           <Box>

@@ -74,6 +74,17 @@ export class CmsController {
   }
 
 
+  @ApiTags('Sessions')
+  @ApiBearerAuth('bearer')
+  @Post('sessions/:id/paid-participants')
+  addSessionPaidParticipants(
+    @Param('id') id: string,
+    @Body() {userIds}: AddParticipantsDto
+  ) {
+    return this.cmsService.addPaidParticipants(id, userIds);
+  }
+
+
   /**
    * Add self to list of participants
    * @param id 
