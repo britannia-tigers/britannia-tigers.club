@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { GB_LOCALE, ItemResponse, ListResponse, SessionRequest, SessionResponse } from './api.interface'
+import { GB_LOCALE, ItemResponse, ListResponse, SessionRequest, SessionResponse, SessionType } from './api.interface'
 import { useEffect, useState } from 'react'
 
 export interface ApiSessionGetQuery {
@@ -80,7 +80,7 @@ function convertOne(cur:ItemResponse<SessionRequest>) {
   return {
     id: cur.sys.id,
     name: cur.fields.name[GB_LOCALE],
-    type: cur.fields.type[GB_LOCALE],
+    type: cur.fields.type[GB_LOCALE] as SessionType,
     date: cur.fields.date[GB_LOCALE],
     description: cur.fields.description && cur.fields.description[GB_LOCALE],
     location: [cur.fields.location[GB_LOCALE].lon, cur.fields.location[GB_LOCALE].lat] as [string, string],
