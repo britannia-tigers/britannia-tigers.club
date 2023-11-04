@@ -86,7 +86,7 @@ export function Calendar({
                 onReset={() => onDateSelect(moment().startOf('day').toISOString())}
               />
             )}
-            firstDayOfWeek={0}
+            firstDayOfWeek={1}
             date={curDate.toISOString()}
             color="black"
             size={size}

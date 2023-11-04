@@ -1,11 +1,15 @@
 import { useEffect, useState } from "react";
 import { UserSessionResponse } from "../api/api.interface";
-import { ApiSessionGetQuery, addSelfToSession, getSessionById, getSessions } from "../api/sessions";
+import { ApiSessionGetQuery, addSelfToSession, getSessionById, getSessions, removeSelfFromSession } from "../api/sessions";
 import { useAuth0 } from "@auth0/auth0-react";
 
 
 export const useBookSession = () => async (authToken:string, id:string) => {
   return addSelfToSession(authToken, id);
+}
+
+export const useCancelSession = () => async(authToken:string, id:string) => {
+  return removeSelfFromSession(authToken, id);
 }
 
 export function useSession(id?:string) {

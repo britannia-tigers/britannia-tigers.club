@@ -14,6 +14,13 @@ export interface ApiSessionGetQuery {
 
 }
 
+
+/**
+ * add self to a session
+ * @param authToken 
+ * @param id 
+ * @returns 
+ */
 export async function addSelfToSession(authToken:string, id:string) {
   const res = await axios.post<ItemResponse<SessionRequest>>(`/api/sessions/${id}/participants/self`, {}, {
     headers: {
@@ -21,8 +28,25 @@ export async function addSelfToSession(authToken:string, id:string) {
     }
   });
 
-  return convertOne(res.data);
+  return convertOne(res.data)
 }
+
+
+/**
+ * remove self from a session
+ * @param authToken 
+ * @param id 
+ */
+export async function removeSelfFromSession(authToken:string, id:string) {
+  const res = await axios.delete<ItemResponse<SessionRequest>>(`api/sessions/${id}/participants/self`, {
+    headers: {
+      Authorization: `bearer ${authToken}`
+    }
+  });
+
+  return convertOne(res.data)
+}
+
 
 /**
  * get a session by id

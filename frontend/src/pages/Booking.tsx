@@ -17,7 +17,9 @@ enum BookingStatusTypes {
   booking_success,
   booking_error,
   payment_success,
-  payment_cancel
+  payment_cancel,
+  cancel_success,
+  cancel_error
 }
 
 type BookingStatus = keyof typeof BookingStatusTypes
@@ -63,14 +65,15 @@ export function Booking() {
 
     case 'booking_success':
     case 'payment_success':
+    case 'cancel_success':
       return (
         <BookingWrapper>
           <InnerContainer>
             <BrowserView>
-              <InnerTitle bottomPadding="small" >{ status ==='booking_success' ? 'Booking' : 'Payment' } Success</InnerTitle>
+              <InnerTitle bottomPadding="small" >{ status ==='booking_success' ? 'Booking' : status === 'payment_success' ? 'Payment' : 'Cancel' } Success</InnerTitle>
             </BrowserView>
             <MobileView>
-              <MobileInnerTitle>Session Booked</MobileInnerTitle>
+              <MobileInnerTitle>{ status ==='booking_success' ? 'Booking' : status === 'payment_success' ? 'Payment' : 'Cancel' } Success</MobileInnerTitle>
             </MobileView>
             <Grid 
               responsive

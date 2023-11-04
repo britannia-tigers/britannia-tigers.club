@@ -166,22 +166,16 @@ export class CmsService {
    * @returns 
    */
   async removeParticipants(entryId: string, userIds: string[]) {
-    const sess = await this.getSessionById(entryId);
-    const oParticipants:string[] = sess.fields.participants ? sess.fields.participants[contentfulConfig.locale.gb] : [];
+    const entry = await this.getSessionById(entryId);
+    if(!entry.fields.participants || !entry.fields.participants[contentfulConfig.locale.gb]) {
+      return entry
+    }
 
-    const nParticipants = oParticipants.filter(p => !userIds.includes(p))
-
-    let fields = { 
-      ...sess.fields,
-      participants: { [contentfulConfig.locale.gb]: nParticipants }
-    };
-
-    const res = await this.client.entry.publish({ entryId }, {
-      sys: sess.sys,
-      fields
-    });
-    return res;
-
+    // filter the ones not in the list 
+    entry.fields.participants[contentfulConfig.locale.gb] = entry.fields.participants[contentfulConfig.locale.gb].filter(i => !userIds.includes(i))
+    
+    const res = await this.client.entry.update({ entryId }, entry)
+    return this.client.entry.publish({ entryId }, res)
   }
 
 

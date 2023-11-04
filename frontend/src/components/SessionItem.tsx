@@ -4,7 +4,7 @@ import { Link, useNavigate } from "react-router-dom"
 import { SessionTitles } from "./SessionTitles"
 import { Paragraph } from "./Titles"
 import { useAuth0 } from "@auth0/auth0-react"
-import { useBookSession } from "../hooks/sessions"
+import { useBookSession, useCancelSession } from "../hooks/sessions"
 import { useAuthToken } from "../hooks/auth"
 import { MouseEvent, useCallback, useContext } from "react"
 import { stripePayment } from "../configs/stripe"
@@ -51,6 +51,7 @@ export function SessionItem({
 
   const navigate = useNavigate();
   const bookSession = useBookSession()
+  const cancelSession = useCancelSession();
   const token = useAuthToken();
   const { user } = useAuth0();
   const isMatch = type === 'friendly' || type === 'tournament';
@@ -74,6 +75,21 @@ export function SessionItem({
     fetch()
 
   }, [passed, isBookingAvailable, token])
+
+  const cancelHander = useCallback(() => {
+    async function fetch() {
+      if(token) {
+        try {
+          await cancelSession(token, id)
+          navigate(`/session/${id}?status=cancel_success`)
+        } catch(e) {
+          navigate(`/session/${id}/?status=cancel_error&message${(e as Error)?.message || 'Unknown message'}`)
+        }
+      }
+    }
+
+    fetch()
+  }, [token])
 
   const paymentHandler = useCallback(async () => {
     console.log('me clicked', type, user)
@@ -160,7 +176,7 @@ export function SessionItem({
                 size='small' 
                 disabled={passed || !isBookingAvailable} 
                 label='CANCEL' 
-                onClick={bookHandler} />}
+                onClick={cancelHander} />}
             </Box>
           </>
         ): isAuthenticated ? (

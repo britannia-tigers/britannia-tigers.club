@@ -1,8 +1,7 @@
 import { Box, Button, Card, CardBody, CardFooter, CardHeader, Form , FormField, TextInput as TIn} from "grommet";
-import { PropsWithChildren, useEffect, useMemo, useState } from "react";
+import { PropsWithChildren, useState } from "react";
 import { Paragraph, SubTitle } from "./Titles";
 import { useNaviStore } from "../stores/NaviStore";
-import { AnimationType } from "grommet/utils";
 import { Close } from "./Close";
 import { TextInput } from "./TextInput";
 import { TextArea } from "./TextArea";

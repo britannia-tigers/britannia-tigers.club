@@ -83,6 +83,7 @@ export class CmsController {
   ) {
     return this.cmsService.addPaidParticipants(id, userIds);
   }
+  
 
 
   /**
