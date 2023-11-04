@@ -91,8 +91,6 @@ export function SessionItem({
       case 'practice':
         const practicePriceIds  = stripePayment.priceId[type];
         const practiceRes = await createSessionPayment(id, user.sub, practicePriceIds.member)
-        
-        console.log(practiceRes)
         window.location.href = practiceRes.url;
         break;
     }
@@ -143,7 +141,7 @@ export function SessionItem({
          </Box>
         ) : isPaid ? (
           <Box>
-            <Paragraph>You are in!</Paragraph>
+            <Paragraph>You are in! </Paragraph>
           </Box>
         ) : isBooked ? (
           <>          
