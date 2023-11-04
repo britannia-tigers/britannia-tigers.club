@@ -9,6 +9,7 @@ import { theme } from './configs/theme'
 import { Logout } from './pages/Logout'
 import { Session } from './pages/Session'
 import { Booking } from './pages/Booking'
+import { GlobalDialog } from './components/GlobalDialog'
 
 function App() {
 
@@ -29,6 +30,7 @@ function App() {
           </Auth>
         </Router>
       </Page>
+      <GlobalDialog />
     </Grommet>
   )
 }
