@@ -8,11 +8,21 @@ import { Calendar } from './pages/Calendar'
 import { Grommet, Page, ThemeType } from 'grommet'
 import { theme } from './configs/theme'
 import { Logout } from './pages/Logout'
-
+import { Helmet } from 'react-helmet';
 function App() {
 
   return (
     <Grommet full theme={theme}>
+      <Helmet titleTemplate="Britannia Tigers Club :: %s">
+        <meta charSet="utf-8" />
+        <meta property="og:locale" content="en_GB" />
+        <meta property="og:type" content="organization" />
+        <meta property="og:description" content="We are a community basketball club based in London" />
+        <link rel="canonical" href="https://britannia-tigers.club/" />
+        <meta property="og:url" content="https://britannia-tigers.club/" />
+        <meta property="og:site_name" content="Britannia Tigers Club :: A community basketball club based in London" />
+        <meta property='og-image' content='https://images.britannia-tigers.club/og_image.png' />
+      </Helmet>
       <Page>
         <Router>
           <Auth>

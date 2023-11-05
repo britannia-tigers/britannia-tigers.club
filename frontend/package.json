@@ -35,6 +35,7 @@
     "react": "^18.2.0",
     "react-device-detect": "^2.2.3",
     "react-dom": "^18.2.0",
+    "react-helmet": "^6.1.0",
     "react-router-dom": "^6.16.0",
     "react-toastify": "^9.1.3",
     "rimraf": "^5.0.1",
@@ -44,5 +45,8 @@
     "typescript": "^5.0.2",
     "vite": "^4.4.5",
     "zustand": "^4.4.1"
+  },
+  "devDependencies": {
+    "@types/react-helmet": "^6.1.8"
   }
 }

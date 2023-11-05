@@ -5,6 +5,8 @@ import { Box, Button, Form, FormField, TextInput } from 'grommet'
 import { ResizedSection } from '../components/ResizedSection'
 import { WhitePage } from '../components/WhitePage'
 import { useLocation } from 'react-router-dom'
+import { Helmet } from 'react-helmet'
+
 
 export function Profile() {
 
@@ -27,6 +29,9 @@ export function Profile() {
 
   return (
     <WhitePage backTo='/'>
+        <Helmet>
+          <title>Profile</title>
+        </Helmet>
           <Form
             // value={value}
             // onChange={nextValue => setValue(nextValue)}
