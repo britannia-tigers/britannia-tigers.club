@@ -17,6 +17,6 @@ export interface UserRequest<T = {}> extends UserInfo<T> {
 
 }
 
-export async function updateUserSelf(authToken:string, userId:string, payload:User) {
+export async function updateUserSelf(authToken:string, userId:string, payload:UserRequest) {
 
 }
