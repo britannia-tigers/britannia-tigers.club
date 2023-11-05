@@ -33,8 +33,7 @@ export function Auth({ children }: PropsWithChildren) {
         scope: [
           'openid',
           'profile',
-          'email',  
-          'list:sessions'
+          'email'
         ].join(' ')
       }}
       onRedirectCallback={redirectHandler}>
