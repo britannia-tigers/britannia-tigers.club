@@ -6,7 +6,8 @@ import {
   UserInfoResponse, 
 } from 'auth0'
 import userConfig from './user.config'
-import { JSONApiResponse } from 'auth0/dist/cjs/lib/models';
+import { authManagementClient, authUserClient } from 'src/client/auth0';
+import { UserRoleType, UserRoles } from './user.interface';
 
 
 @Injectable()
@@ -16,19 +17,8 @@ export class UserService {
   userInfo:UserInfoClient;
 
   constructor() {
-    const domain = process.env.AUTH0_API_DOMAIN;
-    const clientId = process.env.AUTH0_API_CLIENT_ID;
-    const clientSecret = process.env.AUTH0_API_SECRET;
-  
-    this.management = new ManagementClient({
-      domain,
-      clientId,
-      clientSecret
-    })
-
-    this.userInfo = new UserInfoClient({
-      domain
-    })
+    this.management = authManagementClient()
+    this.userInfo = authUserClient()
   }
 
   async getSelf(accessToken:string):Promise<GetUsers200ResponseOneOfInner> {
@@ -54,10 +44,17 @@ export class UserService {
     return this.management.users.getRoles({ id });
   }
 
-  async createUser(body:UserCreate) {
+  async assignUserRole(userId:string,  role:UserRoleType) {
+    return this.management.users.assignRoles(
+      { id: userId }, 
+      { roles: [userConfig.roleTypeId[role]] }
+    )
+  }
+
+  async createUser(body:UserCreate, role?: UserRoles) {
     const userRes = await this.management.users.create(body);
     await this.management.roles.assignUsers({
-      id: userConfig.roleTypeId.member
+      id: role || userConfig.roleTypeId.member
     }, {
       users: [userRes.data.user_id]
     });

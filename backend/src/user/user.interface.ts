@@ -13,4 +13,16 @@ export interface User {
   app_metadata?: AppMetaData
 }
 
+export enum UserRoles {
+  member = 'member',
+  editor = 'editor',
+  admin = 'admin'
+}
+
+export type UserRoleType = keyof typeof UserRoles
+
+export type UserRoleTypeId = {
+  [key in UserRoles]: string
+}
+
 export type UserCreateUpdateRequest = Omit<User, 'app_metadata'>

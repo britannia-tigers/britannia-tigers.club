@@ -22,6 +22,19 @@ export function User({ showInMobileView, notFixed }: UserProps) {
 
   const loginHandler = useCallback(() => {
     loginWithRedirect({
+      authorizationParams: {
+        scope: [
+          'openid',
+          'profile',
+          'email',  
+          'list:sessions',
+          'list:pages',
+          'read:pages',
+          'read:self',
+          'read:sessions',
+          'write:self'
+        ].join(' ')
+      },
       appState: {
         returnTo: pathname
       }
@@ -30,6 +43,14 @@ export function User({ showInMobileView, notFixed }: UserProps) {
 
   const signupHandler = useCallback(() => {
     loginWithRedirect({
+      authorizationParams: {
+        screen_hint: 'signup',
+        scope: [
+          'openid',
+          'profile',
+          'email'
+        ].join(' ')
+      },
       appState: {
         returnTo: '/profile'
       }

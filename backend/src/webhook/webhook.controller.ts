@@ -2,11 +2,11 @@ import { Body, Controller, Get, Headers, Post, RawBodyRequest, Req } from '@nest
 import { ApiTags } from '@nestjs/swagger';
 import Stripe from 'stripe'
 import { stripeClient } from '../client/stripe'
-import { CheckoutWebhookDto } from './webhook.dto';
+import { CheckoutWebhookDto, UserRegistrationDto } from './webhook.dto';
 import { Request } from 'express';
 import { CmsService } from 'src/cms/cms.service';
 import { StripeWebhookResponseObject } from './webhook.interface';
-
+import { UserService } from 'src/user/user.service';
 @ApiTags('Webhooks')
 @Controller('webhooks')
 export class WebhookController {
@@ -14,9 +14,41 @@ export class WebhookController {
   readonly endpointSecret:string;
 
   constructor(
-    private readonly cmsService:CmsService
+    private readonly cmsService:CmsService,
+    private readonly userService:UserService
   ) {
     this.endpointSecret = process.env.STRIPE_WEBHOOK_SECRET;
+  }
+
+  @Post('user')
+  async postUserRegistration(
+    @Body() { type, user: {
+      user_id,
+      user_metadata,
+      ...restUser
+    } }:UserRegistrationDto
+  ) {
+
+    console.log('user.postRegistration webhook: ', type, user_id);
+    
+    try {
+      switch(type) {
+        case 'user.postRegistration':
+          await this.userService.assignUserRole(user_id, 'member');
+          await this.userService.updateUser(user_id, { user_metadata: {
+            ...user_metadata,
+            type: 'member',
+            isPaid: false,
+            isTeam: false
+          } })
+          break;
+          console.log('user.postRegistration success: ');
+        default:
+          console.info('unknown type received', type, user_id, user_metadata, restUser);
+      }
+    } catch(e) {
+      console.error('User post registration failed: ', e);
+    }
   }
 
 
