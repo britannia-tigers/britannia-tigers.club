@@ -16,6 +16,7 @@ import { User } from '../components/User';
 enum BookingStatusTypes {
   booking_success,
   booking_error,
+  booking_cancel,
   payment_success,
   payment_cancel
 }
@@ -110,6 +111,20 @@ export function Booking() {
                 )}
               </Box>
             </Grid>
+          </InnerContainer>
+        </BookingWrapper>
+      )
+    case 'booking_cancel':
+      return (
+        <BookingWrapper>
+          <InnerContainer>
+            <BrowserView>
+              <InnerTitle bottomPadding="small" >Booking cancelled</InnerTitle>
+            </BrowserView>
+            <MobileView>
+              <MobileInnerTitle>Session Booked</MobileInnerTitle>
+            </MobileView>
+
           </InnerContainer>
         </BookingWrapper>
       )

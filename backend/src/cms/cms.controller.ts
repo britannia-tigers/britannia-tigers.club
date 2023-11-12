@@ -16,6 +16,8 @@ import { AssetProps, CollectionProp } from 'contentful-management';
 import { UserService } from 'src/user/user.service';
 
 
+export const GB_LOCALE:string = 'en-GB'
+
 @Controller('api')
 export class CmsController {
   constructor(
@@ -54,6 +56,26 @@ export class CmsController {
     } else {
       return this.cmsService.createSession({ name, location, date });
     }
+  }
+
+
+  /**
+   * Get list of participants with auth0 data
+   * @param id 
+   * @returns 
+   */
+  @ApiTags('Sessions')
+  @ApiBearerAuth('bearer')
+  // @UseGuards(AuthGuard)
+  // @UseGuards(PermissionGuard([SessionPermissions.READ]))
+  @Get('session/:id/participants')
+  async getSessionParticipants(
+    @Param('id') id: string
+  ) {
+    const allUsers = (await this.userService.getUserList({ per_page: 100 })).data;
+    const { fields: { participants } } = await this.cmsService.getSessionById(id);
+
+    return allUsers.filter(user => (participants[GB_LOCALE] || []).includes(user.user_id));
   }
 
 
@@ -189,14 +211,13 @@ export class CmsController {
   getSessions(
     @Query() { 
       name, location, skip, limit,
-      date, startDate, endDate
+      date, startDate, endDate, 
+      order = '-fields.date'
     }:SessionRequestDto
-
-
   ):Promise<SessionListResponse> {
     return this.cmsService.findSessions({ 
       name, location, skip, limit,
-      date, startDate, endDate
+      date, startDate, endDate, order
     });
   }
 
@@ -214,12 +235,24 @@ export class CmsController {
     return this.cmsService.getNextSession();
   }
 
+
+  /**
+   * get sponspor list
+   * @param skip 
+   * @param limit 
+   * @returns 
+   */
   @ApiTags('Sponsors')
   @Get('sponsors')
   getSponsors(@Query('skip') skip, @Query('limit') limit): Promise<SponsorListResponse> {
     return this.cmsService.getSponsors({ skip, limit });
   }
 
+
+  /**
+   * get all assets
+   * @returns 
+   */
   @ApiTags('Assets')
   @Get('assets')
   getAssets(): Promise<CollectionProp<AssetProps>> {

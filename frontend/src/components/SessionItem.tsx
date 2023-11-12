@@ -76,8 +76,7 @@ export function SessionItem({
   }, [passed, isBookingAvailable, token])
 
   const paymentHandler = useCallback(async () => {
-    console.log('me clicked', type, user)
-    if(!user || !user.sub) {
+    if(!user || !user.sub || !token) {
       console.error('no logged in user')
       return;
     }
@@ -85,12 +84,12 @@ export function SessionItem({
     switch(type) {
       case 'scrimmage':
         const scrimmagePriceIds = stripePayment.priceId[type];
-        const scrimmageRes = await createSessionPayment(id, user.sub, scrimmagePriceIds.standard)
+        const scrimmageRes = await createSessionPayment(token, id, user.sub, scrimmagePriceIds.standard)
         window.location.href = scrimmageRes.url;
         break;
       case 'practice':
         const practicePriceIds  = stripePayment.priceId[type];
-        const practiceRes = await createSessionPayment(id, user.sub, practicePriceIds.member)
+        const practiceRes = await createSessionPayment(token, id, user.sub, practicePriceIds.member)
         window.location.href = practiceRes.url;
         break;
     }

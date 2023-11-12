@@ -33,6 +33,10 @@ export class SessionDto {
   @IsArray()
   @ApiProperty({ required: false })
   readonly paidParticipants: string[];
+
+  @IsString()
+  @ApiProperty({ required: false })
+  readonly order: string;
 }
 
 

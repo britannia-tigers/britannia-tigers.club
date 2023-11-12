@@ -254,7 +254,7 @@ export class CmsService {
       const r = radius || 1; //default 1km
       restQuery = { ...restQuery, [filterBy('location', 'within')]: `${location},${r}` }
     }
-
+    
     if(date && moment(date).isValid()) {
       // when a date is given
 

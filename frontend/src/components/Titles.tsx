@@ -17,20 +17,41 @@ interface SubParagraphProps {
   isLink?: boolean
 }
 
+export const MainTitle = styled.h2<SubTitleProps>`
+  font-size: 30px;
+  margin:0;
+  padding: 0;
+  margin-top: ${props => props.marginTop || 0};
+  margin-bottom: ${props => props.marginBottom || '36px'};
+`
+
 export const SubTitle = styled.h3<SubTitleProps>`
   font-size: 24px;
   margin:0;
   padding: 0;
+  margin-top: ${props => props.marginTop || 0};
   margin-bottom: ${props => props.marginBottom || '36px'};
 `
 
 export const SmallSubTitle = styled.h3<SubTitleProps>`
-  font-size: 24x;
+  font-size: 20px;
   margin:0;
   padding: 0;
   text-transform: capitalize;
   margin-top: ${props => props.marginTop || 0};
   margin-bottom: ${props => props.marginBottom || '36px'};
+`
+
+export const SmallParagraph = styled.p<SubTitleProps>`
+  color: ${props => props.color ? props.color : 'inherit'};
+  font-size: 19px;
+  margin:0;
+  padding: 0;
+  text-transform: capitalize;
+  margin-left: 2px;
+  margin-top: ${props => props.marginTop || 0};
+  margin-bottom: ${props => props.marginBottom || 0};
+
 `
 
 export const MobileSubTitle = styled(SubTitle)<SubTitleProps>`

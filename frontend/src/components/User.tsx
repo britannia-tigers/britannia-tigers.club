@@ -9,9 +9,10 @@ import { BrowserView, MobileView } from 'react-device-detect';
 interface UserProps {
   showInMobileView?: boolean
   notFixed?: boolean
+  padding?: string
 }
 
-export function User({ showInMobileView, notFixed }: UserProps) {
+export function User({ showInMobileView, notFixed, padding }: UserProps) {
 
   // const windowSize = useContext(ResponsiveContext)
 
@@ -61,6 +62,7 @@ export function User({ showInMobileView, notFixed }: UserProps) {
     <></>
   ) : (
     <UserContainer 
+      padding={padding}
       isNotFixed={notFixed}
       bgIsDark={bgIsDark}
       textColor={textColor}>
@@ -108,11 +110,12 @@ interface UserContainerProps {
   bgIsDark: boolean
   textColor: string
   isNotFixed?: boolean
+  padding?: string
 }
 
 const UserContainer = styled.div<UserContainerProps>`
   position: ${props => props.isNotFixed ? 'relative' : 'fixed'};
-  padding: 30px 30px 30px 30px;
+  padding: ${props => props.padding ? props.padding : '30px 30px 30px 30px'};
   right: 0;
   top: 0;
   z-index: 99;

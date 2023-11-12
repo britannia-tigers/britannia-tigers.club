@@ -14,6 +14,7 @@ import { SessionItem } from "../components/SessionItem";
 import { User } from "../components/User";
 import { useNaviStore } from "../stores/NaviStore";
 import { BrowserView, MobileView } from "react-device-detect";
+import { formatUrlDate } from "../helpers/displayHelpers";
 
 
 /**
@@ -141,14 +142,4 @@ export function Session() {
         }}/>
     </WhitePage>   
   )
-}
-
-
-/**
- * format url date
- * @param d 
- * @returns 
- */
-function formatUrlDate(d?:string) {
-  return  Mo(d).startOf('day').format('YYYY-MM-DD')
 }

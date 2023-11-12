@@ -10,6 +10,8 @@ import { Logout } from './pages/Logout'
 import { Helmet } from 'react-helmet';
 import { Session } from './pages/Session'
 import { Booking } from './pages/Booking'
+import { Admin } from './pages/Admin'
+import { AdminSession } from './pages/AdminSession'
 
 function App() {
 
@@ -29,6 +31,9 @@ function App() {
         <Router>
           <Auth>
             <Routes>
+              <Route path='/admin' element={<Admin />} />
+              <Route path='/admin/session/:sessionId' element={<AdminSession />} />
+
               <Route path='/profile' element={<Restricted><Profile /></Restricted>} />
               <Route path='/session' element={<Session />} />
               <Route path='/session/:sessionId' element={<Booking />} />

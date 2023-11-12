@@ -14,6 +14,12 @@ export interface ApiSessionGetQuery {
 
 }
 
+/**
+ * Add self to a session
+ * @param authToken 
+ * @param id 
+ * @returns 
+ */
 export async function addSelfToSession(authToken:string, id:string) {
   const res = await axios.post<ItemResponse<SessionRequest>>(`/api/sessions/${id}/participants/self`, {}, {
     headers: {
