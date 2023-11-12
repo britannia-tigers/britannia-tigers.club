@@ -37,6 +37,8 @@ workflows:
           requires:
             - 'build and test uat'
           app-name: $HEROKU_UAT_APP_NAME
+          # force push
+          force: true
           filters:
             branches:
               only: uat
@@ -54,6 +56,8 @@ workflows:
           requires:
             - 'build and test prod'
           app-name: $HEROKU_APP_NAME
+          # force push
+          force: true
           filters:
             tags:
               only: /^v.*/
