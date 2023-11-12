@@ -18,6 +18,7 @@ interface SessionItemProps {
   title: string
   type: SessionType
   date: Moment
+  duration: number
   location: [string, string]
   locationName: string
   description?: string
@@ -34,6 +35,7 @@ export function SessionItem({
   title,
   type,
   date,
+  duration,
   location,
   locationName,
   description,
@@ -110,6 +112,7 @@ export function SessionItem({
       <SessionTitles
         title={title}
         date={date}
+        duration={duration}
         locationName={locationName}
         location={location}
       />

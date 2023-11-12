@@ -88,6 +88,7 @@ function convertOne(cur:ItemResponse<SessionRequest>) {
     name: cur.fields.name[GB_LOCALE],
     type: cur.fields.type[GB_LOCALE] as SessionType,
     date: cur.fields.date[GB_LOCALE],
+    duration: cur.fields.duration[GB_LOCALE],
     description: cur.fields.description && cur.fields.description[GB_LOCALE],
     location: [cur.fields.location[GB_LOCALE].lon, cur.fields.location[GB_LOCALE].lat] as [string, string],
     locationName: cur.fields.locationName[GB_LOCALE],

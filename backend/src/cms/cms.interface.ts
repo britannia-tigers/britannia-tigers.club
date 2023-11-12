@@ -16,10 +16,14 @@ export interface LocalisedEntry<T> {
   [name:string]: T
 }
 
-export interface Session {
+export interface SessionBase {
   name: string
   location: string
   date: string
+}
+
+export interface Session extends SessionBase{
+  duration: number
   locationName?: string
   type?: string
   description?: string

@@ -8,6 +8,7 @@ import { Copy, Edit, Share } from "grommet-icons";
 import { AdminContainer } from "../components/AdminContainer";
 import { TBody, TCell, THead, TRow, TTable } from "../components/Table";
 import { RGBA_ASTC_10x10_Format } from "three/src/constants.js";
+import { BookingAvailable } from "../components/BookingAvailable";
 
 
 export function Admin() {
@@ -74,6 +75,7 @@ export function Admin() {
       { dates && (
         <TTable>
           <THead>
+            <TCell />
             <TCell>Date</TCell>
             <TCell>Session name</TCell>
             <TCell>Location</TCell>
@@ -91,6 +93,7 @@ export function Admin() {
 
             return (
               <TRow>
+                <TCell>{s.isBookingAvailable && <BookingAvailable />}</TCell>
                 <TCell>{formatDisplayShortDate(s.date)}</TCell>
                 <TCell><Link to={`/admin/session/${s.id}`}>{s.name}</Link></TCell>
                 <TCell>{s.locationName}</TCell>

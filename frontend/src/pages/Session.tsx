@@ -108,6 +108,7 @@ export function Session() {
                 type={sess.type}
                 description={sess.description}
                 date={moment(sess.date)}
+                duration={sess.duration}
                 location={sess.location}
                 locationName={sess.locationName}
                 price={sess.price}

@@ -6,7 +6,7 @@ import {
 } from 'contentful-management';
 import { createClient as createDeliveryClient, ContentfulClientApi, ChainModifiers } from 'contentful'
 import config from './contentful.config';
-import { ExtendedQueryOptions, FilterParam, LocalisedSessionFull, PageFullResponse, PageListResponse, Session, SessionFullResponse, SessionListResponse, Sponsor, SponsorListResponse } from './cms.interface';
+import { ExtendedQueryOptions, FilterParam, LocalisedSessionFull, PageFullResponse, PageListResponse, Session, SessionFullResponse, SessionListResponse, SessionBase, Sponsor, SponsorListResponse } from './cms.interface';
 import contentfulConfig from './contentful.config';
 import * as moment from 'moment';
 
@@ -63,7 +63,7 @@ export class CmsService {
    * @param param0 
    * @returns 
    */
-  async createSession({ name, location, date }: Session) {
+  async createSession({ name, location, date }: SessionBase) {
     
     try {
       const latlng = location.split(',');

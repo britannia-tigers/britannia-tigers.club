@@ -65,7 +65,7 @@ export function Booking() {
    */
   switch(status) {
     case 'booking_info':
-    case 'booking_infoking_success':
+    case 'booking_success':
     case 'payment_success':
       return (
         <BookingWrapper>
@@ -102,6 +102,7 @@ export function Booking() {
                     id={sess.id}
                     title={sess.name}
                     date={moment(sess.date)}
+                    duration={sess.duration}
                     location={sess.location}
                     locationName={sess.locationName}
                     type={sess.type}
@@ -141,7 +142,7 @@ export function Booking() {
       )
     case 'payment_cancel':
       return (
-        <BookingWrapper backTo={`/session/${sessionId}?status=booking_info`}>
+        <BookingWrapper backTo={`/session`}>
           <InnerContainer>
             <InnerTitle bottomPadding="small" >Payment cancelled</InnerTitle>
           </InnerContainer>

@@ -1,4 +1,4 @@
-import { Box, BoxExtendedProps, ResponsiveContext } from "grommet";
+import { Box, BoxExtendedProps, ResponsiveContext, Text } from "grommet";
 import { Moment } from "moment";
 import { PropsWithChildren, useContext } from "react";
 import { formatDateTime } from "../helpers/displayHelpers";
@@ -7,12 +7,13 @@ import { SmallSubTitle, SubParagraph } from "./Titles";
 interface SessionTitlesProps extends BoxExtendedProps {
   title: string
   date: Moment
+  duration: number
   locationName: string
   location?: [string, string]
 }
 
 export function SessionTitles ({
-  title, date, locationName, location, ...restProps
+  title, date, locationName, location, duration, ...restProps
 }:PropsWithChildren<SessionTitlesProps>) {
 
   const dateTime = formatDateTime(date);
@@ -22,10 +23,8 @@ export function SessionTitles ({
     <Box {...restProps}>
       <SmallSubTitle marginBottom="none">{title}</SmallSubTitle>
       <SubParagraph isLink={true} onClick={() => window.open(link, 'gmap')}>{locationName || 'TBC'}</SubParagraph>
-      <SubParagraph>{dateTime}</SubParagraph>
+      <SubParagraph>{dateTime} <Text size='xsmall' color='#888888'>({duration}mins)</Text></SubParagraph>
     </Box>
   )
 }
-
-
 

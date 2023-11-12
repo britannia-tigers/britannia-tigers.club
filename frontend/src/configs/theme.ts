@@ -39,10 +39,14 @@ export const theme = {
   button: {
     badge: {
       container: {
-        // extend: css`
-        //   margin-right: 5px;
-        //   margin-top: 20px;
-        // `
+        pad: {
+          vertical: '2px',
+          horizontal: '1px'
+        },
+        extend: css`
+          margin-right: 5px;
+          margin-top: 16px;
+        `
       },
       text: {
         size: {
