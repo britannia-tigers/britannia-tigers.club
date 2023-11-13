@@ -37,6 +37,7 @@ workflows:
           requires:
             - 'build and test uat'
           app-name: $HEROKU_UAT_APP_NAME
+          # more options can be found in https://circleci.com/developer/orbs/orb/circleci/heroku
           # force push
           force: true
           filters:
@@ -56,6 +57,7 @@ workflows:
           requires:
             - 'build and test prod'
           app-name: $HEROKU_APP_NAME
+          # more options can be found in https://circleci.com/developer/orbs/orb/circleci/heroku
           # force push
           force: true
           filters:
