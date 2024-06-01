@@ -1,5 +1,5 @@
-# britannia-tigers.club
-main website for britannia tigers.  FE is built using vite and BE using Nest.
+# london-tigers.club (formerly birtannia tigers)
+main website for london tigers.  FE is built using vite and BE using Nest.
 
 ### How to run locally
 

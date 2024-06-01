@@ -35,8 +35,8 @@ function App() {
               <Route path='/admin/session/:sessionId' element={<AdminSession />} />
 
               <Route path='/profile' element={<Restricted><Profile /></Restricted>} />
-              <Route path='/session' element={<Session />} />
-              <Route path='/session/:sessionId' element={<Booking />} />
+              {/* <Route path='/session' element={<Session />} />
+              <Route path='/session/:sessionId' element={<Booking />} /> */}
               <Route path='/callback' element={<Callback />} />
               <Route path='/logout' element={<Logout />} />
               <Route index element={<Main />} />
