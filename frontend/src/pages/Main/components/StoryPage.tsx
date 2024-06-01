@@ -18,7 +18,7 @@ export function StoryPage({ }:PropsWithChildren<PageProps>) {
           <MobileInnerTitle>Our Story</MobileInnerTitle>
         </MobileView>
         <InnerSubTitle>
-          <p>The Britannia Tigers have undergone a commendable evolution, beginning as a group of basketball enthusiasts in early 2010 in Hackney, East London.</p>
+          <p>The London Tigers have undergone a commendable evolution, beginning as a group of basketball enthusiasts in early 2010 in Hackney, East London.</p>
           
           <p>This journey has transformed us into a more diverse and inclusive club, where people from various ethnicities, genders, and backgrounds have found a welcoming and open environment to come together and play.</p>
 

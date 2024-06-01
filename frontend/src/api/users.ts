@@ -4,7 +4,9 @@
 export interface UserInfo<T> {
   given_name?: string | null
   family_name?: string | null
-
+  name?: string | null
+  picture?: string | null
+  
   phone_number?: string
   readonly email: string
   user_metadata: T

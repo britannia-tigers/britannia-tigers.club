@@ -64,7 +64,7 @@ export function User({ showInMobileView, notFixed }: UserProps) {
       isNotFixed={notFixed}
       bgIsDark={bgIsDark}
       textColor={textColor}>
-      <BrowserView>
+      <BrowserView style={{ padding: '0 50px' }}>
         { isAuthenticated ? (
           <Avatar 
             src={user?.picture} 
@@ -72,7 +72,7 @@ export function User({ showInMobileView, notFixed }: UserProps) {
             onClick={() => isAuthenticated && navigate('/profile')}/>
         ) : (
           <UserButtonContainer>
-            <h4 onClick={signupHandler}>Become a Member</h4>
+            {/* <h4 onClick={signupHandler}>Become a Member</h4> */}
             <Button onClick={loginHandler} size='small' primary label='Login'/>
           </UserButtonContainer>
         )}
@@ -86,7 +86,7 @@ export function User({ showInMobileView, notFixed }: UserProps) {
               onClick={() => isAuthenticated && navigate('/profile')}/>
           ) : (
             <UserButtonContainer>
-              <h4 onClick={signupHandler}>Become a Member</h4>
+              {/* <h4 onClick={signupHandler}>Become a Member</h4> */}
               <Button onClick={loginHandler} size='small' primary label='Login'/>
             </UserButtonContainer>
           )}
@@ -99,8 +99,8 @@ export function User({ showInMobileView, notFixed }: UserProps) {
 const UserButtonContainer = styled.div`
   display: flex;
   flex-flow: row;
-  align-items: center;
-  justify-content: center;
+  align-items: end;
+  justify-content: end;
   padding-top: 10px;
 `
 
@@ -112,7 +112,7 @@ interface UserContainerProps {
 
 const UserContainer = styled.div<UserContainerProps>`
   position: ${props => props.isNotFixed ? 'relative' : 'fixed'};
-  padding: 30px 30px 30px 30px;
+  padding: 30px 0;
   right: 0;
   top: 0;
   z-index: 99;

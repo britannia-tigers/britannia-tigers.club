@@ -35,7 +35,7 @@ export function MainPage({ offset }:PropsWithChildren<PageProps>) {
                   onClick={() => navigate('/')}
                   bgIsDark={bgIsDark} 
                   color={textColor} >
-                    Britannia<br/>Tigers<br/>Club
+                    London<br/>Tigers<br/>Club
                 </MainTitle>
               </InnerContainer>
             </Box>
