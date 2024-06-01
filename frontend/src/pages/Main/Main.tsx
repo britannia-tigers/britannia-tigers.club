@@ -16,6 +16,7 @@ import { ContactPage } from "./components/ContactPage";
 import { StoryPage } from "./components/StoryPage";
 import { MemberPage } from "./components/MemberPage";
 import { MainPage } from "./components/MainPage";
+import { Helmet } from 'react-helmet';
 import { User } from "../../components/User";
 
 const TOTAL_PAGES = 5;
@@ -145,6 +146,11 @@ export function Main() {
 
   return (
     <>
+      <Helmet>
+        <title>Main</title>
+        <meta charSet="utf-8" />
+        <link rel="canonical" href="https://britannia-tigers.club/story" />
+      </Helmet>
       <User />
       <Navi />
       <Parallax pages={TOTAL_PAGES} ref={parallaxRef} className='my-class-name'>

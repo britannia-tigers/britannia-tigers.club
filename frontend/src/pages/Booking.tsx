@@ -14,15 +14,19 @@ import { Map } from '../components/Map';
 import { User } from '../components/User';
 
 enum BookingStatusTypes {
+  booking_info,
   booking_success,
   booking_error,
+  booking_cancel,
   payment_success,
   payment_cancel
 }
 
 type BookingStatus = keyof typeof BookingStatusTypes
 
-
+interface BookingWrapperProps {
+  backTo?: string
+}
 
 export function Booking() {
 
@@ -60,7 +64,7 @@ export function Booking() {
    * return according to status
    */
   switch(status) {
-
+    case 'booking_info':
     case 'booking_success':
     case 'payment_success':
       return (
@@ -98,6 +102,7 @@ export function Booking() {
                     id={sess.id}
                     title={sess.name}
                     date={moment(sess.date)}
+                    duration={sess.duration}
                     location={sess.location}
                     locationName={sess.locationName}
                     type={sess.type}
@@ -113,11 +118,33 @@ export function Booking() {
           </InnerContainer>
         </BookingWrapper>
       )
+    case 'booking_cancel':
+      return (
+        <BookingWrapper>
+          <InnerContainer>
+            <BrowserView>
+              <InnerTitle bottomPadding="small" >Booking cancelled</InnerTitle>
+            </BrowserView>
+            <MobileView>
+              <MobileInnerTitle>Session Booked</MobileInnerTitle>
+            </MobileView>
+
+          </InnerContainer>
+        </BookingWrapper>
+      )
     case 'booking_error':
       return (
         <BookingWrapper>
           <InnerContainer>
             <InnerTitle bottomPadding="small" >Error...</InnerTitle>
+          </InnerContainer>
+        </BookingWrapper>
+      )
+    case 'payment_cancel':
+      return (
+        <BookingWrapper backTo={`/session`}>
+          <InnerContainer>
+            <InnerTitle bottomPadding="small" >Payment cancelled</InnerTitle>
           </InnerContainer>
         </BookingWrapper>
       )
@@ -131,7 +158,7 @@ export function Booking() {
 
 }
 
-function BookingWrapper({  children }: PropsWithChildren) {
+function BookingWrapper({ children, backTo }: PropsWithChildren<BookingWrapperProps>) {
 
   const navigate = useNavigate()
 
@@ -140,7 +167,7 @@ function BookingWrapper({  children }: PropsWithChildren) {
       {children}
       <User showInMobileView={true}/>
       <Previous 
-        onClick={() => navigate(-1)}
+        onClick={() => backTo ? navigate(backTo) : navigate(-1)}
         style={{
           position: 'fixed',
           left: '20px',

@@ -11,7 +11,7 @@ import { CloudinaryService } from 'src/media/cloudinary.service';
 
 
 @ApiTags('Users')
-@Controller('api/users')
+@Controller('api/user')
 export class UserController {
 
   constructor(
@@ -53,15 +53,16 @@ export class UserController {
 
 
   /**
-   * get user list
+   * get user list with all users, up to 100
    * @returns 
    */
   @ApiBearerAuth('bearer')
   @Get()
-  @UseGuards(PermissionGuard([MemberPermissions.LIST]))
-  @UseGuards(AuthGuard)
-  getUsers():Promise<any> {
-    return this.userService.getUserList();
+  // @UseGuards(PermissionGuard([MemberPermissions.LIST]))
+  // @UseGuards(AuthGuard)
+  async getUsers():Promise<any> {
+    const users = await this.userService.getUserList({ per_page: 100 });
+    return users.data;
   }
 
 

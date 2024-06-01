@@ -64,6 +64,7 @@ export interface SessionRequest {
   type: LocaleBase
   description?: LocaleBase
   date: LocaleBase
+  duration: LocaleBase<number>
   location: LocaleBase<{lon: string, lat: string}>
   locationName: LocaleBase
   price: LocaleBase<number>
@@ -83,6 +84,7 @@ export interface SessionResponse {
   type: SessionType
   description?: string
   date: string
+  duration: number
   price: number
   discount: number
   location: [string, string]

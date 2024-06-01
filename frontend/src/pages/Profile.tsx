@@ -5,6 +5,8 @@ import { Avatar, Box, Button, Grid, ResponsiveContext } from 'grommet'
 import { ResizedSection } from '../components/ResizedSection'
 import { WhitePage } from '../components/WhitePage'
 import { useLocation } from 'react-router-dom'
+import { Helmet } from 'react-helmet'
+
 import { InnerContainer, InnerTitle } from '../components/InnerContainer'
 import { BrowserView } from 'react-device-detect'
 import { TextInput } from '../components/TextInput'
@@ -39,6 +41,9 @@ export function Profile() {
 
   return !isLoading && (
     <WhitePage backTo={-1}>
+      <Helmet>
+        <title>Profile</title>
+      </Helmet>
       <InnerContainer>
       <BrowserView>
         <InnerTitle bottomPadding="small" >Profile</InnerTitle>

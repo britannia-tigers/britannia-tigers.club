@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { stripeClient } from '../client/stripe';
-
+import { UnixTimestamp, CheckoutSession } from './payment.interface';
 
 /**
  * Payment Service
@@ -47,5 +47,41 @@ export class PaymentService {
     });
 
     return sess;
+  }
+
+  async getCheckoutCompleted(
+    startDate?: UnixTimestamp,
+    endDate?: UnixTimestamp
+  ) {
+    return this.getEvents(startDate, endDate);
+  }
+
+
+  /**
+   * get events
+   * @param startDate 
+   * @param endDate 
+   * @param limit 
+   * @param type 
+   * @returns 
+   */
+  async getEvents(
+    startDate?: UnixTimestamp,
+    endDate?: UnixTimestamp,
+    limit: number = 100,
+    // type:string = CheckoutSession.COMPLETED,
+  ) {
+    const params = endDate ? {
+      created: {
+        gt: startDate,
+        lte: endDate
+      }
+    } : {};
+
+    return await stripeClient().events.list({
+      ...params,
+      limit,
+      // type,
+    });
   }
 }

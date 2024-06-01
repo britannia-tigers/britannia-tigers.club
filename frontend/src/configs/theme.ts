@@ -9,6 +9,7 @@ export const theme = {
       weight: 600,
       size: "18px",
       height: "20px",
+      
     },
     colors: {
       brand: '#F7EC13',
@@ -20,12 +21,31 @@ export const theme = {
       shadow: 'none'
     }
   },
+  tag: {
+    size: {
+      xsmall: {
+        pad: {
+          horizontal: 'small',
+          vertical: '2px'
+        }
+      }
+    },
+    name: {
+      size: '10px',
+      textAlign: 'center',
+    },
+    
+  },
   button: {
     badge: {
       container: {
+        pad: {
+          vertical: '2px',
+          horizontal: '1px'
+        },
         extend: css`
           margin-right: 5px;
-          margin-top: 20px;
+          margin-top: 16px;
         `
       },
       text: {
@@ -97,10 +117,10 @@ export const theme = {
     }
   },
   calendar: {
-    extend: css`
-      box-shadow: none;
-      align-items: center;
-    `,
+    // extend: css`
+    //   box-shadow: none;
+    //   align-items: center;
+    // `,
     day: {
       extend: css`
         align-items: center;

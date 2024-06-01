@@ -18,3 +18,9 @@ export class PaymentCreateDto {
   readonly userId:string;
 
 }
+
+export class PaymentGetDto {
+  @IsString()
+  @ApiProperty({ required: false })
+  readonly date: string
+}
