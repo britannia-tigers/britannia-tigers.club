@@ -17,15 +17,15 @@ function App() {
 
   return (
     <Grommet full theme={theme}>
-      <Helmet titleTemplate="Britannia Tigers Club :: %s">
+      <Helmet titleTemplate="London Tigers Club :: %s">
         <meta charSet="utf-8" />
         <meta property="og:locale" content="en_GB" />
         <meta property="og:type" content="organization" />
         <meta property="og:description" content="We are a community basketball club based in Hackney, East London" />
-        <link rel="canonical" href="https://britannia-tigers.club/" />
-        <meta property="og:url" content="https://britannia-tigers.club/" />
-        <meta property="og:site_name" content="Britannia Tigers Club :: A community basketball club based in Hackney, East London" />
-        <meta property='og-image' content='https://images.britannia-tigers.club/og_image.png' />
+        <link rel="canonical" href="https://london-tigers.club/" />
+        <meta property="og:url" content="https://london-tigers.club/" />
+        <meta property="og:site_name" content="London Tigers Club :: A community basketball club" />
+        <meta property='og-image' content='https://images.london-tigers.club/og_image.png' />
       </Helmet>
       <Page>
         <Router>

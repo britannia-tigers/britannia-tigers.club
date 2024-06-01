@@ -149,7 +149,7 @@ export function Main() {
       <Helmet>
         <title>Main</title>
         <meta charSet="utf-8" />
-        <link rel="canonical" href="https://britannia-tigers.club/story" />
+        <link rel="canonical" href="https://london-tigers.club/story" />
       </Helmet>
       <User />
       <Navi />
