@@ -43,11 +43,7 @@ export function ContactPage({ offset }:PropsWithChildren<PageProps>) {
                 repeat: 'no-repeat',
                 size: 'cover'
               }} 
-              gridArea="top">
-                <InnerContainer paddingTop='medium'>
-                    <InnerTitle style={{color: 'white'}}>Contact</InnerTitle>
-                </InnerContainer>
-            </Box>
+              gridArea="top" />
           )}
           <Box background="light-5" gridArea="bot0">
             <Map lnglat={BRITANNIA_LNGLAT} />

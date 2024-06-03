@@ -20,7 +20,7 @@ export function User({ showInMobileView, notFixed, padding }: UserProps) {
   const { navi: { bgIsDark, textColor } } = useNaviStore();
   const navigate = useNavigate()
   const { isLoading, isAuthenticated, user, loginWithRedirect } = useAuth0()
-
+  
   const loginHandler = useCallback(() => {
     loginWithRedirect({
       authorizationParams: {
@@ -62,19 +62,19 @@ export function User({ showInMobileView, notFixed, padding }: UserProps) {
     <></>
   ) : (
     <UserContainer 
-      padding={padding}
+      padding={showInMobileView ? '30px 0' : padding}
       isNotFixed={notFixed}
       bgIsDark={bgIsDark}
-      textColor={textColor}>
-      <BrowserView style={{ padding: '0 50px' }}>
+      textColor={showInMobileView ? 'black' : textColor}>
+      <BrowserView>
         { isAuthenticated ? (
           <Avatar 
             src={user?.picture} 
             background="light-1" 
             onClick={() => isAuthenticated && navigate('/profile')}/>
         ) : (
-          <UserButtonContainer>
-            {/* <h4 onClick={signupHandler}>Become a Member</h4> */}
+          <UserButtonContainer isMobile={showInMobileView}>
+            <h4 onClick={signupHandler}>Become a Member</h4>
             <Button onClick={loginHandler} size='small' primary label='Login'/>
           </UserButtonContainer>
         )}
@@ -87,7 +87,7 @@ export function User({ showInMobileView, notFixed, padding }: UserProps) {
               background="light-1" 
               onClick={() => isAuthenticated && navigate('/profile')}/>
           ) : (
-            <UserButtonContainer>
+            <UserButtonContainer isMobile={showInMobileView}>
               <h4 onClick={signupHandler}>Become a Member</h4>
               <Button onClick={loginHandler} size='small' primary label='Login'/>
             </UserButtonContainer>
@@ -98,11 +98,15 @@ export function User({ showInMobileView, notFixed, padding }: UserProps) {
   )
 }
 
-const UserButtonContainer = styled.div`
+interface UserButtonContainerProps {
+  isMobile?: boolean
+}
+
+const UserButtonContainer = styled.div<UserButtonContainerProps>`
   display: flex;
   flex-flow: row;
   align-items: center;
-  justify-content: center;
+  justify-content: ${props => props.isMobile ? 'end' : 'center' };
   padding-top: 10px;
 `
 

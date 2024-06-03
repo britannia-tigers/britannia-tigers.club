@@ -5,12 +5,16 @@ import { ParallaxLayer } from '@react-spring/parallax'
 import { InnerContainer, InnerSubTitle, InnerTitle, MobileInnerTitle } from '../../../components/InnerContainer'
 import { BrowserView, MobileView } from 'react-device-detect'
 import { PageProps } from '../Main.interface'
+import { ResponsiveContext } from 'grommet'
 
 export function StoryPage({ }:PropsWithChildren<PageProps>) {
+
+  const size = React.useContext(ResponsiveContext);
+
   return (
     <ResizedSection>
-      <ParallaxLayer offset={1} speed={0.75}>
-      <InnerContainer>
+      {/* <ParallaxLayer offset={1} speed={0.75}> */}
+      <InnerContainer size={size}>
         <BrowserView>
           <InnerTitle>Our Story</InnerTitle>
         </BrowserView>
@@ -25,7 +29,7 @@ export function StoryPage({ }:PropsWithChildren<PageProps>) {
           <p>With this strong foundation of inclusivity, we have formed a competitive team of individuals who are eager to participate in recreational leagues and tournaments in the future.</p>
         </InnerSubTitle>
       </InnerContainer>
-      </ParallaxLayer>
+      {/* </ParallaxLayer> */}
     </ResizedSection>
   )
 }
