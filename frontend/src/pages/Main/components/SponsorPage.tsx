@@ -1,11 +1,11 @@
-import { PropsWithChildren } from "react";
+import { PropsWithChildren, useContext } from "react";
 import { PageProps } from "../Main.interface";
 import { useSponsors } from "../../../api/sponsors";
 import { ResizedSection } from "../../../components/ResizedSection";
 import { ParallaxLayer } from "@react-spring/parallax";
 import { InnerContainer, InnerTitle, MobileInnerTitle } from "../../../components/InnerContainer";
 import { BrowserView, MobileView, isMobile } from "react-device-detect";
-import { Box } from "grommet";
+import { Box, ResponsiveContext } from "grommet";
 import { SponsorImg } from "../../../components/SponsorImg";
 
 
@@ -13,11 +13,12 @@ import { SponsorImg } from "../../../components/SponsorImg";
 export function SponsorPage({ offset }:PropsWithChildren<PageProps>) {
 
   const sponsors = useSponsors();
+  const size = useContext(ResponsiveContext);
 
   return (
     <ResizedSection bgColor="white" color="black">
       <ParallaxLayer offset={4} speed={0.5}>
-        <InnerContainer>
+        <InnerContainer size={size}>
           <BrowserView>
             <InnerTitle>Sponsors</InnerTitle>
           </BrowserView>

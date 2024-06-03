@@ -1,10 +1,11 @@
 import { PropsWithChildren } from "react";
 import styled from "styled-components";
 
-type PaddingTopType = 'large' | 'medium' | 'small' | number
+type PaddingType = 'large' | 'medium' | 'small' | number | string
 
 interface InnerContainerProps {
-  paddingTop?: PaddingTopType
+  size?: 'small' | 'medium' | 'large' | string
+  paddingTop?: PaddingType
   title?: string | JSX.Element
 }
 
@@ -13,7 +14,7 @@ interface InnerTitleProps {
 }
 
 interface InnerProps {
-  paddingTop: PaddingTopType
+  size?: PaddingType
 }
 
 export const CenteredOuterContainer = styled.div`
@@ -25,30 +26,26 @@ export const CenteredOuterContainer = styled.div`
 `
 
 const Inner = styled.div<InnerProps>`
-  padding-top: ${
-    props => props.paddingTop === 'large' ? 
-      '135px' : props.paddingTop === 'medium' ? 
-      '72px' : props.paddingTop === 'small' ? 
-      '30px' : typeof props.paddingTop === 'number' ?
-      `${props.paddingTop}px` : 0
+  padding-left: ${
+    props => props.size === 'small' ? 
+      '30px' : 0
   };
-  padding-bottom: ${
-    props => props.paddingTop === 'large' ? 
-      '135px' : props.paddingTop === 'small' ? 
-      '30px' : typeof props.paddingTop === 'number' ?
-      `${props.paddingTop}px` : 0
+  padding-right: ${
+    props => props.size === 'small' ? 
+      '30px' : 0
   };
+
   display: block;
   width: 680px;
-  height: fill-available;
+  /* height: fill-available; */
 `
 
-export function InnerContainer({ children, title, paddingTop = 'large'}:PropsWithChildren<InnerContainerProps>) {
+export function InnerContainer({ children, title, size, paddingTop = 'large'}:PropsWithChildren<InnerContainerProps>) {
 
 
   return (
     <CenteredOuterContainer>
-      <Inner paddingTop={paddingTop}>
+      <Inner size={size}>
         {title || null}
         {children}
       </Inner>
@@ -58,7 +55,7 @@ export function InnerContainer({ children, title, paddingTop = 'large'}:PropsWit
 
 export const InnerTitle = styled.h3<InnerTitleProps>`
   display: block;
-  text-align: right;
+  text-align: left;
   font-size: 36px;
   text-transform: uppercase;
   padding: 0 0 ${props => props.bottomPadding === 'large'  ? '90px' : props.bottomPadding === 'medium' ? '60px' : '42px'} 0;
@@ -71,7 +68,7 @@ export const MobileInnerTitle = styled(InnerTitle)<InnerTitleProps>`
 
 export const InnerSubTitle = styled.h4`
   margin: 0;
-  padding: 0 45px;
+  padding: 0 0px;
   line-height: 1.25em;
 `
 

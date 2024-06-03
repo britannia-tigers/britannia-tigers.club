@@ -7,7 +7,7 @@ import { ResizedSection } from '../../../components/ResizedSection';
 import { ParallaxLayer } from '@react-spring/parallax';
 import { InnerContainer, InnerTitle, MobileInnerTitle } from '../../../components/InnerContainer';
 import { BrowserView, MobileView } from 'react-device-detect';
-import { Avatar, Box, Button, Paragraph } from 'grommet';
+import { Avatar, Box, Button, Paragraph, ResponsiveContext } from 'grommet';
 import { WIP } from '../../../components/WIP';
 import { SubTitle } from '../../../components/Titles';
 
@@ -41,27 +41,29 @@ export function MemberPage({ offset }:PropsWithChildren<PageProps>) {
     return m
   }, [])
 
+  const size = React.useContext(ResponsiveContext);
+
+
 
   return (
     <ResizedSection bgColor="white" color="black">
-      <ParallaxLayer offset={2} speed={0.75}>
-        <InnerContainer>
-          <BrowserView>
-            <InnerTitle>Tigers Team</InnerTitle>
-          </BrowserView>
-          <MobileView>
-            <MobileInnerTitle>Tigers Team</MobileInnerTitle>
-          </MobileView>
+        <InnerContainer size={size}>
           <Box justify="center">  
             <Box 
               wrap={true} 
               pad="none"
-              justify="center" 
+              justify="between" 
               direction="row">
                 { members.map(s => (
                 <Avatar 
-                  margin="small"
-                  size="xlarge"
+                  margin={size === 'small' ? {
+                    vertical: 'large',
+                    horizontal: 'large'
+                  } : {
+                    vertical: 'medium',
+                    horizontal: 'small'
+                  }}
+                  size={size === 'small' ? 'medium' : 'xlarge'}
                   src={s.picture} 
                   background={s.bgColor}
                   onClick={() => {} }/>
@@ -70,7 +72,6 @@ export function MemberPage({ offset }:PropsWithChildren<PageProps>) {
           </Box>
 
         </InnerContainer>
-      </ParallaxLayer>
       {/* temporary until team players are decided */}
       {/* <ParallaxLayer offset={2} speed={0.25}>
         <WIP>
