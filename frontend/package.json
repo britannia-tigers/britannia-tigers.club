@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@auth0/auth0-react": "^2.2.1",
+    "@contentful/rich-text-react-renderer": "^15.21.2",
     "@react-spring/parallax": "^9.7.3",
     "@react-spring/web": "^9.7.3",
     "@react-three/fiber": "^8.14.2",

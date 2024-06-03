@@ -3,11 +3,12 @@ import { useWindowSize } from "../hooks/windowSize";
 import { PropsWithChildren } from "react";
 
 
-interface iSesction {
+interface iSection {
   color?: string
   bgColor?: string
   bgImg?: string
   bgVignette?: boolean
+  flexHeight?: boolean
 }
 
 /**
@@ -20,8 +21,9 @@ export function ResizedSection({
   color =  'white',
   bgColor = 'black' ,
   bgImg,
-  bgVignette = false
-}: PropsWithChildren<iSesction>) {
+  bgVignette = false,
+  flexHeight = false
+}: PropsWithChildren<iSection>) {
 
   const [width, height] = useWindowSize();
 
@@ -32,7 +34,8 @@ export function ResizedSection({
       color={color}
       bgColor={bgColor} 
       width={width} 
-      height={height}>
+      height={height}
+      flexHeight={flexHeight}>
       { children }
     </Container>
   )
@@ -45,12 +48,14 @@ interface iContainer {
   color: string
   bgImg?: string
   bgVignette?: boolean;
+  flexHeight?: boolean;
 }
 
 const Container = styled.div<iContainer>`
     /* DO NOT Put position: relative here or it will break the page */
     width: ${props => props.width}px;
-    height: ${props => props.height}px;
+    height: ${props => props.flexHeight ? 'auto' : props.height}px;
+    min-height: ${props => props.height}px;
     color: ${props => props.color};
     background-color: ${props => props.bgColor};
     background-image: ${props => props.bgImg ? `url(${props.bgImg})` : 'none'};

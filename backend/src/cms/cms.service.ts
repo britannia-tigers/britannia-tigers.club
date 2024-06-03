@@ -6,7 +6,7 @@ import {
 } from 'contentful-management';
 import { createClient as createDeliveryClient, ContentfulClientApi, ChainModifiers } from 'contentful'
 import config from './contentful.config';
-import { ExtendedQueryOptions, FilterParam, LocalisedSessionFull, PageFullResponse, PageListResponse, Session, SessionFullResponse, SessionListResponse, SessionBase, Sponsor, SponsorListResponse } from './cms.interface';
+import { ExtendedQueryOptions, FilterParam, LocalisedSessionFull, PageFullResponse, PageListResponse, Session, SessionFullResponse, SessionListResponse, SessionBase, Sponsor, SponsorListResponse, SponsorFullResponse } from './cms.interface';
 import contentfulConfig from './contentful.config';
 import * as moment from 'moment';
 
@@ -307,6 +307,12 @@ export class CmsService {
    */
   async getSponsors(q: ExtendedQueryOptions = {}): Promise<SponsorListResponse> {
     return await this.getListByContentType<Sponsor>(config.contentTypeId.sponsors, q);  
+  }
+
+  async getSponsorById(id: string): Promise<SponsorFullResponse> {
+    return this.client.entry.get({
+      entryId: id,
+    });
   }
 
   /**

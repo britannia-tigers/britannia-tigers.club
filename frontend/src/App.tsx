@@ -14,7 +14,7 @@ import { Admin } from './pages/Admin'
 import { AdminSession } from './pages/AdminSession'
 import { ToastContainer } from 'react-toastify'
 import { isMobile } from "react-device-detect";
-
+import { Sponsor } from './pages/Sponsor'
 
 function App() {
 
@@ -43,6 +43,7 @@ function App() {
               <Route path='/callback' element={<Callback />} />
               <Route path='/logout' element={<Logout />} />
               <Route index element={<Main />} />
+              <Route path='/sponsor/:id' element={<Sponsor />} />
               <Route path='*' element={<Main />} />
             </Routes>
           </Auth>

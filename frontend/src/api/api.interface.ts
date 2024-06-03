@@ -1,3 +1,5 @@
+import { Document } from '@contentful/rich-text-types'
+
 
 export const GB_LOCALE:Locale = 'en-GB'
 
@@ -104,7 +106,10 @@ export interface UserSessionResponse extends SessionResponse {
 export interface Sponsor {
   name: LocaleBase
   description?: LocaleBase
+  about?: LocaleBase<Document>
   logo: LocaleLink
+  website?: LocaleBase
+  email?: LocaleBase
 }
 
 export interface ConvertedListResponse<T> {
