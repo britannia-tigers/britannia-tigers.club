@@ -14,6 +14,7 @@ interface InnerTitleProps {
 }
 
 interface InnerProps {
+  paddingTop?: PaddingType
   size?: PaddingType
 }
 
@@ -26,6 +27,7 @@ export const CenteredOuterContainer = styled.div`
 `
 
 const Inner = styled.div<InnerProps>`
+  padding-top: ${props => props.paddingTop === 'large' ? '90px' : 'auto'};
   padding-left: ${
     props => props.size === 'small' ? 
       '30px' : 0
@@ -45,7 +47,7 @@ export function InnerContainer({ children, title, size, paddingTop = 'large'}:Pr
 
   return (
     <CenteredOuterContainer>
-      <Inner size={size}>
+      <Inner size={size} paddingTop={paddingTop}>
         {title || null}
         {children}
       </Inner>

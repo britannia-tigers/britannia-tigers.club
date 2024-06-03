@@ -12,6 +12,10 @@ export interface PageFull extends Page {
 
 }
 
+export interface SponsorFull {
+  
+}
+
 export interface LocalisedEntry<T> {
   [name:string]: T
 }
@@ -78,4 +82,5 @@ export type SponsorListResponse = Response<Sponsor>;
 
 export type SessionFullResponse = EntryProps<LocalisedSessionFull>;
 export type PageFullResponse = EntryProps<PageFull>;
+export type SponsorFullResponse = EntryProps<SponsorFull>
 

@@ -9,17 +9,19 @@ import { Close } from "./Close";
 
 
 interface WhitePageProps {
+  flexHeight?: boolean
   bgColor?: string
   textColor?: string
   backTo?: string | number
 }
 
-export function WhitePage({ children, backTo, bgColor = 'white', textColor = 'black' }: PropsWithChildren<WhitePageProps>) {
+export function WhitePage({ children, backTo, bgColor = 'white', textColor = 'black', flexHeight = true }: PropsWithChildren<WhitePageProps>) {
 
   const navigate = useNavigate()
 
   return (
     <ResizedSection 
+      flexHeight={flexHeight}
       color={textColor}
       bgColor={bgColor}>
         {children}

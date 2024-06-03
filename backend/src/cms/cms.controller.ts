@@ -3,7 +3,7 @@ import { CmsService } from './cms.service';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { PermissionGuard } from 'src/auth/permission.guard';
 import { SessionPermissions } from './cms.permissions';
-import { PageFullResponse, PageListResponse, SessionFullResponse, SessionListResponse, SponsorListResponse } from './cms.interface';
+import { PageFullResponse, PageListResponse, SessionFullResponse, SessionListResponse, SponsorFullResponse, SponsorListResponse } from './cms.interface';
 import { AddParticipantsDto, SessionDto, SessionRequestDto } from './cms.dto';
 import { ApiBearerAuth, ApiBody, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { MailService } from 'src/messaging/mail.service';
@@ -248,6 +248,12 @@ export class CmsController {
     return this.cmsService.getSponsors({ skip, limit });
   }
 
+
+  @ApiTags('Sponsors')
+  @Get('sponsors/:id')
+  getSponsorById(@Param('id') id:string): Promise<SponsorFullResponse> {
+    return this.cmsService.getSponsorById(id);
+  }
 
   /**
    * get all assets
