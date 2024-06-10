@@ -21,12 +21,6 @@ export function SponsorPage({ offset }:PropsWithChildren<PageProps>) {
     <ResizedSection bgColor="white" color="black">
       <ParallaxLayer offset={4} speed={0.5}>
         <InnerContainer size={size}>
-          <BrowserView>
-            <InnerTitle>Sponsors</InnerTitle>
-          </BrowserView>
-          <MobileView>
-            <MobileInnerTitle>Sponsors</MobileInnerTitle>
-          </MobileView>
           <Box wrap={true} gap={isMobile ? "none" : "medium"} justify="center" align="center" direction="row" pad={{ top: 'none', bottom: 'large', horizontal: 'none'}}>
             { sponsors.map(s => <SponsorImg width={150} height={150} src={s.logo.url} onClick={() => navi(`/sponsor/${s.id}`)}/>) }
           </Box>

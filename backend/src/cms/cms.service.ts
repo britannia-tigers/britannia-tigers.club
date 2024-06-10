@@ -138,6 +138,34 @@ export class CmsService {
     return this.client.entry.publish({ entryId }, res);
   }
 
+    /**
+   * remove participants from session and publish straight away
+   * @param entryId 
+   * @param userIds 
+   * @returns 
+   */
+  async removeParticipants(entryId: string, userIds: string[]) {
+    const entry = await this.getSessionById(entryId);
+
+    if(!entry.fields.participants || !entry.fields.participants[contentfulConfig.locale.gb]) {
+      entry.fields.participants = { };
+    } else {
+      const nParticipants = entry.fields.participants[contentfulConfig.locale.gb].filter(p => !userIds.includes(p))
+      entry.fields.participants[contentfulConfig.locale.gb] = nParticipants;
+    }
+
+    console.log('ud[ate: ', entry);
+
+    // const oParticipants:string[] = sess.fields.participants ? sess.fields.participants[contentfulConfig.locale.gb] : [];
+
+    // const nParticipants = oParticipants.filter(p => !userIds.includes(p))
+
+    const res = await this.client.entry.update({ entryId }, entry);
+    return this.client.entry.publish({ entryId }, res);
+
+  }
+  
+
 
   /**
    * add a paid participant to the sessiona and publish stragiht away
@@ -157,31 +185,6 @@ export class CmsService {
 
     const res = await this.client.entry.update({ entryId }, entry);
     return this.client.entry.publish({ entryId }, res);
-  }
-
-  /**
-   * remove participants from session and publish straight away
-   * @param entryId 
-   * @param userIds 
-   * @returns 
-   */
-  async removeParticipants(entryId: string, userIds: string[]) {
-    const sess = await this.getSessionById(entryId);
-    const oParticipants:string[] = sess.fields.participants ? sess.fields.participants[contentfulConfig.locale.gb] : [];
-
-    const nParticipants = oParticipants.filter(p => !userIds.includes(p))
-
-    let fields = { 
-      ...sess.fields,
-      participants: { [contentfulConfig.locale.gb]: nParticipants }
-    };
-
-    const res = await this.client.entry.publish({ entryId }, {
-      sys: sess.sys,
-      fields
-    });
-    return res;
-
   }
 
 

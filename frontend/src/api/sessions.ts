@@ -30,6 +30,15 @@ export async function addSelfToSession(authToken:string, id:string) {
   return convertOne(res.data);
 }
 
+export async function removeSelfSession(authToken: string, id:string) {
+  const response = await axios.delete<ItemResponse<SessionRequest>>(`/api/sessions/${id}/participants/self`, {
+    headers: {
+      Authorization: `bearer ${authToken}`
+    }
+  });
+  return response.data;
+}
+
 /**
  * get a session by id
  * @param id 

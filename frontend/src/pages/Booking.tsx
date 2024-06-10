@@ -68,7 +68,7 @@ export function Booking() {
     case 'booking_success':
     case 'payment_success':
       return (
-        <BookingWrapper>
+        <BookingWrapper backTo='/session'>
           <InnerContainer>
             <BrowserView>
               <InnerTitle bottomPadding="small" >{ status ==='booking_success' ? 'Booking' : 'Payment' } Success</InnerTitle>

@@ -3,12 +3,13 @@ import { Box, DateInput, Text } from "grommet";
 import moment from "moment";
 import { useSessions } from "../hooks/sessions";
 import { Link, useSearchParams } from "react-router-dom";
-import { formatDisplayShortDate, formatUrlDate } from "../helpers/displayHelpers";
+import { formatDisplayShortDate, formatUrlDate, strTrimmer } from "../helpers/displayHelpers";
 import { Copy, Edit, Share } from "grommet-icons";
 import { AdminContainer } from "../components/AdminContainer";
 import { TBody, TCell, THead, TRow, TTable } from "../components/Table";
 import { RGBA_ASTC_10x10_Format } from "three/src/constants.js";
 import { BookingAvailable } from "../components/BookingAvailable";
+import { Tip } from "../components/Tip";
 
 
 export function Admin() {
@@ -93,7 +94,13 @@ export function Admin() {
 
             return (
               <TRow>
-                <TCell>{s.isBookingAvailable && <BookingAvailable />}</TCell>
+                <TCell>
+                  {s.isBookingAvailable && (
+                    <Tip hint='Session is available for booking'>
+                      <Box><BookingAvailable /></Box>
+                    </Tip>
+                  )}
+                </TCell>
                 <TCell>{formatDisplayShortDate(s.date)}</TCell>
                 <TCell><Link to={`/admin/session/${s.id}`}>{s.name}</Link></TCell>
                 <TCell>{s.locationName}</TCell>
@@ -101,7 +108,9 @@ export function Admin() {
                 <TCell><Text color='grey' size='small'>{diff > 0 ? diff : 0}</Text> / {s.maxWaitingList || <>&#8734;</>}</TCell>
                 <TCell><Text color='grey' size='small'>{s.paidParticipants?.length || 0}</Text> / {s.maxParticipants || <>&#8734;</>}</TCell>
                 <TCell>
-                  {s.id} <Copy color="#cccccc" size="small"/>
+                  <Tip hint='Copy session ID'>
+                    <a>{strTrimmer(s.id, 4)} <Copy color="#cccccc" size="small"/></a>
+                  </Tip>
                 </TCell>
                 <TCell><Share size='small' /></TCell>
               </TRow>

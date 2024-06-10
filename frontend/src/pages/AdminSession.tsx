@@ -5,7 +5,7 @@ import { useSessionPaymentList } from "../hooks/admin";
 import { useAuthToken } from "../hooks/auth";
 import { useSession } from "../hooks/sessions";
 import { AdminContainer } from "../components/AdminContainer";
-import { Avatar, Box, Paragraph, Text, Tip } from "grommet";
+import { Avatar, Box, Paragraph, Text } from "grommet";
 import { MainTitle, SmallParagraph, SmallSubTitle, SubTitle } from "../components/Titles";
 import { TBody, TCell, THead, TRow, TTable } from "../components/Table";
 import { Copy, Edit } from "grommet-icons";
@@ -13,6 +13,7 @@ import { formatDisplayShortDate, strTrimmer } from "../helpers/displayHelpers";
 import { Tag } from "../components/Tag";
 import { useUserList } from "../hooks/user";
 import Tags from "../configs/tags";
+import { Tip } from "../components/Tip";
 
 
 export function AdminSession() {
@@ -84,23 +85,13 @@ export function AdminSession() {
                 <a target='stripe' href={`https://dashboard.stripe.com/${l.livemode ? '' : 'test/'}payments/${l.payment_intent}`}><Edit size="small" /></a>
               </TCell>
               <TCell>
-                <Tip
-                  dropProps={{ align: { left: 'right' } }}
-                  content={
-                    <Box background='black' pad="xsmall" gap="xsmall" width={{ max: 'xsmall' }}>
-                      <Text size="small">
-                        Click to copy
-                      </Text>
-                    </Box>
-                  }
-                  plain
-                >
                  {l.payment_intent && (
-                  <a onClick={() => navigator.clipboard.writeText(l.payment_intent)}>
-                      {strTrimmer(l.payment_intent, 10)} <Copy size="small" />
-                  </a>
+                  <Tip hint='Copy payment ID'>
+                    <a onClick={() => navigator.clipboard.writeText(l.payment_intent)}>
+                        {strTrimmer(l.payment_intent, 10)} <Copy size="small" />
+                    </a>
+                  </Tip>
                  )}
-                </Tip>
               </TCell>
               <TCell>{l.user?.name}</TCell>
               <TCell>{l.user?.email}</TCell>
@@ -110,23 +101,13 @@ export function AdminSession() {
                 <Tag value={l.payment_status}/><Tag value={l.status}/>
               </Box></TCell>
               <TCell>
-                <Tip
-                  dropProps={{ align: { left: 'right' } }}
-                  content={
-                    <Box background='black' pad="xsmall" gap="xsmall" width={{ max: 'xsmall' }}>
-                      <Text size="small">
-                        Click to copy
-                      </Text>
-                    </Box>
-                  }
-                  plain
-                >
                   {l.metadata?.userId && (
-                    <a onClick={() => navigator.clipboard.writeText(l.metadata.userId)}>
-                      {l.metadata?.userId && strTrimmer(l.metadata.userId)} <Copy size="small" />
-                    </a>
+                    <Tip hint='Copy user ID'>
+                      <a onClick={() => navigator.clipboard.writeText(l.metadata.userId)}>
+                        {l.metadata?.userId && strTrimmer(l.metadata.userId)} <Copy size="small" />
+                      </a>
+                    </Tip>
                   )}
-                </Tip>
               </TCell>
             </TRow>
           ))}
