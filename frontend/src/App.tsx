@@ -12,8 +12,6 @@ import { Session } from './pages/Session'
 import { Booking } from './pages/Booking'
 import { Admin } from './pages/Admin'
 import { AdminSession } from './pages/AdminSession'
-import { ToastContainer } from 'react-toastify'
-import { isMobile } from "react-device-detect";
 import { Sponsor } from './pages/Sponsor'
 import { ToastContainer } from 'react-toastify'
 import { isMobile } from "react-device-detect";

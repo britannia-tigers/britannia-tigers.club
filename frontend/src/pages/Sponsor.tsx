@@ -6,6 +6,8 @@ import { InnerContainer } from "../components/InnerContainer";
 import { Suspense, useContext } from "react";
 import { ResponsiveContext } from "grommet";
 import { SponsorImg } from "../components/SponsorImg";
+import { MobileView } from "react-device-detect";
+import { Emblem } from "../components/Emblem";
 
 export function Sponsor() {
 
@@ -16,6 +18,7 @@ export function Sponsor() {
   return sponsor && (
     <WhitePage backTo='/sponsors' flexHeight>
       <InnerContainer size={size} paddingTop='large'>
+        <Emblem  height='45px' style={{ position:'fixed', left: '30px', top: '25px'  }}/>
         <SponsorImg position='left' width={200} height={200} src={sponsor.logo?.url} />
         {sponsor?.about && documentToReactComponents(sponsor.about)}
       </InnerContainer>
