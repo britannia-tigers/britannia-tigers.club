@@ -11,6 +11,8 @@ import { stripePayment } from "../configs/stripe"
 import { createSessionPayment } from "../api/payments"
 import { SessionType } from "../api/api.interface"
 import { AxiosResponse } from "axios"
+import { removeSelfSession } from "../api/sessions"
+import { toast } from "react-toastify"
 
 
 interface SessionItemProps {
@@ -98,6 +100,23 @@ export function SessionItem({
 
   }, [user, isBookingAvailable, token])
 
+  const cancelHandler = useCallback(async () => {
+    if(!user || !user.sub || !token) {
+      console.error('no logged in user')
+      return;
+    }
+
+    try {
+      const status = await removeSelfSession(token, id);
+      // navigate(`/session/${id}?status=booking_cancel`);
+      toast('cancelled');
+    } catch(e) {
+      // Do something
+      console.error(e);
+    }
+
+  }, [user, token]);
+
 
   return (
     <Box 
@@ -162,7 +181,7 @@ export function SessionItem({
                 size='small' 
                 disabled={passed || !isBookingAvailable} 
                 label='CANCEL' 
-                onClick={bookHandler} />}
+                onClick={cancelHandler} />}
             </Box>
           </>
         ): isAuthenticated ? (

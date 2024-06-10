@@ -136,7 +136,7 @@ export class CmsController {
   @ApiBearerAuth('bearer')
   @Delete('sessions/:id/participants/self')
   @UseGuards(AuthGuard)
-  async removeSelfToSession(
+  async removeSelfFromSession(
     @Headers('authorization') authToken,
     @Param('id') id: string,
   ) {

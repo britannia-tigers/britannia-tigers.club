@@ -12,6 +12,9 @@ import { Session } from './pages/Session'
 import { Booking } from './pages/Booking'
 import { Admin } from './pages/Admin'
 import { AdminSession } from './pages/AdminSession'
+import { ToastContainer } from 'react-toastify'
+import { isMobile } from "react-device-detect";
+
 
 function App() {
 
@@ -45,6 +48,12 @@ function App() {
           </Auth>
         </Router>
       </Page>
+      <ToastContainer
+          position={isMobile ? "top-center": "top-right"}
+          closeButton={false}
+          hideProgressBar={true}
+          closeOnClick
+          />
     </Grommet>
   )
 }

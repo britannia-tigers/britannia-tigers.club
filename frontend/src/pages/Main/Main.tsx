@@ -161,12 +161,12 @@ export function Main() {
         <SponsorPage offset={4} />
       </Parallax>
       <ContactForm title="Join us" onSubmit={formHandler}/>
-      <ToastContainer 
+      {/* <ToastContainer 
           position={isMobile ? "top-center": "top-right"}
           closeButton={false}
           hideProgressBar={true}
           closeOnClick
-          />
+          /> */}
 
     </>
   )
