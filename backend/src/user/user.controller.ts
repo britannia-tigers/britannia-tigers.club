@@ -8,6 +8,7 @@ import { AuthGuard } from 'src/auth/auth.guard';
 import { ApiBearerAuth, ApiBody, ApiConsumes, ApiTags } from '@nestjs/swagger';
 import { UserDto } from './user.dto';
 import { CloudinaryService } from 'src/media/cloudinary.service';
+import { assert } from 'console';
 
 
 @ApiTags('Users')
@@ -59,9 +60,10 @@ export class UserController {
   @ApiBearerAuth('bearer')
   @Get()
   // @UseGuards(PermissionGuard([MemberPermissions.LIST]))
-  // @UseGuards(AuthGuard)
+  @UseGuards(AuthGuard)
   async getUsers():Promise<any> {
     const users = await this.userService.getUserList({ per_page: 100 });
+    assert(users.data, 'User data cannot be empty')
     return users.data;
   }
 

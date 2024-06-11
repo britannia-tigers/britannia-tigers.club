@@ -41,8 +41,8 @@ export class WebhookController {
             isPaid: false,
             isTeam: false
           } })
-          break;
           console.log('user.postRegistration success: ');
+          break;
         default:
           console.info('unknown type received', type, user_id, user_metadata, restUser);
       }

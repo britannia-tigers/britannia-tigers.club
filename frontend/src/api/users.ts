@@ -1,4 +1,4 @@
-import axios from "axios"
+import axios, { AxiosResponse } from "axios"
 
 export type UserType = 'admin' | 'editor' | 'member' 
 
@@ -26,6 +26,13 @@ export interface UserRequest extends UserInfo<UserMetaData> {
 
 }
 
+interface CloudinaryResponse {
+  created_at: string
+  user_id: string
+  picture: string
+  name: string
+}
+
 export async function getAllUsers(token: string) {
   const users = await axios.get<UserInfo[]>(`/api/user`)
   return users.data;
@@ -33,4 +40,20 @@ export async function getAllUsers(token: string) {
 
 export async function updateUserSelf(authToken:string, userId:string, payload:UserRequest) {
 
+}
+
+export async function updateUserPic(authToken: string, file: File) {
+  const formData = new FormData();
+  formData.append('file', file);
+  const res = await axios.post<AxiosResponse<CloudinaryResponse>>(
+      `/api/user/self/upload`,
+      formData,
+      {
+        headers: {
+          'Authorization': `bearer ${authToken}`,
+          'Content-Type': 'multipart/form-data'
+        }
+      }
+    )
+    return res?.data?.data;
 }

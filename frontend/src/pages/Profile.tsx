@@ -1,4 +1,4 @@
-import { useCallback, useContext, useEffect, useMemo } from 'react'
+import { useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import { Close } from 'grommet-icons' 
 import { useAuth0 } from "@auth0/auth0-react"
 import { Avatar, Box, Button, Grid, ResponsiveContext } from 'grommet'
@@ -12,24 +12,35 @@ import { BrowserView } from 'react-device-detect'
 import { TextInput } from '../components/TextInput'
 import { Paragraph, SubTitle } from '../components/Titles'
 import { useDropzone } from 'react-dropzone';
+import { updateUserPic } from '../api/users'
+import { useAuthToken } from '../hooks/auth'
 
 export function Profile() {
 
   const { isLoading, isAuthenticated, user, logout } = useAuth0()
+  const token = useAuthToken();
+  const [picture, setPicture] = useState<string>();
   const { pathname } = useLocation();
 
   const { acceptedFiles, getRootProps, getInputProps } = useDropzone();
 
-  const { name, picture, email, phone_number } = useMemo(() => ({
+  const { name, email, phone_number } = useMemo(() => ({
     ...user
   }), [user])
+
+  useEffect(() => setPicture(user?.picture), [user?.picture]);
 
   const windowSize = useContext(ResponsiveContext);
 
 
   useEffect(() => {
-    console.log('ff: ', acceptedFiles)
-  }, [acceptedFiles])
+    (async () => {
+      if(token && acceptedFiles.length) {
+        const res = await updateUserPic(token, acceptedFiles[0]);
+        setPicture(res?.picture);
+      }
+    })()
+  }, [token, acceptedFiles])
 
   const logoutHandler = useCallback(() => {
     logout({
