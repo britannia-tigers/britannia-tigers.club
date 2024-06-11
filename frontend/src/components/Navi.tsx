@@ -36,6 +36,7 @@ export function Navi() {
           <NavLinks gap='xsmall' color={textColor} direction='column' alignContent='stretch'>
             <Link to='/story'>Story</Link>
             <Link to='/team'>Team</Link>
+            <Link to='/highlights'>Highlights</Link>
             {/* <Link to='/session'>Session</Link> */}
             <Link to='/contact'>Contact</Link>
             <Link to='/sponsors'>Sponsors</Link>
@@ -67,6 +68,7 @@ export function Navi() {
                 <Link to='/'>Home</Link>
                 <Link to='/story'>Story</Link>
                 <Link to='/team'>Team</Link>
+                <Link to='/highlights'>Highlights</Link>
                 {/* <Link to='/session'>Session</Link> */}
                 <Link to='/contact'>Contact</Link>
                 <Link to='/sponsors'>Sponsors</Link>
