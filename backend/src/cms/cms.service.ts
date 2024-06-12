@@ -41,6 +41,27 @@ export class CmsService {
     this.client.accessToken
   }
 
+  /**
+   * GET Team User
+   */
+  async getTeamUser() {
+    // TODO: get team user
+  }
+
+  /**
+   * CREATE Team User
+   */
+  async createTeamUser() {
+    // TODO: create cms team user 
+  }
+
+  /**
+   * GET Team user public profile
+   */
+  async getTeamUserPublicProfile() {
+    // TODO: get cms team user public profile
+  }
+
 
   /**
    * GET pages

@@ -15,6 +15,8 @@ import { AdminSession } from './pages/AdminSession'
 import { Sponsor } from './pages/Sponsor'
 import { ToastContainer } from 'react-toastify'
 import { isMobile } from "react-device-detect";
+import { Highlight } from './pages/Highlight'
+import { PublicProfile } from './pages/PublicProfile'
 
 
 function App() {
@@ -39,12 +41,14 @@ function App() {
               <Route path='/admin/session/:sessionId' element={<AdminSession />} />
 
               <Route path='/profile' element={<Restricted><Profile /></Restricted>} />
+              <Route path='/PublicProfile/:id' element={<PublicProfile />} />
               {/* <Route path='/session' element={<Session />} />
               <Route path='/session/:sessionId' element={<Booking />} /> */}
               <Route path='/callback' element={<Callback />} />
               <Route path='/logout' element={<Logout />} />
               <Route index element={<Main />} />
               <Route path='/sponsor/:id' element={<Sponsor />} />
+              <Route path='/highlights' element={<Highlight />} />
               <Route path='*' element={<Main />} />
             </Routes>
           </Auth>

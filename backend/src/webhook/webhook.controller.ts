@@ -25,6 +25,7 @@ export class WebhookController {
     @Body() { type, user: {
       user_id,
       user_metadata,
+      app_metadata,
       ...restUser
     } }:UserRegistrationDto
   ) {
@@ -35,16 +36,23 @@ export class WebhookController {
       switch(type) {
         case 'user.postRegistration':
           await this.userService.assignUserRole(user_id, 'member');
-          await this.userService.updateUser(user_id, { user_metadata: {
-            ...user_metadata,
-            type: 'member',
-            isPaid: false,
-            isTeam: false
-          } })
-          break;
+          await this.userService.updateUser(user_id, { 
+            app_metadata: {
+              ...app_metadata,
+              type: ['member'],
+              isPaid: false
+            },
+            user_metadata: {
+              heroImages: [],
+              images: [],
+              heroVideos: [],
+              videos: []
+            }
+          });
           console.log('user.postRegistration success: ');
+          break;
         default:
-          console.info('unknown type received', type, user_id, user_metadata, restUser);
+          console.info('unknown type received', type, user_id, app_metadata, restUser);
       }
     } catch(e) {
       console.error('User post registration failed: ', e);
