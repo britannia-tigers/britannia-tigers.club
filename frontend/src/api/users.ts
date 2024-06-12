@@ -1,14 +1,17 @@
 import axios, { AxiosResponse } from "axios"
 
-export type UserType = 'admin' | 'editor' | 'member' 
+export type UserType = 'admin' | 'editor' | 'member' | 'team'
 
-export interface UserMetaData {
+export interface AppMetaData {
   isPaid: boolean
-  isTeam: boolean
-  type: UserType
+  type: UserType[]
 }
 
-export interface UserInfo<T = UserMetaData> {
+export interface UserMetaData {
+  
+}
+
+export interface UserInfo<P = AppMetaData, T = UserMetaData> {
   name: string
   given_name?: string | null
   family_name?: string | null
@@ -18,6 +21,7 @@ export interface UserInfo<T = UserMetaData> {
   email: string
   readonly email_verified: boolean
   picture?: string
+  app_metadata: P
   user_metadata: T
 
 }
