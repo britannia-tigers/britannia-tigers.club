@@ -28,15 +28,15 @@ export function Profile() {
 
   const { acceptedFiles, getRootProps, getInputProps } = useDropzone();
 
-  const { name, email, phone_number, imageSrcs, heroImageSrcs } = useMemo(() => {
+  const { name, email, phone_number, images } = useMemo(() => {
     
     const { name, email, phone_number, user_metadata } = self || {};
     const { images, heroImages } = user_metadata || {};
 
     return {
-      name, email, phone_number,
-      imageSrcs: images && images.map(i => ({ src: i })),
-      heroImageSrcs: heroImages && heroImages.map(i => ({ src: i }))
+      name, email, phone_number, images
+      // imageSrcs: images && images.map(i => ({ id: i, src: i })),
+      // heroImageSrcs: heroImages && heroImages.map(i => ({ src: i }))
     }
   }, [self])
 
@@ -170,7 +170,7 @@ export function Profile() {
           <Box gridArea='blank'></Box>
         </Grid>
         <Grid>
-          <ImageGallery data={imageSrcs} />
+          <ImageGallery data={images} />
         </Grid>
 
       </InnerContainer>
