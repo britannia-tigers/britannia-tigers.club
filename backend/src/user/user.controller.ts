@@ -1,5 +1,5 @@
-import { Body, Controller, Get, Headers, NotFoundException, Param, Patch, Post, Put, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
-import { FileInterceptor } from '@nestjs/platform-express';
+import { Body, Controller, Get, Headers, Logger, NotFoundException, Param, Patch, Post, Put, UploadedFile, UploadedFiles, UseGuards, UseInterceptors } from '@nestjs/common';
+import { FileFieldsInterceptor, FileInterceptor } from '@nestjs/platform-express';
 import { UserService } from './user.service';
 import { UserCreateUpdateRequest, AppMetaData, User } from './user.interface';
 import { PermissionGuard } from 'src/auth/permission.guard';
@@ -60,7 +60,7 @@ export class UserController {
   @ApiBearerAuth('bearer')
   @Get()
   // @UseGuards(PermissionGuard([MemberPermissions.LIST]))
-  @UseGuards(AuthGuard)
+  // @UseGuards(AuthGuard)
   async getUsers():Promise<any> {
     const users = await this.userService.getUserList({ per_page: 100 });
     assert(users.data, 'User data cannot be empty')
@@ -153,6 +153,71 @@ export class UserController {
       });
       
     } catch(e) {
+      throw e;
+    }
+  }
+
+  
+  /**
+   * Upload an avatar
+   * @param file 
+   */
+  @ApiBearerAuth('bearer')
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        // comment: { type: 'string' },
+        // outletId: { type: 'integer' },
+        file: {
+          type: 'string',
+          format: 'binary',
+        },
+      },
+    },
+  })
+  @Post('self/upload-images')
+  @UseInterceptors(FileFieldsInterceptor([
+    { name: 'images' },
+    { name: 'heroImages' }
+  ]))
+  @UseGuards(AuthGuard)
+  async addImage(
+    @Headers('authorization') authToken,
+    @UploadedFiles() { images, heroImages }: { 
+      images?: Express.Multer.File[],
+      heroImages?: Express.Multer.File[]
+    }
+  ) {
+    try {
+      const self = await this.userService.getSelf(authToken.split(' ')[1]);
+
+      const img_promises = images.map(async f => {
+        const tmp = await this.cloudinaryService.upload(f);
+        return this.cloudinaryService.imageResize(tmp.public_id, tmp.format);
+      })
+
+      const heroImg_promises = heroImages.map(async f => {
+        const tmp = await this.cloudinaryService.upload(f);
+        return this.cloudinaryService.imageResize(tmp.public_id, tmp.format);
+      })
+
+      const imageUrls = await Promise.all(img_promises);
+      const heroImageUrls = await Promise.all(heroImg_promises);
+
+      Logger.log(imageUrls);
+      
+      return await this.userService.updateUser(self.user_id, {
+        user_metadata: {
+          ...self.user_metadata,
+          images: [...self.user_metadata?.images, ...imageUrls],
+          heroImages: [...self.user_metadata?.heroImages, ...heroImageUrls]
+        }
+      });
+      
+    } catch(e) {
+      Logger.error(e);
       throw e;
     }
   }

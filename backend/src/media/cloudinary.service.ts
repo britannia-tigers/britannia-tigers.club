@@ -18,7 +18,6 @@ export class CloudinaryService {
 
   async upload(file: Express.Multer.File, name?: string) {
     // cloudinary.uploader.upload()
-    console.log('hello upload!');
     const b64 = Buffer.from(file.buffer).toString("base64");
     let dataURI = "data:" + file.mimetype + ";base64," + b64;
     const cldRes = await cloudinary.uploader.upload(dataURI, {
@@ -34,6 +33,13 @@ export class CloudinaryService {
       height: 360, 
       width: 360, 
       crop: "thumb"});
+  }
+
+  imageResize(publicId:string, fileFormat: string) {
+    return cloudinary.url(`${publicId}.${fileFormat}`, {
+      height: 900, 
+      width: 1600, 
+      crop: "fill"});
   }
 
           
