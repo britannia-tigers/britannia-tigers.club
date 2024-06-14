@@ -95,25 +95,70 @@ export class UserController {
     return this.userService.getUserRole(id);
   }
 
-
   /**
    * create user
    * @param body 
    * @returns 
    */
-  @Post()
-  createUser(@Body() body:UserDto) {
-    const { email, name, password, phone_number } = body;
-    const appMetaData:AppMetaData = {
-      paid: false,
-      team: false
-    };
+  // @Post()
+  // createUser(@Body() body:UserDto) {
+  //   const { email, name, password, phone_number } = body;
+  //   const appMetaData:AppMetaData = {
+  //     isPaid: false,
+  //     team: ["member"]
+  //   };
 
-    return this.userService.createUser({
-      email, name, phone_number, password,
-      app_metadata: appMetaData,
-      connection: 'Username-Password-Authentication'
-    });
+  //   return this.userService.createUser({
+  //     email, name, phone_number, password,
+  //     app_metadata: appMetaData,
+  //     connection: 'Username-Password-Authentication'
+  //   });
+  // }
+
+  /**
+   * upload hero image
+   * @param authToken 
+   * @param file 
+   * @returns 
+   */
+  @ApiBearerAuth('bearer')
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        // comment: { type: 'string' },
+        // outletId: { type: 'integer' },
+        file: {
+          type: 'string',
+          format: 'binary',
+        },
+      },
+    },
+  })
+  @Post('self/heroimage')
+  @UseInterceptors(FileInterceptor('file'))
+  @UseGuards(AuthGuard)
+  async uploadHeroImage(
+    @Headers('authorization') authToken,
+    @UploadedFile() file: Express.Multer.File
+  ) {
+    try {
+      const self = await this.userService.getSelf(authToken.split(' ')[1]);
+      const cldRes = await this.cloudinaryService.upload(file);
+      const imgUrl = this.cloudinaryService.webDownsize(cldRes.public_id, cldRes.format);
+      
+      return await this.userService.updateUser(self.user_id, {
+        user_metadata: {
+          ...self.user_metadata,
+          heroImages: [...self.user_metadata?.heroImages, imgUrl]
+        }
+      });
+      
+    } catch(e) {
+      throw e;
+    }
+
   }
 
 
@@ -253,7 +298,7 @@ export class UserController {
   async markUserPaidStatus(@Param('id') id, @Param('paid') paid:boolean) {
     const lastPaymentDate = (new Date()).toISOString();
     const app_metadata:Partial<AppMetaData> = {
-      paid,
+      isPaid: paid,
       lastPaymentDate
     }
     return this.userService.updateUser(id, { app_metadata });
@@ -266,15 +311,15 @@ export class UserController {
    * @param team 
    * @returns 
    */
-  @ApiBearerAuth('bearer')
-  @Post(':id/team')
-  @UseGuards(PermissionGuard([MemberPermissions.WRITE]))
-  @UseGuards(AuthGuard)
-  async markUserTeamStatus(@Param('id') id, @Param('team') team:boolean) {
-    const app_metadata:Partial<AppMetaData> = {
-      team
-    }
-    return this.userService.updateUser(id, { app_metadata });
-  }
+  // @ApiBearerAuth('bearer')
+  // @Post(':id/team')
+  // @UseGuards(PermissionGuard([MemberPermissions.WRITE]))
+  // @UseGuards(AuthGuard)
+  // async markUserTeamStatus(@Param('id') id) {
+  //   const app_metadata:Partial<AppMetaData> = {
+  //     team
+  //   }
+  //   return this.userService.updateUser(id, { app_metadata });
+  // }
 
 }

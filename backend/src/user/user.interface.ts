@@ -1,8 +1,15 @@
 
 export interface AppMetaData {
-  team: boolean
+  type: string[]
   lastPaymentDate?: string
-  paid: boolean
+  isPaid: boolean
+}
+
+export interface UserMetaData {
+  heroImages: string[],
+  images: string[],
+  heroVideos: string[],
+  videos: string[]
 }
 
 export interface User {
