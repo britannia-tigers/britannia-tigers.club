@@ -36,5 +36,13 @@ export class CloudinaryService {
       crop: "thumb"});
   }
 
+  webDownsize(publicId:string, fileFormat: string) {
+    return cloudinary.url(`${publicId}.${fileFormat}`, {
+      height: 1600, 
+      width: 900, 
+      crop: "lfill"});
+
+  }
+
           
 }

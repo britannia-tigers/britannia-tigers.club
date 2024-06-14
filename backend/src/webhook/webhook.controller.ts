@@ -24,8 +24,6 @@ export class WebhookController {
   async postUserRegistration(
     @Body() { type, user: {
       user_id,
-      user_metadata,
-      app_metadata,
       ...restUser
     } }:UserRegistrationDto
   ) {
@@ -38,7 +36,6 @@ export class WebhookController {
           await this.userService.assignUserRole(user_id, 'member');
           await this.userService.updateUser(user_id, { 
             app_metadata: {
-              ...app_metadata,
               type: ['member'],
               isPaid: false
             },
@@ -52,7 +49,7 @@ export class WebhookController {
           console.log('user.postRegistration success: ');
           break;
         default:
-          console.info('unknown type received', type, user_id, app_metadata, restUser);
+          console.info('unknown type received', type, user_id, restUser);
       }
     } catch(e) {
       console.error('User post registration failed: ', e);
