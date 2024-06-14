@@ -18,6 +18,7 @@ export interface User {
   password: string
   phone_number: string
   app_metadata?: AppMetaData
+  user_metadata?: UserMetaData
 }
 
 export enum UserRoles {

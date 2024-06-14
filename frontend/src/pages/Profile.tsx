@@ -14,19 +14,31 @@ import { Paragraph, SubTitle } from '../components/Titles'
 import { useDropzone } from 'react-dropzone';
 import { updateUserPic } from '../api/users'
 import { useAuthToken } from '../hooks/auth'
+import { useSelf } from '../hooks/user'
+import { ImageGallery } from '../components/ImageGallery'
 
 export function Profile() {
 
   const { isLoading, isAuthenticated, user, logout } = useAuth0()
+
   const token = useAuthToken();
+  const self = useSelf();
   const [picture, setPicture] = useState<string>();
   const { pathname } = useLocation();
 
   const { acceptedFiles, getRootProps, getInputProps } = useDropzone();
 
-  const { name, email, phone_number } = useMemo(() => ({
-    ...user
-  }), [user])
+  const { name, email, phone_number, imageSrcs, heroImageSrcs } = useMemo(() => {
+    
+    const { name, email, phone_number, user_metadata } = self || {};
+    const { images, heroImages } = user_metadata || {};
+
+    return {
+      name, email, phone_number,
+      imageSrcs: images && images.map(i => ({ src: i })),
+      heroImageSrcs: heroImages && heroImages.map(i => ({ src: i }))
+    }
+  }, [self])
 
   useEffect(() => setPicture(user?.picture), [user?.picture]);
 
@@ -156,6 +168,9 @@ export function Profile() {
           </Box>
           <Box gridArea='sessions'></Box>
           <Box gridArea='blank'></Box>
+        </Grid>
+        <Grid>
+          <ImageGallery data={imageSrcs} />
         </Grid>
 
       </InnerContainer>

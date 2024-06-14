@@ -1,12 +1,12 @@
 import { Body, Controller, Get, Headers, Logger, NotFoundException, Param, Patch, Post, Put, UploadedFile, UploadedFiles, UseGuards, UseInterceptors } from '@nestjs/common';
 import { FileFieldsInterceptor, FileInterceptor } from '@nestjs/platform-express';
 import { UserService } from './user.service';
-import { UserCreateUpdateRequest, AppMetaData, User } from './user.interface';
+import { UserCreateUpdateRequest, AppMetaData, User, UserMetaData } from './user.interface';
 import { PermissionGuard } from 'src/auth/permission.guard';
 import { MemberPermissions, SelfPermissions } from './user.permissions';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { ApiBearerAuth, ApiBody, ApiConsumes, ApiTags } from '@nestjs/swagger';
-import { UserDto } from './user.dto';
+import { UpdateUserMetaDataDto, UserDto } from './user.dto';
 import { CloudinaryService } from 'src/media/cloudinary.service';
 import { assert } from 'console';
 
@@ -116,53 +116,6 @@ export class UserController {
   // }
 
   /**
-   * upload hero image
-   * @param authToken 
-   * @param file 
-   * @returns 
-   */
-  @ApiBearerAuth('bearer')
-  @ApiConsumes('multipart/form-data')
-  @ApiBody({
-    schema: {
-      type: 'object',
-      properties: {
-        // comment: { type: 'string' },
-        // outletId: { type: 'integer' },
-        file: {
-          type: 'string',
-          format: 'binary',
-        },
-      },
-    },
-  })
-  @Post('self/heroimage')
-  @UseInterceptors(FileInterceptor('file'))
-  @UseGuards(AuthGuard)
-  async uploadHeroImage(
-    @Headers('authorization') authToken,
-    @UploadedFile() file: Express.Multer.File
-  ) {
-    try {
-      const self = await this.userService.getSelf(authToken.split(' ')[1]);
-      const cldRes = await this.cloudinaryService.upload(file);
-      const imgUrl = this.cloudinaryService.webDownsize(cldRes.public_id, cldRes.format);
-      
-      return await this.userService.updateUser(self.user_id, {
-        user_metadata: {
-          ...self.user_metadata,
-          heroImages: [...self.user_metadata?.heroImages, imgUrl]
-        }
-      });
-      
-    } catch(e) {
-      throw e;
-    }
-
-  }
-
-
-  /**
    * Upload an avatar
    * @param file 
    */
@@ -181,7 +134,7 @@ export class UserController {
       },
     },
   })
-  @Post('self/upload')
+  @Post('self/avatar/upload')
   @UseInterceptors(FileInterceptor('file'))
   @UseGuards(AuthGuard)
   async uploadAvatar(
@@ -204,7 +157,7 @@ export class UserController {
 
   
   /**
-   * Upload an avatar
+   * Upload images and heroimages
    * @param file 
    */
   @ApiBearerAuth('bearer')
@@ -222,7 +175,7 @@ export class UserController {
       },
     },
   })
-  @Post('self/upload-images')
+  @Post('self/assets/upload')
   @UseInterceptors(FileFieldsInterceptor([
     { name: 'images' },
     { name: 'heroImages' }
@@ -262,9 +215,45 @@ export class UserController {
       });
       
     } catch(e) {
-      Logger.error(e);
       throw e;
     }
+  }
+
+  @ApiBearerAuth('bearer')
+  @Put('self/assets')
+  @UseGuards(AuthGuard)
+  async updateAssets(
+    @Headers('authorization') authToken,
+    @Body() { heroImages, images, heroVideos, videos }: UpdateUserMetaDataDto
+  ) {
+    try {
+      let { user_id, user_metadata } = await this.userService.getSelf(authToken.split(' ')[1]);
+      
+      if(heroImages) {
+        user_metadata.heroImages = heroImages;
+      }
+
+      if(images) {
+        user_metadata.heroImages = heroImages;
+      }
+
+      if(videos) {
+        user_metadata.videos = videos;
+      }
+
+      if(heroVideos) {
+        user_metadata.userVideos = heroVideos;
+      }
+
+      return await this.userService.updateUser(user_id, {
+        user_metadata
+      });
+
+
+    } catch(e) {
+      throw e;
+    }
+
   }
 
 
@@ -279,8 +268,8 @@ export class UserController {
   @UseGuards(PermissionGuard([MemberPermissions.WRITE]))
   @UseGuards(AuthGuard)
   async updateUser(@Param('id') id, @Body() data:UserCreateUpdateRequest) {
-    // filter out potential data injection
-    const { app_metadata, ...restUser } = data as User;
+    // filter out potential data injection for user and app metadata
+    const { app_metadata, user_metadata, ...restUser } = data as User;
     return this.userService.updateUser(id, restUser);
   }
 

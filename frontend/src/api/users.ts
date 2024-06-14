@@ -8,7 +8,10 @@ export interface AppMetaData {
 }
 
 export interface UserMetaData {
-  
+  images: string[]
+  heroImages: string[]
+  videos: string[]
+  heroVideos: string[]
 }
 
 export interface UserInfo<P = AppMetaData, T = UserMetaData> {
@@ -42,6 +45,15 @@ export async function getAllUsers(token: string) {
   return users.data;
 }
 
+export async function getSelf(token: string) {
+  const { data } = await axios.get<UserInfo>(`/api/user/self`, {
+    headers: {
+      Authorization: `bearer ${token}`
+    }
+  })
+  return data;
+}
+
 export async function updateUserSelf(authToken:string, userId:string, payload:UserRequest) {
 
 }
@@ -50,7 +62,7 @@ export async function updateUserPic(authToken: string, file: File) {
   const formData = new FormData();
   formData.append('file', file);
   const res = await axios.post<AxiosResponse<CloudinaryResponse>>(
-      `/api/user/self/upload`,
+      `/api/user/self/avatar/upload`,
       formData,
       {
         headers: {
