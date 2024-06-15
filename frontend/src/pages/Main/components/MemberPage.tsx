@@ -55,18 +55,19 @@ export function MemberPage({ offset }:PropsWithChildren<PageProps>) {
               justify="between" 
               direction="row">
                 { members.map(s => (
-                <Avatar 
-                  margin={size === 'small' ? {
-                    vertical: 'large',
-                    horizontal: 'large'
-                  } : {
-                    vertical: 'medium',
-                    horizontal: 'small'
-                  }}
-                  size={size === 'small' ? 'medium' : 'xlarge'}
-                  src={s.picture} 
-                  background={s.bgColor}
-                  onClick={() => {} }/>
+                  <Avatar 
+                    margin={size === 'small' ? {
+                      vertical: 'large',
+                      horizontal: 'large'
+                    } : {
+                      vertical: 'medium',
+                      horizontal: 'small'
+                    }}
+                    size={size === 'small' ? 'medium' : 'xlarge'}
+                    src={s.picture} 
+                    background={s.bgColor}
+                    
+                  />
                 )) }
             </Box>
           </Box>
