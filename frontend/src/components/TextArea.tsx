@@ -1,5 +1,5 @@
 import { FormField, TextArea as GTA } from "grommet";
-import { useMemo } from "react";
+import { useCallback, useMemo, useState, ChangeEvent, useEffect } from "react";
 import styled from "styled-components";
 
 
@@ -25,19 +25,35 @@ const TA = styled(GTA)`
 export function TextArea({ name, value, onChange, label, placeholder, required, maxLength = 250, rows=3 }:TextAreaProps) {
 
   const id = useMemo(() => `text_input_${Math.round(Math.random() * 1000)}`, [])
+  const [v, setV] = useState<string>(value || '');
+  useEffect(() => value ? setV(value) : undefined, [value]);
 
+  const handleChange = useCallback((e:ChangeEvent<HTMLTextAreaElement>) => {
+    setV(e.target.value)
+    if(onChange) onChange(e);
+  }, [value])
 
   return (
     <FormField 
       name={name}
-      value={value}
-      onChange={onChange}
+      value={v}
       required={required}
       placeholder={placeholder}
       maxLength={maxLength}
       rows={rows}
       label={label} 
       htmlFor={id}
-      component={TA} />
+    >
+      <TA 
+        name={name}
+        value={v}
+        onChange={handleChange}
+        required={required}
+        placeholder={placeholder}
+        maxLength={maxLength}
+        rows={rows}
+        id={id}
+        />
+    </FormField>
   )
 }

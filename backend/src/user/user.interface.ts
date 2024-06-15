@@ -6,9 +6,15 @@ export interface AppMetaData {
 }
 
 export interface UserMetaData {
-  heroImages: string[],
-  images: string[],
-  heroVideos: string[],
+  description: string
+  stats: {
+    strength?: number
+    stamina?: number
+    grit?: number
+    strategy?: number
+    agility?: number
+  }
+  images: string[]
   videos: string[]
 }
 

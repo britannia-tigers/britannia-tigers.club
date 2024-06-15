@@ -16,6 +16,7 @@ import { updateUserPic } from '../api/users'
 import { useAuthToken } from '../hooks/auth'
 import { useSelf } from '../hooks/user'
 import { ImageGallery } from '../components/ImageGallery'
+import { TextArea } from '../components/TextArea'
 
 export function Profile() {
 
@@ -31,12 +32,10 @@ export function Profile() {
   const { name, email, phone_number, images } = useMemo(() => {
     
     const { name, email, phone_number, user_metadata } = self || {};
-    const { images, heroImages } = user_metadata || {};
+    const { images, videos } = user_metadata || {};
 
     return {
-      name, email, phone_number, images
-      // imageSrcs: images && images.map(i => ({ id: i, src: i })),
-      // heroImageSrcs: heroImages && heroImages.map(i => ({ src: i }))
+      name, email, phone_number, images, videos
     }
   }, [self])
 
@@ -74,20 +73,24 @@ export function Profile() {
       <Grid
           pad={windowSize === 'small' ? { horizontal: 'large', vertical: 'none' } : 'none'}
           responsive
-          columns={windowSize === 'small' ? ['flex'] : [['1/2', '1/2'], ['1/2', '1/2']]}
-          rows={windowSize === 'small' ? ['auto', 'auto'] : ['flex', 'flex']}
+          columns={windowSize === 'small' ? ['flex'] : ['1/2', '1/2']}
+          rows={windowSize === 'small' ? ['auto', 'auto', 'auto', 'auto'] : ['flex', 'auto', 'auto']}
           gap={{
-            row: windowSize === 'small' ? 'large' : 'medium',
+            // row: windowSize === 'small' ? 'large' : 'medium',
             column: windowSize === 'small' ? 'none' : 'medium'
           }}
           areas={windowSize === 'small' ? [
             { name: 'picture', start: [0, 0], end: [0, 0] },
-            { name: 'events', start: [0, 1], end: [0, 1] }
+            { name: 'events', start: [0, 1], end: [0, 1] },
+            { name: 'about',  start: [0, 2], end: [0, 2] },
+            { name: 'cta', start: [0, 3], end: [0, 3]}
           ] : [
             { name: 'picture', start: [0, 0], end: [0, 0] },
             { name: 'events', start: [1, 0], end: [1, 0] },
-            { name: 'sessions', start: [0, 1], end: [0, 1] },
-            { name: 'blank', start: [1, 1], end: [1, 1] }
+            { name: 'about',  start: [0, 1], end: [1, 1] },
+            { name: 'cta',  start: [0, 2], end: [1, 2] }
+            // { name: 'sessions', start: [0, 1], end: [0, 1] },
+            // { name: 'blank', start: [1, 1], end: [1, 1] }
           ]}
           >
           <Box 
@@ -149,6 +152,16 @@ export function Profile() {
                 id="text-input-id" 
                 name="email" />
             </FormField> */}
+          </Box>
+          <Box gridArea="about">
+            <TextArea 
+              aria-label="description"
+              name="description"
+              label="Description"
+              value='hello this is just another testing'
+              placeholder="Your description here..." />
+          </Box>
+          <Box gridArea="cta">
             <Box 
               pad={{top: 'large'}}
               direction="row" 
@@ -166,12 +179,15 @@ export function Profile() {
                 label='LOGOUT'/>   
             </Box>
           </Box>
-          <Box gridArea='sessions'></Box>
-          <Box gridArea='blank'></Box>
-        </Grid>
-        <Grid>
-          <ImageGallery data={images} />
-        </Grid>
+          {/* <Box gridArea='sessions'></Box>
+          <Box gridArea='blank'></Box> */}
+      </Grid>
+      <Grid pad={{top: 'xlarge', bottom: 'large'}}>
+        <SubTitle marginBottom='36px'>
+          Images
+        </SubTitle>
+        <ImageGallery data={images} headerMode={false} editMode={true} />
+      </Grid>
 
       </InnerContainer>
     </WhitePage>

@@ -157,7 +157,7 @@ export class UserController {
 
   
   /**
-   * Upload images and heroimages
+   * Upload images and videos
    * @param file 
    */
   @ApiBearerAuth('bearer')
@@ -178,39 +178,40 @@ export class UserController {
   @Post('self/assets/upload')
   @UseInterceptors(FileFieldsInterceptor([
     { name: 'images' },
-    { name: 'heroImages' }
+    { name: 'videos' }
   ]))
   @UseGuards(AuthGuard)
   async addImage(
     @Headers('authorization') authToken,
-    @UploadedFiles() { images, heroImages }: { 
+    @UploadedFiles() { images, videos }: { 
       images?: Express.Multer.File[],
-      heroImages?: Express.Multer.File[]
+      videos?: Express.Multer.File[]
     }
   ) {
     try {
       const self = await this.userService.getSelf(authToken.split(' ')[1]);
 
-      const img_promises = images.map(async f => {
+      const img_promises = images?.map(async f => {
         const tmp = await this.cloudinaryService.upload(f);
-        return this.cloudinaryService.imageResize(tmp.public_id, tmp.format);
+        return tmp.public_id;
+        // this.cloudinaryService.imageResize(tmp.public_id, tmp.format);
       })
 
-      const heroImg_promises = heroImages.map(async f => {
+      const vid_promises = videos?.map(async f => {
         const tmp = await this.cloudinaryService.upload(f);
-        return this.cloudinaryService.imageResize(tmp.public_id, tmp.format);
+        console.log(tmp.public_id)
+        return tmp.public_id;
+        // this.cloudinaryService.imageResize(tmp.public_id, tmp.format);
       })
 
-      const imageUrls = await Promise.all(img_promises);
-      const heroImageUrls = await Promise.all(heroImg_promises);
-
-      Logger.log(imageUrls);
+      const imageUrls = await Promise.all(img_promises || []);
+      const heroImageUrls = await Promise.all(vid_promises || []);
       
       return await this.userService.updateUser(self.user_id, {
         user_metadata: {
           ...self.user_metadata,
           images: [...self.user_metadata?.images, ...imageUrls],
-          heroImages: [...self.user_metadata?.heroImages, ...heroImageUrls]
+          vid_promises: [...self.user_metadata?.vid_promises, ...heroImageUrls]
         }
       });
       
@@ -219,35 +220,57 @@ export class UserController {
     }
   }
 
+
+  /**
+   * GET user assets
+   * @param authToken 
+   * @returns 
+   */
+  @ApiBearerAuth('bearer')
+  @Get('self/assets')
+  @UseGuards(AuthGuard)
+  async getAssets(
+    @Headers('authorization') authToken,
+
+  ) {
+    try {
+      let { user_metadata } = await this.userService.getSelf(authToken.split(' ')[1]);
+      return user_metadata;
+    } catch(e) {
+      throw(e);
+    }
+  }
+
+
+  /**
+   * Update user assets
+   * @param authToken 
+   * @param param1 
+   * @returns 
+   */
   @ApiBearerAuth('bearer')
   @Put('self/assets')
   @UseGuards(AuthGuard)
   async updateAssets(
     @Headers('authorization') authToken,
-    @Body() { heroImages, images, heroVideos, videos }: UpdateUserMetaDataDto
+    @Body() { images, videos }: UpdateUserMetaDataDto
   ) {
     try {
       let { user_id, user_metadata } = await this.userService.getSelf(authToken.split(' ')[1]);
-      
-      if(heroImages) {
-        user_metadata.heroImages = heroImages;
-      }
 
       if(images) {
-        user_metadata.heroImages = heroImages;
+        user_metadata.images = images;
       }
 
       if(videos) {
         user_metadata.videos = videos;
       }
 
-      if(heroVideos) {
-        user_metadata.userVideos = heroVideos;
-      }
-
-      return await this.userService.updateUser(user_id, {
+      const successRes = await this.userService.updateUser(user_id, {
         user_metadata
       });
+
+      return successRes.data?.user_metadata;
 
 
     } catch(e) {

@@ -40,9 +40,9 @@ export class WebhookController {
               isPaid: false
             },
             user_metadata: {
-              heroImages: [],
+              description: '',
+              stats: {},
               images: [],
-              heroVideos: [],
               videos: []
             }
           });

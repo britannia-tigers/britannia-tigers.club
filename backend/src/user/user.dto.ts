@@ -28,17 +28,7 @@ export class UpdateUserMetaDataDto {
   @IsArray()
   @ArrayMinSize(1)
   @ApiProperty()
-  readonly heroImages?: string[];
-
-  @IsArray()
-  @ArrayMinSize(1)
-  @ApiProperty()
   readonly images?: string[];
-
-  @IsArray()
-  @ArrayMinSize(1)
-  @ApiProperty()
-  readonly heroVideos?: string[];
 
   @IsArray()
   @ArrayMinSize(1)

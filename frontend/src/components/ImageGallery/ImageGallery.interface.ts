@@ -9,6 +9,8 @@ export interface ImageGalleryDataType {
 
 export interface ImageGalleryProps {
   data?: string[]
+  editMode: boolean
+  headerMode: boolean
 }
 
 export interface ImageGalleryItemProps extends ImageGalleryDataType {

@@ -12,13 +12,13 @@ import {
   arrayMove,
   SortableContext,
   sortableKeyboardCoordinates,
-  verticalListSortingStrategy,
+  rectSwappingStrategy,
 } from '@dnd-kit/sortable';
 import { ImageGalleryItem } from "./ImageGalleryItem";
 import { ImageGalleryDataType, ImageGalleryProps } from "./ImageGallery.interface";
 import { Distribution } from "grommet";
 
-export function ImageGallery({ data }: PropsWithChildren<ImageGalleryProps>) {
+export function ImageGallery({ data, headerMode, editMode }: PropsWithChildren<ImageGalleryProps>) {
 
   const [items, setItems] = useState<ImageGalleryDataType[]>([]);
 
@@ -27,7 +27,7 @@ export function ImageGallery({ data }: PropsWithChildren<ImageGalleryProps>) {
     setItems(data.map((d, i) => ({
       id: d,
       src: d,
-      value: setValueByIndex(i)
+      value: headerMode ? setValueByIndex(i) : 10
     })))
   }, [data]);
 
@@ -50,7 +50,7 @@ export function ImageGallery({ data }: PropsWithChildren<ImageGalleryProps>) {
         return tmpItems.map((t, i) => ({
           ...t, 
           i,
-          value: setValueByIndex(i)
+          value: headerMode ? setValueByIndex(i) : 10
         }))
       });
     }
@@ -64,9 +64,9 @@ export function ImageGallery({ data }: PropsWithChildren<ImageGalleryProps>) {
     >
       <SortableContext 
         items={items}
-        strategy={verticalListSortingStrategy}
+        strategy={rectSwappingStrategy}
       >
-        <Distribution values={items}>
+        <Distribution values={items} gap={headerMode ? 'none' : 'small'}>
           {i => <ImageGalleryItem key={i.id} id={i.id} src={i.src} value={i.value}/>}
         </Distribution>
       </SortableContext>

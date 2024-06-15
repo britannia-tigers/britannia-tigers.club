@@ -9,9 +9,7 @@ export interface AppMetaData {
 
 export interface UserMetaData {
   images: string[]
-  heroImages: string[]
   videos: string[]
-  heroVideos: string[]
 }
 
 export interface UserInfo<P = AppMetaData, T = UserMetaData> {
