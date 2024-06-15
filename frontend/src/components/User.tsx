@@ -1,5 +1,5 @@
 import { useAuth0 } from '@auth0/auth0-react'
-import { Header, Nav , Avatar, Box, Button, ResponsiveContext } from 'grommet'
+import { Header, Nav , Avatar, Box, Button, ResponsiveContext, Stack } from 'grommet'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
 import { useNaviStore } from '../stores/NaviStore';
@@ -68,10 +68,14 @@ export function User({ showInMobileView, notFixed, padding }: UserProps) {
       textColor={showInMobileView ? 'black' : textColor}>
       <BrowserView>
         { isAuthenticated ? (
-          <Avatar 
-            src={user?.picture} 
-            background="light-1" 
-            onClick={() => isAuthenticated && navigate('/profile')}/>
+          <Stack
+            onClick={() => isAuthenticated && navigate('/profile')}
+          >
+              <Avatar 
+                src={user?.picture} 
+                background="light-1" 
+              />
+          </Stack>
         ) : (
           <UserButtonContainer isMobile={showInMobileView}>
             <h4 onClick={signupHandler}>Become a Member</h4>
@@ -82,10 +86,14 @@ export function User({ showInMobileView, notFixed, padding }: UserProps) {
       {showInMobileView && (
         <MobileView>
           { isAuthenticated ? (
-            <Avatar 
-              src={user?.picture} 
-              background="light-1" 
-              onClick={() => isAuthenticated && navigate('/profile')}/>
+            <Stack
+              onClick={() => isAuthenticated && navigate('/profile')}
+            >
+              <Avatar 
+                src={user?.picture} 
+                background="light-1" 
+              />
+            </Stack>
           ) : (
             <UserButtonContainer isMobile={showInMobileView}>
               <h4 onClick={signupHandler}>Become a Member</h4>
