@@ -1,5 +1,4 @@
 import React, { PropsWithChildren, useContext, useEffect, useState } from 'react';
-import { WhitePage } from '../components/WhitePage';
 import { InnerContainer, InnerTitle, MobileInnerTitle } from '../components/InnerContainer';
 import { Previous } from '../components/Previous';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
@@ -12,6 +11,7 @@ import { Paragraph } from '../components/Titles';
 import { BrowserView, MobileView } from 'react-device-detect';
 import { Map } from '../components/Map';
 import { User } from '../components/User';
+import { PageWrapper } from '../components/PageWrapper';
 
 enum BookingStatusTypes {
   booking_info,
@@ -24,9 +24,6 @@ enum BookingStatusTypes {
 
 type BookingStatus = keyof typeof BookingStatusTypes
 
-interface BookingWrapperProps {
-  backTo?: string
-}
 
 export function Booking() {
 
@@ -49,14 +46,14 @@ export function Booking() {
    */
   if(!isLoading && !isAuthenticated) {
     return (
-      <BookingWrapper>
+      <PageWrapper>
         <InnerContainer>
           <InnerTitle bottomPadding="small" >You are not logged in</InnerTitle>
           <Paragraph>
             Please sign up or log in above to view your booking.
           </Paragraph>
         </InnerContainer>
-      </BookingWrapper>
+      </PageWrapper>
     )
   }
 
@@ -68,7 +65,7 @@ export function Booking() {
     case 'booking_success':
     case 'payment_success':
       return (
-        <BookingWrapper backTo='/session'>
+        <PageWrapper backTo='/session'>
           <InnerContainer>
             <BrowserView>
               <InnerTitle bottomPadding="small" >{ status ==='booking_success' ? 'Booking' : 'Payment' } Success</InnerTitle>
@@ -116,11 +113,11 @@ export function Booking() {
               </Box>
             </Grid>
           </InnerContainer>
-        </BookingWrapper>
+        </PageWrapper>
       )
     case 'booking_cancel':
       return (
-        <BookingWrapper>
+        <PageWrapper>
           <InnerContainer>
             <BrowserView>
               <InnerTitle bottomPadding="small" >Booking cancelled</InnerTitle>
@@ -130,23 +127,23 @@ export function Booking() {
             </MobileView>
 
           </InnerContainer>
-        </BookingWrapper>
+        </PageWrapper>
       )
     case 'booking_error':
       return (
-        <BookingWrapper>
+        <PageWrapper>
           <InnerContainer>
             <InnerTitle bottomPadding="small" >Error...</InnerTitle>
           </InnerContainer>
-        </BookingWrapper>
+        </PageWrapper>
       )
     case 'payment_cancel':
       return (
-        <BookingWrapper backTo={`/session`}>
+        <PageWrapper backTo={`/session`}>
           <InnerContainer>
             <InnerTitle bottomPadding="small" >Payment cancelled</InnerTitle>
           </InnerContainer>
-        </BookingWrapper>
+        </PageWrapper>
       )
     default:
       return (
@@ -156,23 +153,4 @@ export function Booking() {
       )
   }
 
-}
-
-function BookingWrapper({ children, backTo }: PropsWithChildren<BookingWrapperProps>) {
-
-  const navigate = useNavigate()
-
-  return (
-    <WhitePage>
-      {children}
-      <User showInMobileView={true}/>
-      <Previous 
-        onClick={() => backTo ? navigate(backTo) : navigate(-1)}
-        style={{
-          position: 'fixed',
-          left: '20px',
-          top: '30px'
-        }}/>
-    </WhitePage>
-  )
 }

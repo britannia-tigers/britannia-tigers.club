@@ -7,10 +7,12 @@ import { ResizedSection } from '../../../components/ResizedSection';
 import { ParallaxLayer } from '@react-spring/parallax';
 import { InnerContainer, InnerTitle, MobileInnerTitle } from '../../../components/InnerContainer';
 import { BrowserView, MobileView } from 'react-device-detect';
-import { Avatar, Box, Button, Paragraph, ResponsiveContext } from 'grommet';
+import { Avatar, Box, Button, Paragraph, ResponsiveContext, Stack, Tip } from 'grommet';
 import { WIP } from '../../../components/WIP';
 import { SubTitle } from '../../../components/Titles';
-
+import { useUserList } from '../../../hooks/user';
+import { Link } from 'react-router-dom';
+import { Tooltip } from 'react-tooltip'
 
 export function MemberPage({ offset }:PropsWithChildren<PageProps>) {
 
@@ -27,23 +29,32 @@ export function MemberPage({ offset }:PropsWithChildren<PageProps>) {
     unknownBg2
   ]
 
+  const users = useUserList();
+
   const members = useMemo(() => {
     const m = []
 
+    const found = users?.filter(u => u.app_metadata?.type.findIndex(t => t === 'team') > -1) || []
+    const len = found?.length || 0;
+
     let i = 0
-    while(i < 15) {
+    while(i < len) {
       const c = Math.floor(Math.random() * colors.length)
       const u = Math.floor(Math.random() * unknown.length)
-      m.push({ picture: unknown[u], bgColor: colors[c] })
+      m.push({ 
+        id: btoa(found[i].user_id), 
+        picture: unknown[u], 
+        bgColor: colors[c],
+        name: found[i].name,
+        position: found[i]?.user_metadata?.stats?.position
+      })
       i++
     }
 
     return m
-  }, [])
+  }, [users])
 
   const size = React.useContext(ResponsiveContext);
-
-
 
   return (
     <ResizedSection bgColor="white" color="black">
@@ -55,19 +66,27 @@ export function MemberPage({ offset }:PropsWithChildren<PageProps>) {
               justify="between" 
               direction="row">
                 { members.map(s => (
-                  <Avatar 
-                    margin={size === 'small' ? {
-                      vertical: 'large',
-                      horizontal: 'large'
-                    } : {
-                      vertical: 'medium',
-                      horizontal: 'small'
-                    }}
-                    size={size === 'small' ? 'medium' : 'xlarge'}
-                    src={s.picture} 
-                    background={s.bgColor}
-                    
-                  />
+                    // <Link to={`/team/${s.id}`}>
+                    <>
+                      <Avatar 
+                        data-tooltip-id={s.id}
+                        margin={size === 'small' ? {
+                          vertical: 'large',
+                          horizontal: 'large'
+                        } : {
+                          vertical: 'medium',
+                          horizontal: 'small'
+                        }}
+                        size={size === 'small' ? 'medium' : 'xlarge'}
+                        src={s.picture} 
+                        background={s.bgColor}
+                        
+                      />
+                      <Tooltip id={s.id} style={{ backgroundColor: "rgb(247, 236, 19)", color: "#222" }}>
+                        {s.name}{s?.position ? ` - ${s.position}` : ''}
+                      </Tooltip>
+                    </>
+                    // </Link>
                 )) }
             </Box>
           </Box>

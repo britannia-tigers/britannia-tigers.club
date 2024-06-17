@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { UserInfo, getAllUsers, getSelf } from "../api/users"
+import { PublicUserInfo, UserInfo, getAllUsers, getSelf, getUser } from "../api/users"
 import { useAuthToken } from "./auth"
 
 
@@ -10,8 +10,7 @@ export function useUserList() {
 
   useEffect(() => {
     async function fetch() {
-      if(!token) return setUserList(undefined)
-      const users = await getAllUsers(token)
+      const users = await getAllUsers()
       setUserList(users)
     }
 
@@ -19,6 +18,20 @@ export function useUserList() {
   }, [token])
 
   return userList
+}
+
+export function useUser(id?: string) {
+  const [user, setUser] = useState<PublicUserInfo | undefined>();
+  useEffect(() => {
+    if(!id) return setUser(undefined);
+    (async () => {
+      const data = await getUser(id);
+      setUser(data);
+    })();
+  }, [id])
+
+  return user;
+
 }
 
 export function useSelf() {

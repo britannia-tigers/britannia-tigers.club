@@ -9,6 +9,7 @@ import { ApiBearerAuth, ApiBody, ApiConsumes, ApiTags } from '@nestjs/swagger';
 import { UpdateUserMetaDataDto, UserDto } from './user.dto';
 import { CloudinaryService } from 'src/media/cloudinary.service';
 import { assert } from 'console';
+import { outputUserPublic } from './user.helper';
 
 
 @ApiTags('Users')
@@ -35,7 +36,6 @@ export class UserController {
     return this.userService.getSelf(authToken.split(' ')[1]);
   }
 
-
   /**
    * update self details
    * @param authToken 
@@ -61,10 +61,11 @@ export class UserController {
   @Get()
   // @UseGuards(PermissionGuard([MemberPermissions.LIST]))
   // @UseGuards(AuthGuard)
-  async getUsers():Promise<any> {
+  async getUsers() {
     const users = await this.userService.getUserList({ per_page: 100 });
     assert(users.data, 'User data cannot be empty')
-    return users.data;
+
+    return users.data.map(res => outputUserPublic(res));
   }
 
 
@@ -81,6 +82,20 @@ export class UserController {
     return this.userService.getUser(id);
   }
 
+  /**
+   * get user details
+   * @param id 
+   * @returns 
+   */
+    @ApiBearerAuth('bearer')
+    @Get(':id/public')
+    getUserPublic(@Param('id') id) {
+      return this.userService.getUser(id)
+        .then(res => ({
+          ...res,
+          data: outputUserPublic(res.data)
+        }))
+    }
 
   /**
    * get user role
@@ -205,13 +220,13 @@ export class UserController {
       })
 
       const imageUrls = await Promise.all(img_promises || []);
-      const heroImageUrls = await Promise.all(vid_promises || []);
+      const vidUrls = await Promise.all(vid_promises || []);
       
       return await this.userService.updateUser(self.user_id, {
         user_metadata: {
           ...self.user_metadata,
           images: [...self.user_metadata?.images, ...imageUrls],
-          vid_promises: [...self.user_metadata?.vid_promises, ...heroImageUrls]
+          vid_promises: [...self.user_metadata?.videos, ...vidUrls]
         }
       });
       

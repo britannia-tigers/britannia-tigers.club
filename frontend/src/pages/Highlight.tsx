@@ -15,7 +15,10 @@ export function Highlight() {
   const { setTextColor, setBgDark, setFormVisible } = useNaviStore();
 
   // initially set 
-  useEffect(() => setTextColor('#ffffff'), []);
+  useEffect(() => {
+    setTextColor('#ffffff');
+    setBgDark(true);
+  }, []);
   const numberOfBoxes = 16;
 
   return (

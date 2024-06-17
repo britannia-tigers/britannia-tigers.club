@@ -10,6 +10,7 @@ interface TextInputProps {
   onChange?: React.ChangeEventHandler<HTMLInputElement>
   value?: string
   name: string
+  disabled?: boolean
   validate?:
     | {
         regexp?: object;
@@ -38,7 +39,7 @@ const Input = styled(GTextI)`
 `
 
 export function TextInput({ 
-  label, placeholder, required, type, onChange, 
+  label, placeholder, required, type, onChange, disabled,
   name, value, validate, validateOn = 'submit'
 }:TextInputProps) {
 
@@ -55,6 +56,7 @@ export function TextInput({
       label={label} 
       onChange={onChange}
       value={value}
+      disabled={disabled}
       htmlFor={id}
       >
         <Input 
@@ -64,6 +66,7 @@ export function TextInput({
           type={type === undefined ? 'text' : type}
           required={required}
           id={id}
+          disabled={disabled}
           placeholder={placeholder}
         /> 
     </FormField>

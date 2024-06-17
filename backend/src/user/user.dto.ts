@@ -3,8 +3,9 @@ import { ApiProperty } from '@nestjs/swagger'
 import { UserCreateUpdateRequest } from "./user.interface";
 
 
-export class UserDto implements UserCreateUpdateRequest {
-  
+export class UserDto implements Omit<UserCreateUpdateRequest, 'username'> {
+
+
   @IsString()
   @ApiProperty()
   readonly name:string;

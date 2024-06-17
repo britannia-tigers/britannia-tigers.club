@@ -22,7 +22,7 @@ export function ResizedSection({
   bgColor = 'black' ,
   bgImg,
   bgVignette = false,
-  flexHeight = false
+  flexHeight = false,
 }: PropsWithChildren<iSection>) {
 
   const [width, height] = useWindowSize();

@@ -29,13 +29,13 @@ export function Profile() {
 
   const { acceptedFiles, getRootProps, getInputProps } = useDropzone();
 
-  const { name, email, phone_number, images } = useMemo(() => {
+  const { name, email, phone_number, images, description, stats } = useMemo(() => {
     
     const { name, email, phone_number, user_metadata } = self || {};
-    const { images, videos } = user_metadata || {};
+    const { images, videos, description, stats } = user_metadata || {};
 
     return {
-      name, email, phone_number, images, videos
+      name, email, phone_number, images, videos, description, stats
     }
   }, [self])
 
@@ -126,6 +126,7 @@ export function Profile() {
             <TextInput
               name="email"
               label="Email"
+              disabled
               value={email}
              /> 
             <TextInput
@@ -158,7 +159,7 @@ export function Profile() {
               aria-label="description"
               name="description"
               label="Description"
-              value='hello this is just another testing'
+              value={description}
               placeholder="Your description here..." />
           </Box>
           <Box gridArea="cta">

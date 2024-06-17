@@ -45,12 +45,9 @@ export function ImageGalleryItem({
     thumbnail().width(width).height(height)
   );
 
-  console.log(img.toURL());
-
   return (
-    // <div ref={setNodeRef} style={style}>
-    //   <AdvancedImage cldImg={img} {...attributes} {...listeners} />
-    // </div>
-    <Img ref={setNodeRef} style={style} src={img.toURL()} {...attributes} {...listeners}/>
+    <Img ref={setNodeRef} 
+      style={style} src={img.toURL()} width={width} height={height}
+      {...attributes} {...listeners} />
   )
 }

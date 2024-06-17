@@ -7,7 +7,21 @@ export interface AppMetaData {
   type: UserType[]
 }
 
+type PositionType = 'PG' | 'SG' | 'PF' | 'SF' | 'C'
+
+export interface UserStats {
+  position?: PositionType[]
+  strength?: number
+  stamina?: number
+  grit?: number
+  strategy?: number
+  agility?: number
+
+}
+
 export interface UserMetaData {
+  description: string
+  stats: UserStats
   images: string[]
   videos: string[]
 }
@@ -27,6 +41,13 @@ export interface UserInfo<P = AppMetaData, T = UserMetaData> {
 
 }
 
+export interface PublicUserInfo<T = UserMetaData> {
+  name: string
+  user_id: string
+  picture?: string
+  user_metadata: T
+}
+
 export interface UserRequest extends UserInfo<UserMetaData> {
 
 }
@@ -38,9 +59,14 @@ interface CloudinaryResponse {
   name: string
 }
 
-export async function getAllUsers(token: string) {
+export async function getAllUsers() {
   const users = await axios.get<UserInfo[]>(`/api/user`)
   return users.data;
+}
+
+export async function getUser(id: string) {
+  const {data} = await axios.get<AxiosResponse<PublicUserInfo>>(`/api/user/${id}/public`)
+  return data.data;
 }
 
 export async function getSelf(token: string) {

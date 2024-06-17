@@ -10,7 +10,7 @@ interface InnerContainerProps {
 }
 
 interface InnerTitleProps {
-  bottomPadding?: 'large' | 'small' | 'medium'
+  bottomPadding?: 'large' | 'small' | 'medium' | 'none'
 }
 
 interface InnerProps {
@@ -27,7 +27,7 @@ export const CenteredOuterContainer = styled.div`
 `
 
 const Inner = styled.div<InnerProps>`
-  padding-top: ${props => props.paddingTop === 'large' ? '90px' : 'auto'};
+  padding-top: ${({paddingTop}) => paddingTop === 'large' ? '90px' : paddingTop === 'small' ? '30px' : 'auto'};
   padding-left: ${
     props => props.size === 'small' ? 
       '30px' : 0
@@ -60,7 +60,7 @@ export const InnerTitle = styled.h3<InnerTitleProps>`
   text-align: left;
   font-size: 36px;
   text-transform: uppercase;
-  padding: 0 0 ${props => props.bottomPadding === 'large'  ? '90px' : props.bottomPadding === 'medium' ? '60px' : '42px'} 0;
+  padding: 0 0 ${({bottomPadding}) => bottomPadding === 'large'  ? '90px' : bottomPadding === 'medium' ? '60px' : bottomPadding === 'small' ? '42px' : '0'} 0;
   margin: 0;
 `
 
