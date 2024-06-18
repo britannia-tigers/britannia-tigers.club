@@ -20,6 +20,7 @@
     "@react-spring/parallax": "^9.7.3",
     "@react-spring/web": "^9.7.3",
     "@react-three/fiber": "^8.14.2",
+    "@svgdotjs/svg.js": "^3.2.3",
     "@types/google-map-react": "^2.1.8",
     "@types/react": "^18.2.15",
     "@types/react-dom": "^18.2.7",
