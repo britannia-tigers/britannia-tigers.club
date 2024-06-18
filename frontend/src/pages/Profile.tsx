@@ -23,10 +23,9 @@ export function Profile() {
   const { isLoading, isAuthenticated, user, logout } = useAuth0()
 
   const token = useAuthToken();
-  const self = useSelf();
+  const {self, roles} = useSelf();
   const [picture, setPicture] = useState<string>();
   const { pathname } = useLocation();
-
   const { acceptedFiles, getRootProps, getInputProps } = useDropzone();
 
   const { name, email, phone_number, images, description, stats } = useMemo(() => {

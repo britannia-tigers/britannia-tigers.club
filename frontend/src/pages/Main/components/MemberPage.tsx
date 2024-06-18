@@ -66,8 +66,8 @@ export function MemberPage({ offset }:PropsWithChildren<PageProps>) {
               justify="between" 
               direction="row">
                 { members.map(s => (
-                    // <Link to={`/team/${s.id}`}>
-                    <>
+                    <Link to={`/team/${s.id}`}>
+                    
                       <Avatar 
                         data-tooltip-id={s.id}
                         margin={size === 'small' ? {
@@ -85,8 +85,8 @@ export function MemberPage({ offset }:PropsWithChildren<PageProps>) {
                       <Tooltip id={s.id} style={{ backgroundColor: "rgb(247, 236, 19)", color: "#222" }}>
                         {s.name}{s?.position ? ` - ${s.position}` : ''}
                       </Tooltip>
-                    </>
-                    // </Link>
+                    {/* </> */}
+                    </Link>
                 )) }
             </Box>
           </Box>

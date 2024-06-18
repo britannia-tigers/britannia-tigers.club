@@ -52,14 +52,15 @@ export function PublicProfile() {
         <InnerContainer paddingTop='small'>
           <Grid>
             <Grid>
-              <SubTitle marginBottom="0px">{user?.name}</SubTitle>
-              <Paragraph marginTop="8px">SG</Paragraph>
+              <SubTitle style={{ textTransform: 'uppercase' }}  marginBottom="0px">{user?.name}</SubTitle>
+              <Paragraph marginTop="2px">{user?.user_metadata.stats.position?.join(', ')}</Paragraph>
               <Paragraph marginTop="36px">{description}</Paragraph>
             </Grid>
             <Grid>
 
             </Grid>
             <Grid pad={{ vertical: '48px' }}>
+            <SubTitle>Gallery</SubTitle>
               <ImageGallery data={galleryImages} headerMode={false} editMode={false}/>
             </Grid>
           </Grid>

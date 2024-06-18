@@ -16,7 +16,7 @@ import {
 } from '@dnd-kit/sortable';
 import { ImageGalleryItem } from "./ImageGalleryItem";
 import { ImageGalleryDataType, ImageGalleryProps } from "./ImageGallery.interface";
-import { Distribution } from "grommet";
+import { Distribution, Grid } from "grommet";
 
 export function ImageGallery({ data, headerMode, editMode }: PropsWithChildren<ImageGalleryProps>) {
 
@@ -27,7 +27,7 @@ export function ImageGallery({ data, headerMode, editMode }: PropsWithChildren<I
     setItems(data.map((d, i) => ({
       id: d,
       src: d,
-      value: headerMode ? setValueByIndex(i) : 10
+      value: headerMode ? setValueByIndex(i) : 20
     })))
   }, [data]);
 
@@ -50,7 +50,7 @@ export function ImageGallery({ data, headerMode, editMode }: PropsWithChildren<I
         return tmpItems.map((t, i) => ({
           ...t, 
           i,
-          value: headerMode ? setValueByIndex(i) : 10
+          value: headerMode ? setValueByIndex(i) : 20
         }))
       });
     }
@@ -63,12 +63,19 @@ export function ImageGallery({ data, headerMode, editMode }: PropsWithChildren<I
       onDragEnd={handleDragEnd}
     >
       <SortableContext 
+        disabled={!editMode}
         items={items}
         strategy={rectSwappingStrategy}
       >
-        <Distribution values={items} gap={headerMode ? 'none' : 'small'}>
-          {i => <ImageGalleryItem key={i.id} id={i.id} src={i.src} value={i.value}/>}
-        </Distribution>
+        <Grid
+          columns={{
+            count: 3,
+            size: 'auto',
+          }}
+          gap="medium"
+        >
+          {items?.map(i => <ImageGalleryItem key={i.id} id={i.id} src={i.src} value={i.value}/>)}
+        </Grid>
       </SortableContext>
     </DndContext>
   )

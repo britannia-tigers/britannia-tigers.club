@@ -6,7 +6,7 @@ import {
 } from 'contentful-management';
 import { createClient as createDeliveryClient, ContentfulClientApi, ChainModifiers } from 'contentful'
 import config from './contentful.config';
-import { ExtendedQueryOptions, FilterParam, LocalisedSessionFull, PageFullResponse, PageListResponse, Session, SessionFullResponse, SessionListResponse, SessionBase, Sponsor, SponsorListResponse, SponsorFullResponse } from './cms.interface';
+import { ExtendedQueryOptions, FilterParam, LocalisedSessionFull, PageFullResponse, PageListResponse, Session, SessionFullResponse, SessionListResponse, SessionBase, Sponsor, SponsorListResponse, SponsorFullResponse, GalleryListResponse } from './cms.interface';
 import contentfulConfig from './contentful.config';
 import * as moment from 'moment';
 
@@ -42,28 +42,6 @@ export class CmsService {
   }
 
   /**
-   * GET Team User
-   */
-  async getTeamUser() {
-    // TODO: get team user
-  }
-
-  /**
-   * CREATE Team User
-   */
-  async createTeamUser() {
-    // TODO: create cms team user 
-  }
-
-  /**
-   * GET Team user public profile
-   */
-  async getTeamUserPublicProfile() {
-    // TODO: get cms team user public profile
-  }
-
-
-  /**
    * GET pages
    * @param q 
    * @returns 
@@ -76,6 +54,10 @@ export class CmsService {
     return this.client.entry.get({
       entryId: id,
     });
+  }
+
+  async getGalleries(q: QueryOptions = {}): Promise<GalleryListResponse> {
+    return this.getListByContentType(config.contentTypeId.galleries, q);
   }
 
 

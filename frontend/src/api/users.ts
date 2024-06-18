@@ -38,7 +38,12 @@ export interface UserInfo<P = AppMetaData, T = UserMetaData> {
   picture?: string
   app_metadata: P
   user_metadata: T
+}
 
+export interface UserRole {
+  id: string
+  name: string
+  description: string
 }
 
 export interface PublicUserInfo<T = UserMetaData> {
@@ -76,6 +81,16 @@ export async function getSelf(token: string) {
     }
   })
   return data;
+}
+
+export async function getSelfRoles(token: string) {
+  const { data } = await axios.get<AxiosResponse<UserRole[]>>(`/api/user/self/roles`, {
+    headers: {
+      Authorization: `bearer ${token}`
+    }
+  })
+  return data.data;
+
 }
 
 export async function updateUserSelf(authToken:string, userId:string, payload:UserRequest) {

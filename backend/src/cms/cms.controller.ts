@@ -3,7 +3,7 @@ import { CmsService } from './cms.service';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { PermissionGuard } from 'src/auth/permission.guard';
 import { SessionPermissions } from './cms.permissions';
-import { PageFullResponse, PageListResponse, SessionFullResponse, SessionListResponse, SponsorFullResponse, SponsorListResponse } from './cms.interface';
+import { GalleryListResponse, PageFullResponse, PageListResponse, SessionFullResponse, SessionListResponse, SponsorFullResponse, SponsorListResponse } from './cms.interface';
 import { AddParticipantsDto, SessionDto, SessionRequestDto } from './cms.dto';
 import { ApiBearerAuth, ApiBody, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { MailService } from 'src/messaging/mail.service';
@@ -265,6 +265,17 @@ export class CmsController {
     return this,this.cmsService.getAllAssets();
   }
 
+
+    /**
+   * get pages
+   * @returns 
+   */
+    @ApiTags('Gallery')
+    @Get('galleries')
+    getGalleries(@Query('skip') skip, @Query('limit') limit): Promise<GalleryListResponse> {
+      return this.cmsService.getGalleries({ skip, limit });
+    }
+  
 
   /**
    * get pages

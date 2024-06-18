@@ -97,6 +97,22 @@ export class UserController {
         }))
     }
 
+
+  /**
+   * get self role
+   * @param id 
+   * @returns 
+   */
+    @ApiBearerAuth('bearer')
+    @Get('self/roles')
+    @UseGuards(PermissionGuard([SelfPermissions.READ]))
+    @UseGuards(AuthGuard)
+    async getSelfRole(@Headers('authorization') authToken) {
+      console.log(authToken.split(' ')[1])
+      const res = await this.userService.getSelfRole(authToken.split(' ')[1])
+      return res
+    }
+
   /**
    * get user role
    * @param id 

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { PublicUserInfo, UserInfo, getAllUsers, getSelf, getUser } from "../api/users"
+import { PublicUserInfo, UserInfo, UserRole, getAllUsers, getSelf, getSelfRoles, getUser } from "../api/users"
 import { useAuthToken } from "./auth"
 
 
@@ -36,15 +36,18 @@ export function useUser(id?: string) {
 
 export function useSelf() {
   const [self, setSelf] = useState<UserInfo | undefined>();
+  const [roles, setRoles] = useState<UserRole[]>([]);
   const token = useAuthToken();
 
   useEffect(() => {
     (async () => {
       if(!token) return setSelf(undefined);
       const data = await getSelf(token);
+      const r = await getSelfRoles(token);
       setSelf(data);
+      setRoles(r);
     })();
   }, [token])
 
-  return self;
+  return {self, roles};
 }

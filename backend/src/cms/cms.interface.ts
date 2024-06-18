@@ -16,6 +16,14 @@ export interface SponsorFull {
   
 }
 
+export interface Gallery {
+
+}
+
+export interface GalleryFull extends Gallery {
+
+}
+
 export interface LocalisedEntry<T> {
   [name:string]: T
 }
@@ -83,4 +91,6 @@ export type SponsorListResponse = Response<Sponsor>;
 export type SessionFullResponse = EntryProps<LocalisedSessionFull>;
 export type PageFullResponse = EntryProps<PageFull>;
 export type SponsorFullResponse = EntryProps<SponsorFull>
+
+export type GalleryListResponse = Response<Gallery>
 
