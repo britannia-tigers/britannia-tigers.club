@@ -48,8 +48,7 @@ export class UserController {
   @UseGuards(AuthGuard)
   async updateSelf(@Headers('authorization') authToken, @Body() data:UserDto) {
     console.log(authToken.split(' ')[1])
-    const selfInfo = await this.userService.getSelf(authToken.split(' ')[1]);
-    return this.userService.updateUser(selfInfo.sub, data);
+    return this.userService.updateSelf(authToken.split(' ')[1], data);
   }
 
 

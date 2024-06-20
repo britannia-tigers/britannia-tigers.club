@@ -1,10 +1,11 @@
 import { useAuth0 } from '@auth0/auth0-react'
-import { Header, Nav , Avatar, Box, Button, ResponsiveContext, Stack } from 'grommet'
-import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { Avatar, Button, Stack } from 'grommet'
+import { useLocation, useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
 import { useNaviStore } from '../stores/NaviStore';
-import { useCallback, useContext } from 'react';
+import { useCallback } from 'react';
 import { BrowserView, MobileView } from 'react-device-detect';
+
 
 interface UserProps {
   showInMobileView?: boolean
@@ -69,6 +70,7 @@ export function User({ showInMobileView, notFixed, padding }: UserProps) {
       <BrowserView>
         { isAuthenticated ? (
           <Stack
+            style={{ cursor: 'pointer' }}
             onClick={() => isAuthenticated && navigate('/profile')}
           >
               <Avatar 

@@ -20,10 +20,9 @@ export function RadarChart({
 
   const [data, setData] = useState<RadarChartData[]>([''] as RadarChartData[])
   const ref= useRef<HTMLDivElement>(null)
-  const svgContainer = useMemo(() => SVG(), [data]);
+  const svgContainer = useMemo(() => SVG().width(diameter).height(diameter), [data]);
 
   const { circles } = useMemo(() => {
-    console.log('baba', svgContainer, data, ref)
     if(!svgContainer || !data?.length) return {}
     let circles = [];
     const radius = diameter / 2

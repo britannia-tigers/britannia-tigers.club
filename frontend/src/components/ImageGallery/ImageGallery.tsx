@@ -1,4 +1,4 @@
-import { PropsWithChildren, useCallback, useEffect, useMemo, useState } from "react";
+import { ChangeEvent, PropsWithChildren, useCallback, useEffect, useMemo, useState } from "react";
 import {
   DndContext, 
   closestCenter,
@@ -17,8 +17,9 @@ import {
 import { ImageGalleryItem } from "./ImageGalleryItem";
 import { ImageGalleryDataType, ImageGalleryProps } from "./ImageGallery.interface";
 import { Distribution, Grid } from "grommet";
+import { Dropzone } from "../Dropzone";
 
-export function ImageGallery({ data, headerMode, editMode }: PropsWithChildren<ImageGalleryProps>) {
+export function ImageGallery({ data, headerMode, editMode, onChange, onUpload }: PropsWithChildren<ImageGalleryProps>) {
 
   const [items, setItems] = useState<ImageGalleryDataType[]>([]);
 
@@ -31,6 +32,10 @@ export function ImageGallery({ data, headerMode, editMode }: PropsWithChildren<I
     })))
   }, [data]);
 
+  useEffect(() => {
+    onChange && onChange(items.map(i => i.src))
+  }, [items])
+
 
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -39,7 +44,7 @@ export function ImageGallery({ data, headerMode, editMode }: PropsWithChildren<I
     })
   );
 
-  const handleDragEnd = useCallback((event:DragEndEvent) =>  {
+  const dragEndHandler = useCallback((event:DragEndEvent) =>  {
     const {active, over} = event;
     
     if (active.id !== over?.id) {
@@ -56,28 +61,44 @@ export function ImageGallery({ data, headerMode, editMode }: PropsWithChildren<I
     }
   }, [items]);
 
+  const dropHandler = useCallback(async (e: any) => {
+    if(!onUpload) return
+    try {
+      await onUpload(e.target.files)
+    } catch(e) {
+      throw e;
+    }
+  }, [onUpload]);
+
   return (
-    <DndContext 
-      sensors={sensors}
-      collisionDetection={closestCenter}
-      onDragEnd={handleDragEnd}
-    >
-      <SortableContext 
-        disabled={!editMode}
-        items={items}
-        strategy={rectSwappingStrategy}
-      >
-        <Grid
-          columns={{
-            count: 3,
-            size: 'auto',
-          }}
-          gap="medium"
-        >
-          {items?.map(i => <ImageGalleryItem key={i.id} id={i.id} src={i.src} value={i.value}/>)}
+    <>
+      {editMode && (
+        <Grid pad={{ vertical: 'medium', horizontal: 'none' }}>
+          <Dropzone onChange={dropHandler} name="image_upload" />
         </Grid>
-      </SortableContext>
-    </DndContext>
+      )}
+      <DndContext 
+        sensors={sensors}
+        collisionDetection={closestCenter}
+        onDragEnd={dragEndHandler}
+      >
+        <SortableContext 
+          disabled={!editMode}
+          items={items}
+          strategy={rectSwappingStrategy}
+        >
+          <Grid
+            columns={{
+              count: 3,
+              size: 'auto',
+            }}
+            gap="medium"
+          >
+            {items?.map(i => <ImageGalleryItem key={i.id} id={i.id} src={i.src} value={i.value}/>)}
+          </Grid>
+        </SortableContext>
+      </DndContext>
+    </>
   )
 }
 

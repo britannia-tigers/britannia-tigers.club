@@ -22,7 +22,6 @@ export function Sponsor() {
         <Emblem  height='45px' style={{ position:'fixed', left: '30px', top: '25px'  }}/>
         <SponsorImg position='left' width={200} height={200} src={sponsor.logo?.url} />
         {sponsor?.about && documentToReactComponents(sponsor.about)}
-        <RadarChart />
       </InnerContainer>
     </WhitePage>
   )

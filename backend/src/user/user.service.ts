@@ -71,6 +71,13 @@ export class UserService {
     return userRes.data;
   }
 
+  async updateSelf(accessToken: string, body: UserUpdate) {
+    const userInfo = await this.userInfo.getUserInfo(accessToken);
+    const { sub } = userInfo.data;
+
+    return this.management.users.update({ id: sub }, body)
+  }
+
   async updateUser(id:string, body:UserUpdate) {
     return this.management.users.update({ id }, body);
   }

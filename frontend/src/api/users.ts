@@ -1,3 +1,4 @@
+import { User } from "@auth0/auth0-react"
 import axios, { AxiosResponse } from "axios"
 
 export type UserType = 'admin' | 'editor' | 'member' | 'team'
@@ -7,7 +8,15 @@ export interface AppMetaData {
   type: UserType[]
 }
 
-type PositionType = 'PG' | 'SG' | 'PF' | 'SF' | 'C'
+export enum PositionTypeEnum {
+  PG = 'PG',
+  SG = 'SG',
+  PF = 'PF',
+  SF = 'SF',
+  C = 'C'
+}
+
+export type PositionType = keyof typeof PositionTypeEnum
 
 export interface UserStats {
   position?: PositionType[]
@@ -24,18 +33,13 @@ export interface UserMetaData {
   stats: UserStats
   images: string[]
   videos: string[]
+  position: PositionType[]
 }
 
-export interface UserInfo<P = AppMetaData, T = UserMetaData> {
+export interface UserInfo<P = AppMetaData, T = Partial<UserMetaData>> extends User {
   name: string
-  given_name?: string | null
-  family_name?: string | null
   user_id: string
-  phone_number?: string
-  readonly phone_verified: boolean
   email: string
-  readonly email_verified: boolean
-  picture?: string
   app_metadata: P
   user_metadata: T
 }
@@ -93,8 +97,34 @@ export async function getSelfRoles(token: string) {
 
 }
 
-export async function updateUserSelf(authToken:string, userId:string, payload:UserRequest) {
+export async function updateSelf(token: string, payload: Partial<UserInfo>) {
+  const { data } = await axios.put<AxiosResponse<UserInfo>>(`/api/user/self`, payload, {
+    headers: {
+      Authorization: `bearer ${token}`
+    }
+  })
 
+  return data.data;
+}
+
+export async function uploadSelImages(token: string, images: FileList) {
+  const formData = new FormData();
+
+  let i = 0
+  while(i < images.length) {
+    const file = images.item(i);
+    if(file) formData.append("images", file);
+    i++;
+  }
+
+  const res = await axios.post(`/api/user/self/assets/upload`, formData, {
+    headers: {
+      'Authorization': `bearer ${token}`,
+      'Content-Type': 'multipart/form-data'
+    }
+  })
+
+  console.log(res);
 }
 
 export async function updateUserPic(authToken: string, file: File) {

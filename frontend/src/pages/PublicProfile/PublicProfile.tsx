@@ -10,7 +10,7 @@ import { Distribution, Grid } from "grommet";
 import { ProfileGalleryItem } from "./ProfileGalleryItem";
 import { Paragraph, SmallParagraph, SmallSubTitle, SubTitle } from "../../components/Titles";
 import { ImageGallery } from "../../components/ImageGallery";
-
+import { RadarChart } from "../../components/RadarChart";
 
 export function PublicProfile() {
 
@@ -50,17 +50,28 @@ export function PublicProfile() {
           </Distribution>
 
         <InnerContainer paddingTop='small'>
-          <Grid>
-            <Grid>
+          <Grid
+            gap="medium"
+            rows={['auto', 'auto', 'flex']}
+            areas={[
+              ['title', 'title'],
+              ['info', 'chart'],
+              ['gallery', 'gallery']
+            ]}
+            columns={['1/2', '1/2']}
+          >
+            <Grid gridArea="title">
               <SubTitle style={{ textTransform: 'uppercase' }}  marginBottom="0px">{user?.name}</SubTitle>
               <Paragraph marginTop="2px">{user?.user_metadata.stats.position?.join(', ')}</Paragraph>
-              <Paragraph marginTop="36px">{description}</Paragraph>
             </Grid>
-            <Grid>
-
+            <Grid gridArea="info">
+              <Paragraph marginTop="0px">{description}</Paragraph>
             </Grid>
-            <Grid pad={{ vertical: '48px' }}>
-            <SubTitle>Gallery</SubTitle>
+            <Grid gridArea="chart" justifyContent="end">
+              <RadarChart />
+            </Grid>
+            <Grid gridArea="gallery">
+              <SubTitle marginTop="0px">Gallery</SubTitle>
               <ImageGallery data={galleryImages} headerMode={false} editMode={false}/>
             </Grid>
           </Grid>

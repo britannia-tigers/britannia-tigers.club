@@ -48,7 +48,7 @@ function App() {
               <Route path='/logout' element={<Logout />} />
               <Route index element={<Main />} />
               <Route path='/sponsor/:id' element={<Sponsor />} />
-              <Route path='/highlights' element={<Highlight />} />
+              {/* <Route path='/highlights' element={<Highlight />} /> */}
               <Route path='*' element={<Main />} />
             </Routes>
           </Auth>
