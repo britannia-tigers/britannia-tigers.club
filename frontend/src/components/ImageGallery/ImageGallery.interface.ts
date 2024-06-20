@@ -11,8 +11,8 @@ export interface ImageGalleryProps {
   data?: string[]
   editMode: boolean
   headerMode: boolean
-  onChange: (e?: string[]) => void
-  onUpload: (f: FileList) => Promise<void>
+  onChange?: (e?: string[]) => void
+  onUpload?: (f: FileList) => Promise<void>
 }
 
 export interface ImageGalleryItemProps extends ImageGalleryDataType {
