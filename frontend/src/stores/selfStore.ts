@@ -1,18 +1,25 @@
 import { create } from "zustand";
 import { PositionType, UserInfo, UserMetaData, UserRole, getSelf, getSelfRoles, updateSelf, uploadSelImages } from "../api/users";
 
-export interface ChangeSelfFormData {
-  description?: string
+export interface ChangeSelfStatsFormData {
   position?: PositionType[]
   images?: string[]
   videos?: string[]
+  
 }
+
+export interface ChangeSelfFormData extends ChangeSelfStatsFormData {
+  description?: string
+}
+
+
 
 interface SelfStore {
   self: Partial<UserInfo>
   roles: UserRole[]
   fetch: (token: string) => Promise<void>
   changeSelf: (token: string, formData: ChangeSelfFormData) => Promise<void>
+  changeSelfStats: (token: string, formData: ChangeSelfStatsFormData) => Promise<void>
   uploadImages: (token: string, f: FileList) => Promise<void>
   setSelf: (data: UserInfo) => void
   setAssets: (assets: Partial<UserMetaData>) => void
@@ -55,6 +62,9 @@ export const useSelfStore = create<SelfStore>((set, get) => ({
     });
 
     set(() => ({self: res}))
+  },
+  changeSelfStats: async() => {
+    // TODO: write async function to fetch api
   },
   uploadImages: async (token, f) => {
     await uploadSelImages(token, f)

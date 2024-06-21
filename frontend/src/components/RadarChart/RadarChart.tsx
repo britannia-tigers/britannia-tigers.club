@@ -11,7 +11,7 @@ export interface RadarChartProps {
   step?: number
   min?: number
   max?: number
-  data: RadarChartData[]
+  data?: RadarChartData[]
 }
 
 export function RadarChart({

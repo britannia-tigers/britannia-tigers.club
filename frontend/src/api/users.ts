@@ -18,7 +18,14 @@ export enum PositionTypeEnum {
 
 export type PositionType = keyof typeof PositionTypeEnum
 
+export interface MetricType {
+  unit: string
+  value: number
+}
+
 export interface UserStats {
+  weight?: MetricType
+  height?: MetricType
   position?: PositionType[]
   strength?: number
   stamina?: number

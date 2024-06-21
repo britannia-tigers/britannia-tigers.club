@@ -6,7 +6,7 @@ import { PermissionGuard } from 'src/auth/permission.guard';
 import { MemberPermissions, SelfPermissions } from './user.permissions';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { ApiBearerAuth, ApiBody, ApiConsumes, ApiTags } from '@nestjs/swagger';
-import { UpdateUserMetaDataDto, UserDto } from './user.dto';
+import { UpdateUserMetaDataDto, UpdateUserStatsDto, UserDto } from './user.dto';
 import { CloudinaryService } from 'src/media/cloudinary.service';
 import { assert } from 'console';
 import { outputUserPublic } from './user.helper';
@@ -309,6 +309,32 @@ export class UserController {
 
   }
 
+
+  @ApiBearerAuth('bearer')
+  @Put('self/stats')
+  @UseGuards(AuthGuard)
+  @UseGuards(PermissionGuard([SelfPermissions.WRITE]))
+  async updateSelfStats(    
+    @Headers('authorization') authToken,
+    @Body() stats: UpdateUserStatsDto
+  ) {
+    try {
+      let { user_id, user_metadata } = await this.userService.getSelf(authToken.split(' ')[1]);
+      const successRes = await this.userService.updateUser(user_id, {
+        user_metadata: {
+          ...user_metadata,
+          stats: {
+            ...user_metadata?.stats,
+            ...stats
+          }
+        }
+      });
+
+      return successRes.data?.user_metadata
+    } catch(e) {
+      throw e;
+    }
+  }
 
   /**
    * update user details

@@ -1,4 +1,4 @@
-import { IsEmail, IsPhoneNumber, IsString, IsStrongPassword, IsArray, ArrayMinSize } from "class-validator";
+import { IsEmail, IsPhoneNumber, IsString, IsStrongPassword, IsArray, ArrayMinSize, IsObject, IsNumber } from "class-validator";
 import { ApiProperty } from '@nestjs/swagger'
 import { UserCreateUpdateRequest } from "./user.interface";
 
@@ -38,3 +38,38 @@ export class UpdateUserMetaDataDto {
 
 }
 
+export class UpdateUserStatsDto {
+  @IsArray()
+  @ApiProperty()
+  readonly position?: string[]
+
+  @IsObject()
+  @ApiProperty()
+  readonly weight?: string
+
+  @IsObject()
+  @ApiProperty()
+  readonly height?: string
+
+  @IsNumber()
+  @ApiProperty()
+  readonly strength?: number
+
+  @IsNumber()
+  @ApiProperty()
+  readonly stamina?: number
+
+  @IsNumber()
+  @ApiProperty()
+  readonly grit?: number
+
+  @IsNumber()
+  @ApiProperty()
+  readonly strategy?: number
+
+  @IsNumber()
+  @ApiProperty()
+  readonly agility?: number
+
+
+}

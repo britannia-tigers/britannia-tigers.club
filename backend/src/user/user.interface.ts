@@ -5,15 +5,37 @@ export interface AppMetaData {
   isPaid: boolean
 }
 
+export enum PositionTypeEnum {
+  PG = 'PG',
+  SG = 'SG',
+  PF = 'PF',
+  SF = 'SF',
+  C = 'C'
+}
+
+export type PositionType = keyof typeof PositionTypeEnum
+
+export interface MetricType {
+  unit: string
+  value: number
+}
+
+export interface UserStats {
+  weight?: MetricType
+  height?: MetricType
+
+  position?: PositionType[]
+  strength?: number
+  stamina?: number
+  grit?: number
+  strategy?: number
+  agility?: number
+
+}
+
 export interface UserMetaData {
   description: string
-  stats: {
-    strength?: number
-    stamina?: number
-    grit?: number
-    strategy?: number
-    agility?: number
-  }
+  stats: UserStats
   images: string[]
   videos: string[]
 }
