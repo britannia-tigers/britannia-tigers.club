@@ -1,4 +1,4 @@
-import { ChangeEvent, PropsWithChildren, useCallback, useEffect, useMemo, useState } from "react";
+import { ChangeEvent, MouseEvent, PropsWithChildren, useCallback, useEffect, useMemo, useState } from "react";
 import {
   DndContext, 
   closestCenter,
@@ -19,7 +19,7 @@ import { ImageGalleryDataType, ImageGalleryProps } from "./ImageGallery.interfac
 import { Distribution, Grid } from "grommet";
 import { Dropzone } from "../Dropzone";
 
-export function ImageGallery({ data, headerMode, editMode, onChange, onUpload }: PropsWithChildren<ImageGalleryProps>) {
+export function ImageGallery({ data, headerMode, editMode, onChange, onUpload, onItemClick }: PropsWithChildren<ImageGalleryProps>) {
 
   const [items, setItems] = useState<ImageGalleryDataType[]>([]);
 
@@ -70,6 +70,10 @@ export function ImageGallery({ data, headerMode, editMode, onChange, onUpload }:
     }
   }, [onUpload]);
 
+  const handleItemClick = useCallback((src: string, index: number) => () => {
+    !editMode && onItemClick && onItemClick({src, index})
+  }, [items, onItemClick, editMode])
+
   return (
     <>
       {editMode && (
@@ -94,7 +98,14 @@ export function ImageGallery({ data, headerMode, editMode, onChange, onUpload }:
             }}
             gap="medium"
           >
-            {items?.map(i => <ImageGalleryItem key={i.id} id={i.id} src={i.src} value={i.value}/>)}
+            {items?.map((i, index) => (
+              <ImageGalleryItem 
+                onClick={handleItemClick(i.src, index)}
+                key={i.id} 
+                id={i.id} 
+                src={i.src} 
+                value={i.value} />
+            ))}
           </Grid>
         </SortableContext>
       </DndContext>

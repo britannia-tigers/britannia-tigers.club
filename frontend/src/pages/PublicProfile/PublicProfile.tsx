@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { useParams } from "react-router-dom"
 import { useUser } from "../../hooks/user";
 import { PageWrapper } from "../../components/PageWrapper";
@@ -6,17 +6,20 @@ import { Helmet } from "react-helmet";
 import { InnerContainer, InnerTitle } from "../../components/InnerContainer";
 import { BrowserView } from "react-device-detect";
 import { ResizedSection } from "../../components/ResizedSection";
-import { Distribution, Grid } from "grommet";
+import { Box, Button, Carousel, Distribution, Grid, Image, Layer } from "grommet";
 import { ProfileGalleryItem } from "./ProfileGalleryItem";
 import { Paragraph, SmallParagraph, SmallSubTitle, SubTitle } from "../../components/Titles";
 import { ImageGallery } from "../../components/ImageGallery";
 import { RadarChart } from "../../components/RadarChart";
+import { ImageGalleryItem } from "../../components/ImageGallery/ImageGalleryItem";
+import { Close } from "../../components/Close";
 
 export function PublicProfile() {
 
   const { id } = useParams();
   const userId = useMemo(() => id && atob(id), [id]);
   const user = useUser(userId);
+  const [showCarousel, setShowCarousel] = useState(false)
 
 
   const { heroImages, galleryImages, description } = useMemo(() => {
@@ -39,15 +42,20 @@ export function PublicProfile() {
     }
   }, [user])
 
+  const handleClick = useCallback((e: { src: string, index: number }) => {
+    console.log(e);
+    setShowCarousel(true);
+  }, [user]);
+
   return(
     <>
       <Helmet>
         <title>Team :: {user?.name}</title>
       </Helmet>
       <PageWrapper backTo="/team" bgColor="black">
-          <Distribution style={{ height: 420 }} values={heroImages} gap='none'>
-            {i => <ProfileGalleryItem src={i.src}/>}
-          </Distribution>
+        <Distribution style={{ height: 420 }} values={heroImages} gap='none'>
+          {i => <ProfileGalleryItem src={i.src}/>}
+        </Distribution>
 
         <InnerContainer paddingTop='small'>
           <Grid
@@ -72,10 +80,26 @@ export function PublicProfile() {
             </Grid>
             <Grid gridArea="gallery">
               <SubTitle marginTop="0px">Gallery</SubTitle>
-              <ImageGallery data={galleryImages} headerMode={false} editMode={false}/>
+              <ImageGallery 
+                onItemClick={handleClick}
+                data={galleryImages} 
+                headerMode={false} 
+                editMode={false}/>
             </Grid>
           </Grid>
         </InnerContainer>
+        {showCarousel && (
+          <Layer full background={'none'} animation="fadeIn">
+            <Box fill background={{ color: '#000000', opacity: 'strong' }} align="center" justify="center">
+              <Carousel controls="selectors">
+                {galleryImages.map((g, i) => (
+                  <ImageGalleryItem id={i} src={g} color={g} value={i}/>
+                ))}
+              </Carousel>
+            </Box>
+            <Close onClick={() => setShowCarousel(false)}  color='white' style={{ position: 'absolute', right: '30px', top: '30px' }}/>
+          </Layer>
+        )}
       </PageWrapper>
     </>
   )

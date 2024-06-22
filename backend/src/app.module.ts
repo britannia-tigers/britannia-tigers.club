@@ -7,6 +7,7 @@ import { ServeStaticModule } from '@nestjs/serve-static';
 import { WebhookModule } from './webhook/webhook.module';
 import { MessagingModule } from './messaging/messaging.module';
 import { PaymentModule } from './payment/payment.module';
+import { AdminModule } from './admin/admin.module';
 
 const isDev = process.env.NODE_ENV === 'development'
 const envFilePath = isDev ? ['.dev.env', '.env'] : ['.env']
@@ -23,6 +24,7 @@ const rootPath = isDev ? join(__dirname, '..', '..', 'output', 'public') : join(
       rootPath
     }),
     UserModule,
+    AdminModule,
     CmsModule,
     WebhookModule,
     MessagingModule,

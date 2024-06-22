@@ -18,3 +18,8 @@ export enum SelfPermissions {
   READ='read:self',
   WRITE='write:self'
 }
+
+export enum AdminPermissions {
+  READ = 'read:admins',
+  LIST = 'list:admins'
+}

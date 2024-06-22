@@ -1,4 +1,5 @@
 import { UniqueIdentifier } from "@dnd-kit/core"
+import { EventHandler, MouseEventHandler, SyntheticEvent } from "react"
 
 export interface ImageGalleryDataType {
   id: UniqueIdentifier
@@ -13,10 +14,13 @@ export interface ImageGalleryProps {
   headerMode: boolean
   onChange?: (e?: string[]) => void
   onUpload?: (f: FileList) => Promise<void>
+  onItemClick?: (e: { src: string, index: number }) => void
 }
 
 export interface ImageGalleryItemProps extends ImageGalleryDataType {
   width?: number | string
   height?: number | string
+  onClick?: MouseEventHandler<HTMLImageElement>
 }
+
 

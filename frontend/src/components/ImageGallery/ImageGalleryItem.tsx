@@ -19,7 +19,8 @@ export function ImageGalleryItem({
   src,
   value,
   width = 500,
-  height = 500
+  height = 500,
+  onClick
 }: ImageGalleryItemProps) {
 
   const {
@@ -31,6 +32,7 @@ export function ImageGalleryItem({
   } = useSortable({id});
 
   const style = {
+    cursor: onClick ? 'pointer' : 'default',
     transform: CSS.Transform.toString(transform),
     transition,
   };
@@ -47,7 +49,8 @@ export function ImageGalleryItem({
 
   return (
     <Img ref={setNodeRef} 
-      style={style} src={img.toURL()} width={width} height={height}
+      onClick={onClick}
+      style={style} src={img.toURL()} width={'auto'} height={'auto'}
       {...attributes} {...listeners} />
   )
 }

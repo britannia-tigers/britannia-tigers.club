@@ -1,6 +1,13 @@
 
+export enum UserTypeEnum {
+  member = 'member',
+  team = 'team'
+}
+
+export type UserType = keyof typeof UserTypeEnum
+
 export interface AppMetaData {
-  type: string[]
+  type: UserType[]
   lastPaymentDate?: string
   isPaid: boolean
 }

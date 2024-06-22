@@ -1,11 +1,13 @@
 import { thumbnail } from "@cloudinary/url-gen/actions/resize";
 import { Cloudinary } from "@cloudinary/url-gen/index";
+import { MouseEventHandler } from "react";
 import styled from "styled-components";
 
 interface ProfileGalleryItemProps {
   src: string
   width?: number
   height?: number
+  onClick?: MouseEventHandler
 }
 
 const Img = styled.img`
@@ -17,7 +19,8 @@ const Img = styled.img`
 export function ProfileGalleryItem({ 
   src,
   width = 800,
-  height = 800
+  height = 800,
+  onClick
 }: ProfileGalleryItemProps) {
 
   const cld = new Cloudinary({
@@ -33,7 +36,8 @@ export function ProfileGalleryItem({
 
   return (
     <Img
-      src={img.toURL()} width={width} height={height}
+      onClick={onClick}
+      src={img.toURL()} width={'auto'} height={'auto'}
     />
   )
 }

@@ -1,6 +1,5 @@
-import { CanActivate, ExecutionContext, ForbiddenException, Injectable, Type } from "@nestjs/common";
-import { InsufficientScopeError, claimCheck } from "express-oauth2-jwt-bearer";
-import { promisify } from "util";
+import { CanActivate, ExecutionContext, ForbiddenException, Injectable, Logger, Type } from "@nestjs/common";
+import { UserService } from "src/user/user.service";
 
 
 /**
@@ -12,44 +11,24 @@ function createPermissionGuard(requiredRoutePermissions: string[]) {
 
   @Injectable()
   class PermissionGuardImpl implements CanActivate {
-
+  
+    constructor(
+      private readonly userService: UserService
+    ) {}
+  
     async canActivate(context: ExecutionContext): Promise<boolean> {
-      
-    
+
       const req = context.switchToHttp().getRequest();
-      const res = context.switchToHttp().getResponse();
-
-      const tester = promisify(claimCheck(p => {
-        console.log('permission guard claimcheck: ', p)
-        return true;
-      }))
-
-      await tester(req, res)
-
-      const permissionCheck = promisify(
-        claimCheck((payload) => {
-          const permissionsJwtClaim = (payload.permissions as string[]) || [];
-
-          const hasRequiredRoutePermissions = requiredRoutePermissions.every(
-            (requiredRoutePermission) =>
-              permissionsJwtClaim.includes(requiredRoutePermission),
-          );
-
-          if (!hasRequiredRoutePermissions) {
-            throw new InsufficientScopeError();
-          }
-
-          return hasRequiredRoutePermissions;
-        }),
-      );
-
-
+      
       try {
-        await permissionCheck(req, res);
-        return true;
+        const { authorization }: any = req.headers;
+        const success = await this.userService.getSelfPermissions(authorization.split(' ')[1])
+        const permissions = success.data.map(s => s.permission_name)
+        const found = !!permissions.find(p => requiredRoutePermissions.includes(p));
+        return !!found;
       } catch(e) {
-        console.error('permission guard error: ', e);
-        throw new ForbiddenException('Permission denied');
+        Logger.error(e);
+        throw new ForbiddenException(`Permission denied ${e.message}`);
       }
     }
   }

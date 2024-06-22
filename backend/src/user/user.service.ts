@@ -42,6 +42,16 @@ export class UserService {
     }
   }
 
+  async getSelfPermissions(accessToken: string) {
+    try {
+      const userInfo = await this.userInfo.getUserInfo(accessToken);
+      const { sub } = userInfo.data;
+      return this.management.users.getPermissions({ id: sub });
+    } catch(e) {
+      throw e;
+    }
+  }
+
   async getUserList(request:GetClientsRequest = {}) {
     return this.management.users.getAll(request)
   }

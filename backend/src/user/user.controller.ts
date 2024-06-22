@@ -29,8 +29,8 @@ export class UserController {
    */
   @ApiBearerAuth('bearer')
   @Get('self')
-  @UseGuards(PermissionGuard([SelfPermissions.READ]))
   @UseGuards(AuthGuard)
+  @UseGuards(PermissionGuard([SelfPermissions.READ]))
   getSelf(@Headers('authorization') authToken) {
     console.log(authToken.split(' ')[1])
     return this.userService.getSelf(authToken.split(' ')[1]);
@@ -241,7 +241,7 @@ export class UserController {
         user_metadata: {
           ...self.user_metadata,
           images: [...self.user_metadata?.images, ...imageUrls],
-          vid_promises: [...self.user_metadata?.videos, ...vidUrls]
+          videos: [...self.user_metadata?.videos, ...vidUrls]
         }
       });
       

@@ -8,6 +8,8 @@ export interface RadarChartData {
 
 export interface RadarChartProps {
   diameter?: number
+  padding?: number
+  pointSize?: number
   step?: number
   min?: number
   max?: number
@@ -16,6 +18,8 @@ export interface RadarChartProps {
 
 export function RadarChart({
   diameter = 200,
+  padding = 20,
+  pointSize = 8,
   step = 1,
   max = 5,
   data = [
@@ -43,7 +47,7 @@ export function RadarChart({
 }:PropsWithChildren<RadarChartProps>) {
 
   const ref= useRef<HTMLDivElement>(null)
-  const svgContainer = useMemo(() => SVG().width(diameter).height(diameter), []);
+  const svgContainer = useMemo(() => SVG().width(diameter + padding*2).height(diameter + padding*2), []);
 
   const { elements } = useMemo(() => {
     if(!svgContainer || !data?.length) return {}
@@ -52,31 +56,56 @@ export function RadarChart({
     const count = Math.ceil(max/step)
 
     for(let i = 1; i < count+1; i++) {
-      const offset = -radius*i/count + radius
+      const offset = -radius*i/count + radius + padding
       elements.push(SVG().circle(diameter*i/count).fill('#666666').move(offset, offset).opacity(0.5))
     }
   
     const len = data.length
     const pi = 3.1415
 
-    const polyStr = useMemo(() => {
+    const {polyStr, polyPos, axisPos} = useMemo(() => {
 
       const pos = data.map((d, i) => {
-        const offset = radius
+        const offset = radius + padding
         const hyp = d.value/max * radius
 
-        const x = hyp * Math.cos(i/len * 2 * pi) + offset
-        const y = hyp * Math.sin(i/len * 2 * pi) + offset
+        const x = hyp * Math.sin(i/len * 2 * pi) + offset
+        const y = - hyp * Math.cos(i/len * 2 * pi) + offset
         
         return [x, y]
       })
 
-      return pos.map(p => `${p[0]},${p[1]}`).join(' ')
+      const axisPos = data.map((d, i) => {
+        const offset = radius + padding
+        const x = radius * Math.sin(i/len * 2 * pi) + offset
+        const y = - radius * Math.cos(i/len * 2 * pi) + offset
+        return [x, y]
+      })
+
+      return {
+        axisPos,
+        polyPos: pos,
+        polyStr: pos.map(p => `${p[0]},${p[1]}`).join(' ')
+      }
 
     },[data])
 
     elements.push(SVG().polygon(polyStr).fill('#ffe600').opacity(0.3))
-
+    polyPos.forEach(([x, y]) => elements.push(SVG().circle(pointSize).fill('#ffe600').move(x - pointSize/2, y - pointSize/2).opacity(0.5)))
+    axisPos.forEach(([x, y], i) => 
+      elements.push(
+        SVG()
+          .text(data[i].label.toUpperCase())
+          .move(x - pointSize/2, y - pointSize/2)
+          .font({
+            anchor: 'middle',
+            family: 'din-2014',
+            size: 10
+          })
+          .fill('#ffffff')
+          .opacity(0.5)
+      )
+    )
 
     return {
       elements
@@ -98,6 +127,6 @@ export function RadarChart({
 
 
   return (
-    <div style={{ width: diameter, height: diameter }}ref={ref}/>
+    <div style={{ width: diameter + padding*2, height: diameter + padding*2 }}ref={ref}/>
   )
 }

@@ -86,9 +86,10 @@ export function User({ showInMobileView, notFixed, padding }: UserProps) {
         )}
       </BrowserView>
       {showInMobileView && (
-        <MobileView>
+        <MobileView style={{ display: 'flex', flexDirection: 'row-reverse' }}>
           { isAuthenticated ? (
             <Stack
+              
               onClick={() => isAuthenticated && navigate('/profile')}
             >
               <Avatar 

@@ -4,6 +4,7 @@ import { WhitePage } from "./WhitePage"
 import { Previous } from "grommet-icons"
 import { User } from "./User";
 import { useNaviStore } from "../stores/NaviStore";
+import { Emblem } from "./Emblem";
 
 interface PageWrapperProps {
   backTo?: string
@@ -25,13 +26,13 @@ export function PageWrapper({
   return (
     <WhitePage bgColor={bgColor} textColor={bgColor === 'white' ? '#000000' : '#ffffff'}>
       {children}
-      <User />
+      <Emblem  height='45px' style={{ position:'fixed', left: '30px', top: '25px'  }}/>
       <Previous 
         onClick={() => backTo ? navigate(backTo) : navigate(-1)}
         style={{
           cursor: 'pointer',
           position: 'fixed',
-          left: '20px',
+          right: '30px',
           top: '30px',
           stroke: bgColor === 'white' ? '#000000' : '#ffffff'
         }}/>
