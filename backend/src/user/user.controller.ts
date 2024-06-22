@@ -10,6 +10,7 @@ import { UpdateUserMetaDataDto, UpdateUserStatsDto, UserDto } from './user.dto';
 import { CloudinaryService } from 'src/media/cloudinary.service';
 import { assert } from 'console';
 import { outputUserPublic } from './user.helper';
+import { CacheInterceptor } from '@nestjs/cache-manager';
 
 
 @ApiTags('Users')
@@ -106,6 +107,7 @@ export class UserController {
     @Get('self/roles')
     @UseGuards(PermissionGuard([SelfPermissions.READ]))
     @UseGuards(AuthGuard)
+    @UseInterceptors(CacheInterceptor)
     async getSelfRole(@Headers('authorization') authToken) {
       console.log(authToken.split(' ')[1])
       const res = await this.userService.getSelfRole(authToken.split(' ')[1])
