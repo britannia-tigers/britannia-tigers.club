@@ -46,7 +46,6 @@ export function Admin() {
 
   const changeHandler = useCallback((event: { value: string |string[] }) => {
       const v = event.value;
-      console.log('onChange iso date:', v);
       console.log(
         'onChange utc date:',
         new Date(v[0]),

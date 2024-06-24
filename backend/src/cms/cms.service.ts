@@ -112,7 +112,7 @@ export class CmsService {
         sys: sess.sys,
         fields
       });
-      console.log('patched: ', res)
+
       return res;
     } catch(e) {
       console.error(e);
@@ -156,8 +156,6 @@ export class CmsService {
       const nParticipants = entry.fields.participants[contentfulConfig.locale.gb].filter(p => !userIds.includes(p))
       entry.fields.participants[contentfulConfig.locale.gb] = nParticipants;
     }
-
-    console.log('ud[ate: ', entry);
 
     // const oParticipants:string[] = sess.fields.participants ? sess.fields.participants[contentfulConfig.locale.gb] : [];
 

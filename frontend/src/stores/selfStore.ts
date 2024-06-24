@@ -1,11 +1,11 @@
 import { create } from "zustand";
-import { PositionType, UserInfo, UserMetaData, UserRole, getSelf, getSelfRoles, updateSelf, uploadSelImages } from "../api/users";
+import { LinkType, PositionType, UserInfo, UserMetaData, UserRole, getSelf, getSelfRoles, updateSelf, uploadSelImages } from "../api/users";
 
 export interface ChangeSelfStatsFormData {
   position?: PositionType[]
   images?: string[]
   videos?: string[]
-  
+  links?: LinkType[]
 }
 
 export interface ChangeSelfFormData extends ChangeSelfStatsFormData {
@@ -43,7 +43,7 @@ export const useSelfStore = create<SelfStore>((set, get) => ({
     }))
 
   },
-  changeSelf: async (token, { description, images, videos, position }) => {
+  changeSelf: async (token, { description, images, videos, links, position }) => {
     if(!token) return set(state => state);
     
     const oldSelf = get().self;
@@ -57,7 +57,8 @@ export const useSelfStore = create<SelfStore>((set, get) => ({
           position: position || oldSelf.user_metadata?.stats?.position || []
         },
         images: images || oldSelf.user_metadata?.images || [],
-        videos: videos || oldSelf.user_metadata?.videos || []
+        videos: videos || oldSelf.user_metadata?.videos || [],
+        links: links || oldSelf.user_metadata?.links || []
       }
     });
 

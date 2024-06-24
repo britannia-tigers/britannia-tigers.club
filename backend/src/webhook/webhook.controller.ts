@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Headers, Post, RawBodyRequest, Req } from '@nestjs/common';
+import { Body, Controller, Get, Headers, Logger, Post, RawBodyRequest, Req } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import Stripe from 'stripe'
 import { stripeClient } from '../client/stripe'
@@ -28,7 +28,7 @@ export class WebhookController {
     } }:UserRegistrationDto
   ) {
 
-    console.log('user.postRegistration webhook: ', type, user_id);
+    Logger.log('user.postRegistration webhook: ', type, user_id);
     
     try {
       switch(type) {
@@ -46,7 +46,7 @@ export class WebhookController {
               videos: []
             }
           });
-          console.log('user.postRegistration success: ');
+          Logger.log('user.postRegistration success: ');
           break;
         default:
           console.info('unknown type received', type, user_id, restUser);
@@ -84,17 +84,16 @@ export class WebhookController {
           case 'checkout.session.async_payment_succeeded':
           case 'checkout.session.completed':
             const { userId, sessionId } = (event.data.object as StripeWebhookResponseObject<CheckoutWebhookDto>).metadata;
-            console.log("called session complete: ", userId, sessionId)
             const res  = await this.cmsService.addPaidParticipants(sessionId, [userId]);
-            console.log('checkout complete and added paid participant: ', res);
+            Logger.log('checkout complete and added paid participant: ', res);
             break;
           case 'checkout.session.expired':
             const checkoutSessionExpired = event.data.object;
             // Then define and call a function to handle the event checkout.session.expired
-            console.info('stripe webhook checkout event expired: ', checkoutSessionExpired);
+            Logger.warn('stripe webhook checkout event expired: ', checkoutSessionExpired);
             break;
           default:
-            console.log(`Unhandled event type ${event.type}`);
+            Logger.log(`Unhandled event type ${event.type}`);
         }
 
       } catch(e) {

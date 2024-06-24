@@ -51,7 +51,6 @@ export function Restricted({ children }: PropsWithChildren) {
   setLocalStore('pathname', location.pathname)
 
   useEffect(() => {
-    console.log(isLoading, isAuthenticated)
     if(!isLoading && !isAuthenticated) loginWithRedirect()
   }, [isLoading, isAuthenticated, error])
 

@@ -10,7 +10,7 @@ import { UpdateUserMetaDataDto, UpdateUserStatsDto, UserDto } from './user.dto';
 import { CloudinaryService } from 'src/media/cloudinary.service';
 import { assert } from 'console';
 import { outputUserPublic } from './user.helper';
-import { CacheInterceptor } from '@nestjs/cache-manager';
+import { HttpCacheInterceptor } from 'src/caching/HttpCacheInterceptor';
 
 
 @ApiTags('Users')
@@ -30,10 +30,10 @@ export class UserController {
    */
   @ApiBearerAuth('bearer')
   @Get('self')
+  @UseInterceptors(HttpCacheInterceptor)
   @UseGuards(AuthGuard)
   @UseGuards(PermissionGuard([SelfPermissions.READ]))
   getSelf(@Headers('authorization') authToken) {
-    console.log(authToken.split(' ')[1])
     return this.userService.getSelf(authToken.split(' ')[1]);
   }
 
@@ -48,7 +48,6 @@ export class UserController {
   @UseGuards(PermissionGuard([SelfPermissions.WRITE]))
   @UseGuards(AuthGuard)
   async updateSelf(@Headers('authorization') authToken, @Body() data:UserDto) {
-    console.log(authToken.split(' ')[1])
     return this.userService.updateSelf(authToken.split(' ')[1], data);
   }
 
@@ -61,6 +60,7 @@ export class UserController {
   @Get()
   // @UseGuards(PermissionGuard([MemberPermissions.LIST]))
   // @UseGuards(AuthGuard)
+  @UseInterceptors(HttpCacheInterceptor)
   async getUsers() {
     const users = await this.userService.getUserList({ per_page: 100 });
     assert(users.data, 'User data cannot be empty')
@@ -87,15 +87,16 @@ export class UserController {
    * @param id 
    * @returns 
    */
-    @ApiBearerAuth('bearer')
-    @Get(':id/public')
-    getUserPublic(@Param('id') id) {
-      return this.userService.getUser(id)
-        .then(res => ({
-          ...res,
-          data: outputUserPublic(res.data)
-        }))
-    }
+  @ApiBearerAuth('bearer')
+  @Get(':id/public')
+  @UseInterceptors(HttpCacheInterceptor)
+  getUserPublic(@Param('id') id) {
+    return this.userService.getUser(id)
+      .then(res => ({
+        ...res,
+        data: outputUserPublic(res.data)
+      }))
+  }
 
 
   /**
@@ -103,16 +104,14 @@ export class UserController {
    * @param id 
    * @returns 
    */
-    @ApiBearerAuth('bearer')
-    @Get('self/roles')
-    @UseGuards(PermissionGuard([SelfPermissions.READ]))
-    @UseGuards(AuthGuard)
-    @UseInterceptors(CacheInterceptor)
-    async getSelfRole(@Headers('authorization') authToken) {
-      console.log(authToken.split(' ')[1])
-      const res = await this.userService.getSelfRole(authToken.split(' ')[1])
-      return res
-    }
+  @ApiBearerAuth('bearer')
+  @Get('self/roles')
+  @UseInterceptors(HttpCacheInterceptor)
+  @UseGuards(AuthGuard)
+  @UseGuards(PermissionGuard([SelfPermissions.READ]))
+  getSelfRole(@Headers('authorization') authToken) {
+    return this.userService.getSelfRole(authToken.split(' ')[1])
+  }
 
   /**
    * get user role
@@ -231,9 +230,7 @@ export class UserController {
 
       const vid_promises = videos?.map(async f => {
         const tmp = await this.cloudinaryService.upload(f);
-        console.log(tmp.public_id)
         return tmp.public_id;
-        // this.cloudinaryService.imageResize(tmp.public_id, tmp.format);
       })
 
       const imageUrls = await Promise.all(img_promises || []);
@@ -244,6 +241,7 @@ export class UserController {
           ...self.user_metadata,
           images: [...self.user_metadata?.images, ...imageUrls],
           videos: [...self.user_metadata?.videos, ...vidUrls]
+
         }
       });
       
@@ -261,6 +259,7 @@ export class UserController {
   @ApiBearerAuth('bearer')
   @Get('self/assets')
   @UseGuards(AuthGuard)
+  @UseInterceptors(HttpCacheInterceptor)
   async getAssets(
     @Headers('authorization') authToken,
 

@@ -11,7 +11,6 @@ export function Callback() {
   const [searchParams] = useSearchParams()
 
   const { isAuthenticated } = useAuth0();
-  console.log(pathname)
 
   return isAuthenticated ? (
     <Navigate to={pathname !== 'callback' ? pathname : '/'} replace/>

@@ -75,6 +75,7 @@ export function Profile() {
   }, [token])
 
   const galleryChangeHandler = useCallback((e?: string[]) => {
+    // TODO: gallery change handler
     console.log(e);
   }, [token])
 

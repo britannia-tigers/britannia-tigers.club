@@ -43,11 +43,11 @@ export class UpdateUserStatsDto {
   @ApiProperty()
   readonly position?: string[]
 
-  @IsObject()
+  @IsNumber()
   @ApiProperty()
   readonly weight?: string
 
-  @IsObject()
+  @IsNumber()
   @ApiProperty()
   readonly height?: string
 

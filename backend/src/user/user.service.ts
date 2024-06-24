@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { 
   GetClientsRequest, GetUsers200ResponseOneOfInner, 
   ManagementClient, UserCreate, UserUpdate,
@@ -33,6 +33,7 @@ export class UserService {
   }
 
   async getSelfRole(accessToken:string) {
+    Logger.log('role service fetched');
     try {
       const userInfo = await this.userInfo.getUserInfo(accessToken);
       const { sub } = userInfo.data;

@@ -6,6 +6,7 @@ type PaddingType = 'large' | 'medium' | 'small' | number | string
 interface InnerContainerProps {
   size?: 'small' | 'medium' | 'large' | string
   paddingTop?: PaddingType
+  paddingBottom?: PaddingType
   title?: string | JSX.Element
 }
 
@@ -15,6 +16,7 @@ interface InnerTitleProps {
 
 interface InnerProps {
   paddingTop?: PaddingType
+  paddingBottom?: PaddingType
   size?: PaddingType
 }
 
@@ -28,6 +30,7 @@ export const CenteredOuterContainer = styled.div`
 
 const Inner = styled.div<InnerProps>`
   padding-top: ${({paddingTop}) => paddingTop === 'large' ? '90px' : paddingTop === 'small' ? '30px' : 'auto'};
+  padding-bottom: ${({paddingBottom}) => paddingBottom === 'large' ? '90px' : paddingBottom === 'small' ? '30px' : 'auto'};
   padding-left: ${
     props => props.size === 'small' ? 
       '30px' : 0
@@ -42,12 +45,12 @@ const Inner = styled.div<InnerProps>`
   /* height: fill-available; */
 `
 
-export function InnerContainer({ children, title, size, paddingTop = 'large'}:PropsWithChildren<InnerContainerProps>) {
+export function InnerContainer({ children, title, size, paddingTop = 'large', paddingBottom='large'}:PropsWithChildren<InnerContainerProps>) {
 
 
   return (
     <CenteredOuterContainer>
-      <Inner size={size} paddingTop={paddingTop}>
+      <Inner size={size} paddingTop={paddingTop} paddingBottom={paddingBottom}>
         {title || null}
         {children}
       </Inner>

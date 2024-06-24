@@ -30,18 +30,26 @@ export interface MetricType {
 export interface UserStats {
   weight?: MetricType
   height?: MetricType
-
   position?: PositionType[]
-  strength?: number
-  stamina?: number
-  grit?: number
-  strategy?: number
-  agility?: number
+  chart?: {
+    strength?: number
+    stamina?: number
+    grit?: number
+    strategy?: number
+    agility?: number
+  }
 
+}
+
+export interface LinkType {
+  name: string
+  svg?: string
+  url: string
 }
 
 export interface UserMetaData {
   description: string
+  links: LinkType[]
   stats: UserStats
   images: string[]
   videos: string[]

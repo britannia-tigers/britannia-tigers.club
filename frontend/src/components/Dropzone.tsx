@@ -19,7 +19,6 @@ export function Dropzone({
     if(!onChange) return
     try {
       await onChange(e)
-      console.log('change complete: ', e)
       // stupid way to reset the input field
       e.target.value = null;
       setId(`text_input_${Math.round(Math.random() * 1000)}`)

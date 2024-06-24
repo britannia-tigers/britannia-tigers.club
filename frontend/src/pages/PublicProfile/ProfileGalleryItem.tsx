@@ -18,8 +18,8 @@ const Img = styled.img`
 
 export function ProfileGalleryItem({ 
   src,
-  width = 800,
-  height = 800,
+  width = 1200,
+  height = 1200,
   onClick
 }: ProfileGalleryItemProps) {
 

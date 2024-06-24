@@ -25,9 +25,6 @@ export class AuthGuard implements CanActivate {
     const req = context.switchToHttp().getRequest();
     const res = context.switchToHttp().getResponse();
 
-    console.log(this.ISSUER, this.AUDIENCE, `${this.ISSUER}.well-known/jwks.json`)
-
-
     const checker = promisify(auth({
       audience: this.AUDIENCE,
       issuer: this.ISSUER,

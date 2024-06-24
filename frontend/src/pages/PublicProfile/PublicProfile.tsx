@@ -13,6 +13,7 @@ import { ImageGallery } from "../../components/ImageGallery";
 import { RadarChart } from "../../components/RadarChart";
 import { ImageGalleryItem } from "../../components/ImageGallery/ImageGalleryItem";
 import { Close } from "../../components/Close";
+import { useSelfStore } from "../../stores/selfStore";
 
 export function PublicProfile() {
 
@@ -20,10 +21,11 @@ export function PublicProfile() {
   const userId = useMemo(() => id && atob(id), [id]);
   const user = useUser(userId);
   const [showCarousel, setShowCarousel] = useState(false)
+  const [curCarouselIndex, setCurCarouselIndex] = useState(-1)
 
 
-  const { heroImages, galleryImages, description } = useMemo(() => {
-    const { user_metadata } = user || {};
+  const { heroImages, galleryImages, description, picture } = useMemo(() => {
+    const { user_metadata, picture } = user || {};
     const { description, images } = user_metadata || {};
 
     const allImages = images?.map((t, i) => ({
@@ -38,13 +40,14 @@ export function PublicProfile() {
     return {
       heroImages,
       galleryImages,
-      description
+      description,
+      picture
     }
   }, [user])
 
   const handleClick = useCallback((e: { src: string, index: number }) => {
-    console.log(e);
     setShowCarousel(true);
+    setCurCarouselIndex(e.index)
   }, [user]);
 
   return(
@@ -53,9 +56,11 @@ export function PublicProfile() {
         <title>Team :: {user?.name}</title>
       </Helmet>
       <PageWrapper backTo="/team" bgColor="black">
-        <Distribution style={{ height: 420 }} values={heroImages} gap='none'>
-          {i => <ProfileGalleryItem src={i.src}/>}
-        </Distribution>
+        <Box style={{ height: 420 }} >
+          <Distribution fill values={heroImages} gap='none'>
+            {i => <ProfileGalleryItem src={i.src}/>}
+          </Distribution>
+        </Box>
 
         <InnerContainer paddingTop='small'>
           <Grid
@@ -76,7 +81,7 @@ export function PublicProfile() {
               <Paragraph marginTop="0px">{description}</Paragraph>
             </Grid>
             <Grid gridArea="chart" justifyContent="end">
-              <RadarChart />
+              <RadarChart profile={picture}/>
             </Grid>
             <Grid gridArea="gallery">
               <SubTitle marginTop="0px">Gallery</SubTitle>
@@ -91,7 +96,7 @@ export function PublicProfile() {
         {showCarousel && (
           <Layer full background={'none'} animation="fadeIn">
             <Box fill background={{ color: '#000000', opacity: 'strong' }} align="center" justify="center">
-              <Carousel controls="selectors">
+              <Carousel controls="selectors" initialChild={curCarouselIndex}>
                 {galleryImages.map((g, i) => (
                   <ImageGalleryItem id={i} src={g} color={g} value={i}/>
                 ))}

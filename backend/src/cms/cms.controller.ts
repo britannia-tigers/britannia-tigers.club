@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Headers, Param, Post, Put, Query, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Headers, Param, Post, Put, Query, UseGuards, UseInterceptors } from '@nestjs/common';
 import { CmsService } from './cms.service';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { PermissionGuard } from 'src/auth/permission.guard';
@@ -14,6 +14,8 @@ import contentfulConfig from './contentful.config';
 import { getNextDayOfWeek } from 'src/utils/dateTime.utils';
 import { AssetProps, CollectionProp } from 'contentful-management';
 import { UserService } from 'src/user/user.service';
+import { HttpCacheInterceptor } from 'src/caching/HttpCacheInterceptor';
+
 
 
 export const GB_LOCALE:string = 'en-GB'
@@ -244,6 +246,7 @@ export class CmsController {
    */
   @ApiTags('Sponsors')
   @Get('sponsors')
+  @UseInterceptors(HttpCacheInterceptor)
   getSponsors(@Query('skip') skip, @Query('limit') limit): Promise<SponsorListResponse> {
     return this.cmsService.getSponsors({ skip, limit });
   }
@@ -251,6 +254,7 @@ export class CmsController {
 
   @ApiTags('Sponsors')
   @Get('sponsors/:id')
+  @UseInterceptors(HttpCacheInterceptor)
   getSponsorById(@Param('id') id:string): Promise<SponsorFullResponse> {
     return this.cmsService.getSponsorById(id);
   }
@@ -283,6 +287,7 @@ export class CmsController {
    */
   @ApiTags('Pages')
   @Get('pages')
+  @UseInterceptors(HttpCacheInterceptor)
   getPages(@Query('skip') skip, @Query('limit') limit): Promise<PageListResponse> {
     return this.cmsService.getPages({ skip, limit });
   }
@@ -295,6 +300,7 @@ export class CmsController {
    */
   @ApiTags('Pages')
   @Get('pages/:id')
+  @UseInterceptors(HttpCacheInterceptor)
   async getPageById(@Param('id') id):Promise<PageFullResponse> {
 
     await this.smsService.sendMessage({
