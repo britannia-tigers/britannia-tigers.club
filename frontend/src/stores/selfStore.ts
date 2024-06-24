@@ -9,6 +9,7 @@ export interface ChangeSelfStatsFormData {
 }
 
 export interface ChangeSelfFormData extends ChangeSelfStatsFormData {
+  name?: string
   description?: string
 }
 
@@ -43,12 +44,13 @@ export const useSelfStore = create<SelfStore>((set, get) => ({
     }))
 
   },
-  changeSelf: async (token, { description, images, videos, links, position }) => {
+  changeSelf: async (token, { name, description, images, videos, links, position }) => {
     if(!token) return set(state => state);
     
     const oldSelf = get().self;
 
     const res = await updateSelf(token, {
+      name: name || oldSelf.name,
       user_metadata: {
         ...oldSelf.user_metadata,
         description: description || oldSelf.user_metadata?.description || '',

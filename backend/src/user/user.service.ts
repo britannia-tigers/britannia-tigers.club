@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Inject, Injectable, Logger } from '@nestjs/common';
 import { 
   GetClientsRequest, GetUsers200ResponseOneOfInner, 
   ManagementClient, UserCreate, UserUpdate,
@@ -8,6 +8,8 @@ import {
 import userConfig from './user.config'
 import { authManagementClient, authUserClient } from 'src/client/auth0';
 import { UserRoleType, UserRoles } from './user.interface';
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
+import { Cache } from 'cache-manager';
 
 
 @Injectable()
@@ -16,7 +18,9 @@ export class UserService {
   management:ManagementClient;
   userInfo:UserInfoClient;
 
-  constructor() {
+  constructor(
+    @Inject(CACHE_MANAGER) private cacheManager: Cache
+  ) {
     this.management = authManagementClient()
     this.userInfo = authUserClient()
   }
@@ -85,8 +89,11 @@ export class UserService {
   async updateSelf(accessToken: string, body: UserUpdate) {
     const userInfo = await this.userInfo.getUserInfo(accessToken);
     const { sub } = userInfo.data;
-
-    return this.management.users.update({ id: sub }, body)
+    
+    const res = await this.management.users.update({ id: sub }, body)
+    // update cache
+    await this.cacheManager.set('self', res.data);
+    return res;
   }
 
   async updateUser(id:string, body:UserUpdate) {

@@ -68,6 +68,7 @@ export function Profile() {
     if(!token) return;
 
     await changeSelf(token, {
+      name: e.value.name,
       description: e.value.description,
       position: e.value.position
     })

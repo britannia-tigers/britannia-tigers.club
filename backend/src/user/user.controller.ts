@@ -11,6 +11,7 @@ import { CloudinaryService } from 'src/media/cloudinary.service';
 import { assert } from 'console';
 import { outputUserPublic } from './user.helper';
 import { HttpCacheInterceptor } from 'src/caching/HttpCacheInterceptor';
+import { CacheKey, CacheTTL } from '@nestjs/cache-manager';
 
 
 @ApiTags('Users')
@@ -31,6 +32,7 @@ export class UserController {
   @ApiBearerAuth('bearer')
   @Get('self')
   @UseInterceptors(HttpCacheInterceptor)
+  @CacheKey('self')
   @UseGuards(AuthGuard)
   @UseGuards(PermissionGuard([SelfPermissions.READ]))
   getSelf(@Headers('authorization') authToken) {

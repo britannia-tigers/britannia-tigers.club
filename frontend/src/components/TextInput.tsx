@@ -1,5 +1,5 @@
 import { FormField, TextInput as GTextI } from "grommet";
-import { HTMLInputTypeAttribute, useMemo } from "react";
+import { ChangeEvent, HTMLInputTypeAttribute, useCallback, useEffect, useMemo, useState } from "react";
 import styled from "styled-components";
 
 interface TextInputProps {
@@ -40,10 +40,17 @@ const Input = styled(GTextI)`
 
 export function TextInput({ 
   label, placeholder, required, type, onChange, disabled,
-  name, value, validate, validateOn = 'submit'
+  name, value: initialValue, validate, validateOn = 'submit'
 }:TextInputProps) {
 
   const id = useMemo(() => `text_input_${Math.round(Math.random() * 1000)}`, [])
+  const [value, setValue] = useState(initialValue);
+  const handleChange = useCallback((e:ChangeEvent<HTMLInputElement>) => {
+    setValue(e.target.value)
+    if(onChange) onChange(e);
+  }, [onChange])
+
+  useEffect(() => setValue(initialValue), [initialValue])
 
   return (
     <FormField 
@@ -54,7 +61,7 @@ export function TextInput({
       validate={validate}
       validateOn={validateOn}
       label={label} 
-      onChange={onChange}
+      onChange={handleChange}
       value={value}
       disabled={disabled}
       htmlFor={id}
@@ -62,7 +69,7 @@ export function TextInput({
         <Input 
           name={name}
           value={value}
-          onChange={onChange}
+          onChange={handleChange}
           type={type === undefined ? 'text' : type}
           required={required}
           id={id}

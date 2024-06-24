@@ -41,7 +41,12 @@ export class WebhookController {
             },
             user_metadata: {
               description: '',
-              stats: {},
+              stats: {
+                weight: { unit: 'kg', value: 0 },
+                height: { unit: 'cm', value: 0 },
+                position: [],
+                charts: {}
+              },
               images: [],
               videos: []
             }

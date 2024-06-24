@@ -27,7 +27,7 @@ const rootPath = isDev ? join(__dirname, '..', '..', 'output', 'public') : join(
     }),
     CacheModule.register({
       isGlobal: true,
-      ttl: 60 * 1000 * 10, // 10 minutes (in milliseconds)
+      ttl:  1000 * 60 * 10, // 10 minutes (in milliseconds)
       max: 50 // max of 50 items in cache
     }),
     UserModule,
