@@ -53,9 +53,9 @@ export function ContactPage({ offset }:PropsWithChildren<PageProps>) {
             <p>Follow our social media for the latest news and updates.</p>
             <Box alignSelf={isMobile ? "left" : "center"} gap="small" direction="row" pad={{vertical: 'large', horizontal: 'none'}}>
               <SocialIcon link='https://www.instagram.com/londontigersclub/' src={igIcon} />
-              <SocialIcon link='https://www.tiktok.com/@britannia.tigers' src={tiktokIcon} />
-              <SocialIcon link='https://www.threads.net/@britanniatigersclub' src={threadIcon} />
-              <SocialIcon link='https://twitter.com/britanniatigers' src={twitterIcon} />
+              <SocialIcon link='https://www.tiktok.com/@londontigersclub' src={tiktokIcon} />
+              <SocialIcon link='https://www.threads.net/@londontigersclub' src={threadIcon} />
+              <SocialIcon link='https://x.com/_londontigers' src={twitterIcon} />
             </Box>
           </Box>
           <Box background="dark-1" gridArea="bot2" pad={{vertical: 'large', horizontal: 'large'}}>
