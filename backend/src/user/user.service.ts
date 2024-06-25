@@ -62,7 +62,12 @@ export class UserService {
   }
 
   async getUser(id:string) {
-    return this.management.users.get({id});
+    try {
+      const res = await this.management.users.get({id});
+      return res.data;
+    } catch(e) {
+      throw e;
+    }
   }
 
   async getUserRole(id:string) {

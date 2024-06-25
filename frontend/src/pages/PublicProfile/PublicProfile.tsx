@@ -13,7 +13,9 @@ import { ImageGallery } from "../../components/ImageGallery";
 import { RadarChart } from "../../components/RadarChart";
 import { ImageGalleryItem } from "../../components/ImageGallery/ImageGalleryItem";
 import { Close } from "../../components/Close";
+import { Cloudinary } from '@cloudinary/url-gen';
 import { useSelfStore } from "../../stores/selfStore";
+import { thumbnail } from "@cloudinary/url-gen/actions/resize";
 
 export function PublicProfile() {
 
@@ -25,8 +27,24 @@ export function PublicProfile() {
 
 
   const { heroImages, galleryImages, description, picture } = useMemo(() => {
-    const { user_metadata, picture } = user || {};
+    const { user_metadata, app_metadata, picture } = user || {};
     const { description, images } = user_metadata || {};
+    const { teamAvatar } = app_metadata || {}
+
+    // use team picture if it exists
+    let teamAvatarPicture:string | undefined;
+    if(teamAvatar && teamAvatar.length) {
+      const cld = new Cloudinary({
+        cloud: {
+          cloudName: 'dlpk5xuhc'
+        }
+      }); 
+      
+      teamAvatarPicture = cld.image(teamAvatar).resize(
+        thumbnail().width(200).height(200)
+      ).toURL()
+    }
+
 
     const allImages = images?.map((t, i) => ({
       i,
@@ -41,7 +59,7 @@ export function PublicProfile() {
       heroImages,
       galleryImages,
       description,
-      picture
+      picture: teamAvatarPicture || picture,
     }
   }, [user])
 

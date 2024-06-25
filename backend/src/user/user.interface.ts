@@ -10,6 +10,7 @@ export interface AppMetaData {
   type: UserType[]
   lastPaymentDate?: string
   isPaid: boolean
+  teamAvatar?: string
 }
 
 export enum PositionTypeEnum {

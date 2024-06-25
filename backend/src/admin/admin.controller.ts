@@ -1,5 +1,6 @@
-import { Body, Controller, Get, Header, Headers, NotFoundException, Param, Put, UseGuards } from "@nestjs/common";
-import { ApiBasicAuth, ApiTags } from "@nestjs/swagger";
+import { Body, Controller, Get, Header, Headers, NotFoundException, Param, Post, Put, UploadedFile, UseGuards, UseInterceptors } from "@nestjs/common";
+import { FileInterceptor } from "@nestjs/platform-express";
+import { ApiBasicAuth, ApiBearerAuth, ApiBody, ApiConsumes, ApiTags } from "@nestjs/swagger";
 import { AuthGuard } from "src/auth/auth.guard";
 import { PermissionGuard } from "src/auth/permission.guard";
 import { CloudinaryService } from "src/media/cloudinary.service";
@@ -60,6 +61,54 @@ export class AdminController {
     @Body() body: UserDto
   ) {
     return this.userService.updateUser(userId, body)
+  }
+
+
+  /**
+   * upload team avatar
+   * @param authToken 
+   * @param file 
+   * @param userId 
+   * @returns 
+   */
+  @ApiBearerAuth('bearer')
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        file: {
+          type: 'string',
+          format: 'binary',
+        },
+      },
+    }
+  })
+  @Post('team/:id/avatar/upload')
+  @UseInterceptors(FileInterceptor('file'))
+  @UseGuards(AuthGuard)
+  @UseGuards(PermissionGuard([
+    MemberPermissions.WRITE
+  ]))
+  async uploadTeamAvatar(
+    @UploadedFile() file: Express.Multer.File,
+    @Param('id') userId: string
+  ) {
+    const user = await this.userService.getUser(userId);
+
+    if(!user.app_metadata?.type.includes('team')) {
+      throw new NotFoundException(`User with id ${userId} is not part of the team.`)
+    }
+
+    const tmp = await this.cloudinaryService.upload(file);
+    const res = await this.userService.updateUser(userId, {
+      app_metadata: {
+        ...user.app_metadata,
+        teamAvatar: tmp.public_id
+      }
+    });
+
+    return res.data;    
   }
 
 

@@ -96,7 +96,7 @@ export class UserController {
     return this.userService.getUser(id)
       .then(res => ({
         ...res,
-        data: outputUserPublic(res.data)
+        data: outputUserPublic(res)
       }))
   }
 

@@ -6,6 +6,7 @@ export type UserType = 'admin' | 'editor' | 'member' | 'team'
 export interface AppMetaData {
   isPaid: boolean
   type: UserType[]
+  teamAvatar?: string
 }
 
 export enum PositionTypeEnum {
@@ -66,11 +67,12 @@ export interface UserRole {
   description: string
 }
 
-export interface PublicUserInfo<T = UserMetaData> {
+export interface PublicUserInfo<P = AppMetaData, T = UserMetaData> {
   name: string
   user_id: string
   picture?: string
   user_metadata: T
+  app_metadata: P
 }
 
 export interface UserRequest extends UserInfo<UserMetaData> {

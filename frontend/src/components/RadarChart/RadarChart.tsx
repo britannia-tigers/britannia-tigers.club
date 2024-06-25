@@ -143,7 +143,7 @@ export function RadarChart({
 
   return (
     <div style={{ position: 'relative', width: diameter + padding*2, height: diameter + padding*2 }} ref={ref}>
-      <Avatar src={profile} size={`${imgSize}px`} style={{ position: 'absolute', left: imgPos?.[0], top: imgPos?.[1], opacity: 0.8  }}/>
+      <Avatar src={profile} size={`${imgSize}px`} style={{ position: 'absolute', left: imgPos?.[0], top: imgPos?.[1], opacity: 0.8, border: '2px solid white' }}/>
     </div>
   )
 }
