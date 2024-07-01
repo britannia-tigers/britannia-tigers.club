@@ -99,7 +99,7 @@ export class UserController {
         data: outputUserPublic(res)
       }))
   }
-
+  
 
   /**
    * get self role

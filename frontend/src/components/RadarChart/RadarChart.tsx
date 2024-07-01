@@ -4,10 +4,7 @@ import { Cloudinary } from '@cloudinary/url-gen';
 import { thumbnail } from "@cloudinary/url-gen/actions/resize";
 import { Avatar, Image } from "grommet";
 
-export interface RadarChartData {
-  label: string
-  value: number
-}
+export type RadarChartData = { [name:string]: number }
 
 export interface RadarChartProps {
   diameter?: number
@@ -16,7 +13,7 @@ export interface RadarChartProps {
   step?: number
   min?: number
   max?: number
-  data?: RadarChartData[]
+  data?: RadarChartData
   profile?: string
 }
 
@@ -29,36 +26,23 @@ export function RadarChart({
   step = 1,
   max = 5,
   profile,
-  data = [
-    {
-      label: 'stamina',
-      value: 2
-    },
-    {
-      label: 'agility',
-      value: 4
-    },
-    {
-      label: 'flexibility',
-      value: 4
-    },
-    {
-      label: 'plusmimus',
-      value: 3
-    },
-    {
-      label: 'plusmimus',
-      value: 5
-    }
-  ]
+  data = {
+    'stamina': 0,
+    'agility': 0,
+    'vertical': 0,
+    'strength':0,
+    'grit':0,
+    'strategy':0
+  }
 }:PropsWithChildren<RadarChartProps>) {
 
   const ref= useRef<HTMLDivElement>(null)
   const svgContainer = useMemo(() => SVG().width(diameter + padding*2).height(diameter + padding*2), []);
 
+  console.log('data: ', data)
 
   const { elements, imgSize, imgPos } = useMemo(() => {
-    if(!svgContainer || !data?.length) return {}
+    if(!svgContainer || !data) return {}
     let elements = [];
     const radius = diameter / 2
     const count = Math.ceil(max/step)
@@ -68,13 +52,15 @@ export function RadarChart({
       elements.push(SVG().circle(diameter*i/count).fill('#666666').move(offset, offset).opacity(0.5))
     }
   
-    const len = data.length
+    const dataKeys = Object.keys(data)
+
+    const len = dataKeys.length
     const pi = 3.1415
 
     const offset = radius + padding
 
-    const polyPos = data.map((d, i) => {
-      const hyp = d.value/max * radius
+    const polyPos = dataKeys.map((d, i) => {
+      const hyp = data[d]/max * radius
 
       const x = hyp * Math.sin(i/len * 2 * pi) + offset
       const y = - hyp * Math.cos(i/len * 2 * pi) + offset
@@ -82,7 +68,7 @@ export function RadarChart({
       return [x, y]
     })
 
-    const axisPos = data.map((d, i) => {
+    const axisPos = dataKeys.map((d, i) => {
       const x = radius * Math.sin(i/len * 2 * pi) + offset
       const y = - radius * Math.cos(i/len * 2 * pi) + offset
       return [x, y]
@@ -104,7 +90,7 @@ export function RadarChart({
       const dy =  Math.abs(posY-offset) < TOLERANCE ? 0 : posY > offset ? 10 : -20
       elements.push(
         SVG()
-          .text(data[i].label.toUpperCase())
+          .text(dataKeys[i].toUpperCase())
           .move(posX, posY)
           .font({
             anchor,

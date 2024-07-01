@@ -26,9 +26,9 @@ export function PublicProfile() {
   const [curCarouselIndex, setCurCarouselIndex] = useState(-1)
 
 
-  const { heroImages, galleryImages, description, picture } = useMemo(() => {
+  const { heroImages, galleryImages, description, picture, chart } = useMemo(() => {
     const { user_metadata, app_metadata, picture } = user || {};
-    const { description, images } = user_metadata || {};
+    const { description, images, stats } = user_metadata || {};
     const { teamAvatar } = app_metadata || {}
 
     // use team picture if it exists
@@ -55,11 +55,14 @@ export function PublicProfile() {
     const heroImages = allImages.slice(0, 4)
     const galleryImages = images?.slice(5) || [];
 
+    console.log(user_metadata)
+
     return {
       heroImages,
       galleryImages,
       description,
       picture: teamAvatarPicture || picture,
+      chart: stats?.chart
     }
   }, [user])
 
@@ -99,7 +102,7 @@ export function PublicProfile() {
               <Paragraph marginTop="0px">{description}</Paragraph>
             </Grid>
             <Grid gridArea="chart" justifyContent="end">
-              <RadarChart profile={picture}/>
+              <RadarChart profile={picture} data={chart}/>
             </Grid>
             <Grid gridArea="gallery">
               <SubTitle marginTop="0px">Gallery</SubTitle>

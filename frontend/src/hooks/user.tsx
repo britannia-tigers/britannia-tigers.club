@@ -31,5 +31,4 @@ export function useUser(id?: string) {
   }, [id])
 
   return user;
-
 }
