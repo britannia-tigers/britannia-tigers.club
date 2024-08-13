@@ -110,6 +110,7 @@ export interface Sponsor {
   logo: LocaleLink
   website?: LocaleBase
   email?: LocaleBase
+  year?: LocaleBase
 }
 
 export interface ConvertedListResponse<T> {

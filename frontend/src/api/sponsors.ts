@@ -11,6 +11,7 @@ interface ApiSponsor {
   description?: string
   about?: Document
   logo: ApiAsset
+  year?: string
 }
 
 export async function getAllSponsors() {
@@ -39,7 +40,8 @@ function singleSponsorResConvert(i: ItemResponse<Sponsor>, assets: { [id:string]
     description: i.fields.description?.[GB_LOCALE],
     about: i.fields.about?.[GB_LOCALE],
     logo: i.fields.logo && assets[i.fields.logo[GB_LOCALE].sys.id],
-    website: i.fields.website?.[GB_LOCALE]
+    website: i.fields.website?.[GB_LOCALE],
+    year: i.fields.year?.[GB_LOCALE]
   }
 }
 
