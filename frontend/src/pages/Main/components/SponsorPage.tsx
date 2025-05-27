@@ -21,7 +21,6 @@ export function SponsorPage({ offset }:PropsWithChildren<PageProps>) {
 
   const curYear = moment().year().toString();
   const lastYear = moment().subtract(1, 'year').year().toString();
-  console.log(curYear, sponsors.map(s => s.year));
   const latest = sponsors.filter(s => s.year === curYear)
   const past = sponsors.filter(s => s.year === lastYear)
   return (
