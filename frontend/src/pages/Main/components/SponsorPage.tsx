@@ -9,6 +9,7 @@ import { Box, ResponsiveContext } from "grommet";
 import { SponsorImg } from "../../../components/SponsorImg";
 import { useNavigate } from "react-router-dom";
 import { sonnet } from "@cloudinary/url-gen/qualifiers/artisticFilter";
+import moment from "moment";
 
 
 
@@ -18,8 +19,9 @@ export function SponsorPage({ offset }:PropsWithChildren<PageProps>) {
   const navi = useNavigate()
   const size = useContext(ResponsiveContext);
 
-  const latest = sponsors.filter(s => s.year === "2024")
-  const past = sponsors.filter(s => s.year !== "2024")
+  const curYear = moment().year().toString();
+  const latest = sponsors.filter(s => s.year === curYear)
+  const past = sponsors.filter(s => s.year !== curYear)
   return (
     <ResizedSection bgColor="white" color="black">
       <ParallaxLayer offset={4} speed={0.5}>
