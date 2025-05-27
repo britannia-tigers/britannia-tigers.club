@@ -20,18 +20,20 @@ export function SponsorPage({ offset }:PropsWithChildren<PageProps>) {
   const size = useContext(ResponsiveContext);
 
   const curYear = moment().year().toString();
+  const lastYear = moment().subtract(1, 'year').year().toString();
+  console.log(curYear, sponsors.map(s => s.year));
   const latest = sponsors.filter(s => s.year === curYear)
-  const past = sponsors.filter(s => s.year !== curYear)
+  const past = sponsors.filter(s => s.year === lastYear)
   return (
     <ResizedSection bgColor="white" color="black">
       <ParallaxLayer offset={4} speed={0.5}>
         <InnerContainer size={size}>
-          <InnerTitle>2024</InnerTitle>
+          <InnerTitle>{curYear}</InnerTitle>
           <Box wrap={true} gap={isMobile ? "none" : "medium"} justify="center" align="center" direction="row" pad={{ top: 'none', bottom: 'large', horizontal: 'none'}}>
             
             { latest.map(s => <SponsorImg width={150} height={150} src={s.logo.url} onClick={() => navi(`/sponsor/${s.id}`)}/>) }
           </Box>
-          <InnerTitle>2023</InnerTitle>
+          <InnerTitle>{lastYear}</InnerTitle>
           <Box wrap={true} gap={isMobile ? "none" : "medium"} justify="center" align="center" direction="row" pad={{ top: 'none', bottom: 'large', horizontal: 'none'}}>
             { past.map(s => <SponsorImg disabled width={150} height={150} src={s.logo.url} />) }
           </Box>
